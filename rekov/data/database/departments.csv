@@ -1,0 +1,5 @@
+id,name,code,description,active_doctors_count,wait_time_minutes
+dep_gen,General Medicine,GEN,Primary care and general ailments,2,10
+dep_card,Cardiology,CARD,Heart and cardiovascular care,1,25
+dep_ped,Pediatrics,PED,Children and infant care,2,15
+dep_ortho,Orthopedics,ORTH,Bone and joint care,1,20

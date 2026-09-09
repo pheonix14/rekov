@@ -471,3 +471,652 @@
 2026-09-09 22:48:30 - rekov_system - INFO - [UI] GET / 200 in 295ms
 2026-09-09 22:48:31 - rekov_system - INFO - [API] INFO:     127.0.0.1:54479 - "GET /api/v1/settings/currency HTTP/1.1" 404 Not Found
 2026-09-09 22:48:31 - rekov_system - INFO - [API] INFO:     127.0.0.1:54479 - "GET /api/v1/settings/currency HTTP/1.1" 404 Not Found
+2026-09-09 22:58:21 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 22:58:21 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 22:58:21 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 22:58:21 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 22:58:21 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 22:58:21 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 22:58:21 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 22:58:21 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 22:58:21 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 22:58:21 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 22:58:21 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 22:58:21 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 22:58:21 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 22:58:21 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 22:58:21 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 22:58:21 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:09:38 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:09:38 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:09:38 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:09:38 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:09:38 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:09:38 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:09:38 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:09:38 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:09:38 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:09:38 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:09:38 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:09:38 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:09:38 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:09:38 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:09:38 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:09:38 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:10:06 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:10:06 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:10:06 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:10:06 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:10:06 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:10:06 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:10:06 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:10:06 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:10:06 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:10:06 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:10:06 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:10:06 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:10:06 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:10:06 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:10:06 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:10:06 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:10:22 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:10:22 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:10:22 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:10:22 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:10:22 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:10:22 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:10:22 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:10:22 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:10:22 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:10:22 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:10:22 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:10:22 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:10:22 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:10:22 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:10:22 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:10:22 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:11:29 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:11:29 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:11:29 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:11:29 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:11:29 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:11:29 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:11:29 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:11:29 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:11:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:12:30 - rekov_system - INFO - [UI] GET / 200 in 400ms
+2026-09-09 23:12:31 - rekov_system - INFO - [API] INFO:     127.0.0.1:59231 - "GET /api/v1/settings/currency HTTP/1.1" 404 Not Found
+2026-09-09 23:12:31 - rekov_system - INFO - [API] INFO:     127.0.0.1:59231 - "GET /api/v1/settings/currency HTTP/1.1" 404 Not Found
+2026-09-09 23:13:28 - rekov_system - INFO - [API] INFO:     127.0.0.1:59822 - "GET /api/v1/settings/currency HTTP/1.1" 404 Not Found
+2026-09-09 23:13:28 - rekov_system - INFO - [API] INFO:     127.0.0.1:59822 - "GET /api/v1/settings/currency HTTP/1.1" 404 Not Found
+2026-09-09 23:13:30 - rekov_system - INFO - [API] INFO:     127.0.0.1:49806 - "GET /api/v1/queue/status/admin HTTP/1.1" 404 Not Found
+2026-09-09 23:13:36 - rekov_system - INFO - [UI] GET / 200 in 304ms
+2026-09-09 23:13:37 - rekov_system - INFO - [API] INFO:     127.0.0.1:59033 - "GET /api/v1/settings/currency HTTP/1.1" 404 Not Found
+2026-09-09 23:13:37 - rekov_system - INFO - [API] INFO:     127.0.0.1:59033 - "GET /api/v1/settings/currency HTTP/1.1" 404 Not Found
+2026-09-09 23:13:44 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:44 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:44 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:44 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:44 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:44 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:44 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:44 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:44 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:44 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:44 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:44 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:44 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:44 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:44 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:44 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:45 - rekov_system - INFO - [UI] ○ Compiling /receptionist ...
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - INFO - [API] INFO:     127.0.0.1:56944 - "GET /api/v1/settings/currency HTTP/1.1" 404 Not Found
+2026-09-09 23:13:46 - rekov_system - INFO - [API] INFO:     127.0.0.1:56944 - "GET /api/v1/settings/currency HTTP/1.1" 404 Not Found
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:46 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:46 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:47 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:47 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:13:47 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:47 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:47 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:47 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:47 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:47 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:13:47 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:47 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:47 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:13:47 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:13:47 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:14:00 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:14:00 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:14:00 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:00 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:00 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:00 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:14:00 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:00 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:00 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:00 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:00 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:14:37 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:14:37 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:14:37 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:37 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:37 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:37 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:14:37 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:37 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:37 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:14:37 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:14:37 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:15:16 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:15:16 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:15:16 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:15:16 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:15:16 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:15:16 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:15:16 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:15:16 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:15:58 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:15:58 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:15:58 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:15:58 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:15:58 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:15:58 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:15:58 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:15:58 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:16:24 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:16:24 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:16:24 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:16:24 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:16:24 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:16:24 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:16:24 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:16:24 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:17:24 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:17:24 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:17:24 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:17:24 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:17:24 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:17:24 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:17:24 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:17:24 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:17:25 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:17:25 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:17:25 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:17:25 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:17:25 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:17:25 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:17:25 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:17:25 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:18:25 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:18:25 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:18:25 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:18:25 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:18:25 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:18:25 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:18:25 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:18:25 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:18:29 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:18:29 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:18:29 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:18:29 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:18:29 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:18:29 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:18:29 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:18:29 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:19:35 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:19:35 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:19:35 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:19:35 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:19:35 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:19:35 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:19:35 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:19:35 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:20:32 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:20:32 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:20:32 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:20:32 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:20:32 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:20:32 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:20:32 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:20:32 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:23:11 - rekov_system - INFO - [API] INFO:     127.0.0.1:49757 - "GET /api/v1/settings/currency HTTP/1.1" 404 Not Found
+2026-09-09 23:23:11 - rekov_system - INFO - [API] INFO:     127.0.0.1:49757 - "GET /api/v1/settings/currency HTTP/1.1" 404 Not Found
+2026-09-09 23:23:13 - rekov_system - INFO - [UI] GET /status 200 in 425ms
+2026-09-09 23:23:14 - rekov_system - INFO - [API] INFO:     127.0.0.1:49757 - "GET /api/v1/settings/currency HTTP/1.1" 404 Not Found
+2026-09-09 23:23:14 - rekov_system - INFO - [API] INFO:     127.0.0.1:49757 - "GET /api/v1/settings/currency HTTP/1.1" 404 Not Found
+2026-09-09 23:23:18 - rekov_system - INFO - [API] INFO:     127.0.0.1:49757 - "GET /api/v1/settings/currency HTTP/1.1" 404 Not Found
+2026-09-09 23:23:18 - rekov_system - INFO - [API] INFO:     127.0.0.1:49757 - "GET /api/v1/settings/currency HTTP/1.1" 404 Not Found
+2026-09-09 23:23:27 - rekov_system - INFO - [API] INFO:     127.0.0.1:57941 - "POST /api/v1/kiosk/voice-audio HTTP/1.1" 404 Not Found
+2026-09-09 23:23:41 - rekov_system - INFO - [API] INFO:     127.0.0.1:57941 - "POST /api/v1/kiosk/voice-audio HTTP/1.1" 404 Not Found
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:24:08 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:24:08 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:24:08 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:24:08 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:24:08 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:24:08 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:24:08 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ⚠ ./src/app/doctor-desk/page.tsx
+2026-09-09 23:24:08 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:24:08 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/doctor-desk/page.tsx
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:24:08 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:24:08 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:24:08 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:24:08 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/receptionist/page.tsx
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx
+2026-09-09 23:24:08 - rekov_system - ERROR - [UI] Attempted import error: 'api' is not exported from '@/services/api' (imported as 'api').
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] Import trace for requested module:
+2026-09-09 23:24:08 - rekov_system - WARNING - [UI] ./src/app/login/page.tsx

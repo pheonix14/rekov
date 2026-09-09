@@ -19,31 +19,31 @@ export const VitalsPicker: React.FC<VitalsPickerProps> = ({ vitals, onChange }) 
 
   const inputStyle: React.CSSProperties = {
     width: '100%', background: 'transparent', fontSize: 24, fontWeight: 700,
-    color: '#fff', outline: 'none', border: 'none',
+    color: 'var(--text-primary)', outline: 'none', border: 'none',
     fontFamily: "'Space Grotesk', sans-serif"
   };
 
   const fieldWrap: React.CSSProperties = {
-    background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)',
+    background: 'var(--bg-card)', border: '1px solid var(--border-color)',
     padding: '16px 20px'
   };
 
   return (
     <div style={{
-      background: 'rgba(255,255,255,.02)', border: '1px solid rgba(255,255,255,.08)', padding: 28
+      background: 'var(--bg-main)', border: '1px solid var(--border-color)', padding: 28
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
         <span style={{ fontSize: 22, color: '#ff2d55' }}>&#9878;</span>
         <div>
-          <h2 style={{ fontFamily: "'Space Grotesk'", fontSize: 16, fontWeight: 700, color: '#fff' }}>Self-Triage Vitals</h2>
-          <p style={{ fontFamily: "'Space Grotesk'", fontSize: 11, color: 'rgba(255,255,255,.35)' }}>Provide vitals for priority assessment</p>
+          <h2 style={{ fontFamily: "'Space Grotesk'", fontSize: 16, fontWeight: 700, color: 'var(--text-primary)' }}>Self-Triage Vitals</h2>
+          <p style={{ fontFamily: "'Space Grotesk'", fontSize: 11, color: 'var(--text-secondary)' }}>Provide vitals for priority assessment</p>
         </div>
       </div>
 
       {/* Pain Level */}
       <div style={{ marginBottom: 24 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', marginBottom: 8 }}>
-          <label style={{ fontFamily: "'Space Grotesk'", fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,.6)' }}>
+          <label style={{ fontFamily: "'Space Grotesk'", fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)' }}>
             Pain Level (0-10)
           </label>
           <span style={{ fontFamily: "'Bebas Neue'", fontSize: 28, color: getPainColor(vitals.pain_score) }}>{vitals.pain_score}</span>
@@ -54,7 +54,7 @@ export const VitalsPicker: React.FC<VitalsPickerProps> = ({ vitals, onChange }) 
           onChange={e => handleChange('pain_score', parseInt(e.target.value))}
           style={{ width: '100%', accentColor: '#ff2d55' }}
         />
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: "'Space Grotesk'", fontSize: 9, color: 'rgba(255,255,255,.25)', marginTop: 4 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: "'Space Grotesk'", fontSize: 9, color: 'var(--text-muted)', marginTop: 4 }}>
           <span>NO PAIN (0)</span><span>SEVERE (10)</span>
         </div>
       </div>
@@ -62,17 +62,17 @@ export const VitalsPicker: React.FC<VitalsPickerProps> = ({ vitals, onChange }) 
       {/* Blood Pressure */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12 }}>
         <div style={fieldWrap}>
-          <label style={{ fontFamily: "'Space Grotesk'", fontSize: 10, color: 'rgba(255,255,255,.35)', display: 'block', marginBottom: 4 }}>Systolic BP</label>
+          <label style={{ fontFamily: "'Space Grotesk'", fontSize: 10, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>Systolic BP</label>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <input type="number" value={vitals.systolic_bp} onChange={e => handleChange('systolic_bp', parseInt(e.target.value))} style={inputStyle} />
-            <span style={{ fontFamily: "'Space Grotesk'", fontSize: 10, color: 'rgba(255,255,255,.25)' }}>mmHg</span>
+            <span style={{ fontFamily: "'Space Grotesk'", fontSize: 10, color: 'var(--text-muted)' }}>mmHg</span>
           </div>
         </div>
         <div style={fieldWrap}>
-          <label style={{ fontFamily: "'Space Grotesk'", fontSize: 10, color: 'rgba(255,255,255,.35)', display: 'block', marginBottom: 4 }}>Diastolic BP</label>
+          <label style={{ fontFamily: "'Space Grotesk'", fontSize: 10, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>Diastolic BP</label>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <input type="number" value={vitals.diastolic_bp} onChange={e => handleChange('diastolic_bp', parseInt(e.target.value))} style={inputStyle} />
-            <span style={{ fontFamily: "'Space Grotesk'", fontSize: 10, color: 'rgba(255,255,255,.25)' }}>mmHg</span>
+            <span style={{ fontFamily: "'Space Grotesk'", fontSize: 10, color: 'var(--text-muted)' }}>mmHg</span>
           </div>
         </div>
       </div>
@@ -82,20 +82,20 @@ export const VitalsPicker: React.FC<VitalsPickerProps> = ({ vitals, onChange }) 
         <div style={{ ...fieldWrap, display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ fontSize: 20, color: '#ff2d55' }}>&#9829;</span>
           <div>
-            <label style={{ fontFamily: "'Space Grotesk'", fontSize: 10, color: 'rgba(255,255,255,.35)', display: 'block', marginBottom: 2 }}>Heart Rate</label>
+            <label style={{ fontFamily: "'Space Grotesk'", fontSize: 10, color: 'var(--text-muted)', display: 'block', marginBottom: 2 }}>Heart Rate</label>
             <div style={{ display: 'flex', alignItems: 'baseline' }}>
               <input type="number" value={vitals.heart_rate} onChange={e => handleChange('heart_rate', parseInt(e.target.value))} style={{ ...inputStyle, width: 60, fontSize: 20 }} />
-              <span style={{ fontFamily: "'Space Grotesk'", fontSize: 9, color: 'rgba(255,255,255,.25)' }}>bpm</span>
+              <span style={{ fontFamily: "'Space Grotesk'", fontSize: 9, color: 'var(--text-muted)' }}>bpm</span>
             </div>
           </div>
         </div>
         <div style={{ ...fieldWrap, display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ fontSize: 20, color: 'rgba(255,255,255,.5)' }}>&#9832;</span>
+          <span style={{ fontSize: 20, color: 'var(--text-secondary)' }}>&#9832;</span>
           <div>
-            <label style={{ fontFamily: "'Space Grotesk'", fontSize: 10, color: 'rgba(255,255,255,.35)', display: 'block', marginBottom: 2 }}>Body Temp</label>
+            <label style={{ fontFamily: "'Space Grotesk'", fontSize: 10, color: 'var(--text-muted)', display: 'block', marginBottom: 2 }}>Body Temp</label>
             <div style={{ display: 'flex', alignItems: 'baseline' }}>
               <input type="number" step="0.1" value={vitals.temperature_c} onChange={e => handleChange('temperature_c', parseFloat(e.target.value))} style={{ ...inputStyle, width: 60, fontSize: 20 }} />
-              <span style={{ fontFamily: "'Space Grotesk'", fontSize: 9, color: 'rgba(255,255,255,.25)' }}>C</span>
+              <span style={{ fontFamily: "'Space Grotesk'", fontSize: 9, color: 'var(--text-muted)' }}>C</span>
             </div>
           </div>
         </div>

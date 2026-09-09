@@ -146,3 +146,20 @@ export async function callNextPatient(doctorId: string, roomNumber: string): Pro
     return null;
   }
 }
+
+export const api = {
+  get: async (path: string) => {
+    const res = await fetch(`${API_BASE}${path}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`API GET ${path} failed`);
+    return await res.json();
+  },
+  post: async (path: string, body: any) => {
+    const res = await fetch(`${API_BASE}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error(`API POST ${path} failed`);
+    return await res.json();
+  }
+};

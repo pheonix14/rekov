@@ -54,7 +54,7 @@ export default function ReceiptPage({ params }: { params: { id: string } }) {
 
   if (error) {
     return (
-      <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', background: '#000', color: '#fff', fontFamily: "'Space Grotesk'" }}>
+      <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-main)', color: 'var(--text-primary)', fontFamily: "'Space Grotesk'" }}>
         <p>Invalid or expired receipt ID.</p>
       </div>
     );
@@ -62,15 +62,15 @@ export default function ReceiptPage({ params }: { params: { id: string } }) {
 
   if (!ticket) {
     return (
-      <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', background: '#000' }}>
-        <div style={{ width: 40, height: 40, border: '3px solid rgba(255,255,255,0.1)', borderTopColor: '#ff2d55', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+      <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-main)' }}>
+        <div style={{ width: 40, height: 40, border: '3px solid var(--border-color)', borderTopColor: '#ff2d55', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
         <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
       </div>
     );
   }
 
   return (
-    <div style={{ background: '#000', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+    <div style={{ background: 'var(--bg-main)', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
       
       <p style={{ color: '#ff2d55', fontFamily: "'Space Grotesk'", marginBottom: 20, textAlign: 'center' }}>
         {downloading ? 'Downloading your PDF receipt...' : 'Preparing receipt...'}
@@ -80,7 +80,7 @@ export default function ReceiptPage({ params }: { params: { id: string } }) {
       <div ref={receiptRef} style={{ background: '#fff', color: '#000', padding: '40px 32px', width: '100%', maxWidth: 400, position: 'relative' }}>
         {/* Zig-zag top */}
         <div style={{
-          position: 'absolute', top: 0, left: 0, width: '100%', height: 6, background: '#000',
+          position: 'absolute', top: 0, left: 0, width: '100%', height: 6, background: 'var(--bg-main)',
           clipPath: 'polygon(0 0, 5% 100%, 10% 0, 15% 100%, 20% 0, 25% 100%, 30% 0, 35% 100%, 40% 0, 45% 100%, 50% 0, 55% 100%, 60% 0, 65% 100%, 70% 0, 75% 100%, 80% 0, 85% 100%, 90% 0, 95% 100%, 100% 0)'
         }} />
 

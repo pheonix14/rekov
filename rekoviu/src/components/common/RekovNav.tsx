@@ -41,9 +41,9 @@ export function RekovNav({ currentModule }: { currentModule: string }) {
 
   const isLight = theme === 'LIGHT';
   const overlayBg = isLight ? 'rgba(255,255,255,0.95)' : 'rgba(0,0,0,0.95)';
-  const textColor = isLight ? '#000' : '#fff';
-  const mutedColor = isLight ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.4)';
-  const borderColor = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
+  const textColor = 'var(--text-primary)';
+  const mutedColor = 'var(--text-secondary)';
+  const borderColor = 'var(--border-color)';
 
   return (
     <>
@@ -55,7 +55,7 @@ export function RekovNav({ currentModule }: { currentModule: string }) {
       <button 
         onClick={() => { setMobileOpen(!mobileOpen); setSettingsOpen(false); }}
         style={{
-          position: 'fixed', bottom: 32, left: 32, zIndex: 9999,
+          position: 'fixed', bottom: 32, right: 32, zIndex: 9999,
           background: 'rgba(255,45,85,0.9)', border: '1px solid rgba(255,255,255,0.2)', 
           color: '#fff', fontSize: 24, cursor: 'pointer',
           width: 56, height: 56, borderRadius: '50%',
@@ -133,7 +133,7 @@ export function RekovNav({ currentModule }: { currentModule: string }) {
                 <select 
                   value={lang}
                   onChange={(e) => setLang(e.target.value)}
-                  style={{ background: isLight ? '#fff' : '#000', border: `1px solid ${borderColor}`, color: '#ff2d55', padding: '4px 8px', fontSize: 12, fontFamily: "'Space Grotesk'", borderRadius: 4, cursor: 'pointer', outline: 'none' }}
+                  style={{ background: 'var(--bg-main)', border: `1px solid ${borderColor}`, color: '#ff2d55', padding: '4px 8px', fontSize: 12, fontFamily: "'Space Grotesk'", borderRadius: 4, cursor: 'pointer', outline: 'none' }}
                 >
                   <option value="EN">EN - English</option>
                   <option value="HI">HI - Hindi</option>
@@ -147,7 +147,7 @@ export function RekovNav({ currentModule }: { currentModule: string }) {
                 <select 
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value)}
-                  style={{ background: isLight ? '#fff' : '#000', border: `1px solid ${borderColor}`, color: '#ff2d55', padding: '4px 8px', fontSize: 12, fontFamily: "'Space Grotesk'", borderRadius: 4, cursor: 'pointer', outline: 'none' }}
+                  style={{ background: 'var(--bg-main)', border: `1px solid ${borderColor}`, color: '#ff2d55', padding: '4px 8px', fontSize: 12, fontFamily: "'Space Grotesk'", borderRadius: 4, cursor: 'pointer', outline: 'none' }}
                 >
                   <option value="USD">USD ($)</option>
                   <option value="INR">INR (₹)</option>

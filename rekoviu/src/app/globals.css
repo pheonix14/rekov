@@ -12,11 +12,12 @@
 :root {
   --c1: #ff2d55;
   --c3: #fff;
+  --bg-main: #000;
   --bg: #000;
   --text-primary: #fff;
   --text-secondary: rgba(255, 255, 255, 0.4);
-  --text-muted: rgba(255, 255, 255, 0.15);
   --bg-card: rgba(255, 255, 255, 0.05);
+  --bg-input: rgba(255, 255, 255, 0.05);
   --border-color: rgba(255, 255, 255, 0.1);
   --bg-hover: rgba(255, 255, 255, 0.08);
   --font-display: 'Bebas Neue', sans-serif;
@@ -37,8 +38,8 @@ html {
 }
 
 body {
-  background: #000;
-  color: #fff;
+  background: var(--bg-main);
+  color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
   font-family: var(--font-body);
@@ -440,11 +441,13 @@ body.light-mode {
   --text-primary: #000;
   --text-secondary: rgba(0, 0, 0, 0.5);
   --text-muted: rgba(0, 0, 0, 0.2);
+  --bg-main: #fff;
   --bg-card: rgba(0, 0, 0, 0.03);
+  --bg-input: rgba(0, 0, 0, 0.03);
   --border-color: rgba(0, 0, 0, 0.1);
   --bg-hover: rgba(0, 0, 0, 0.06);
-  background: #fff;
-  color: #000;
+  background: var(--bg-main);
+  color: var(--text-primary);
 }
 
 body.light-mode #bg-img {

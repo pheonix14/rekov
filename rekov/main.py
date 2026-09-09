@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from app.core.config import settings
-from app.routers import kiosk, queue, doctor, health, auth, receptionist, settings
+from app.routers import kiosk, queue, doctor, health, auth, receptionist
 from app.core.database import init_db
 from app.services.sync_service import start_sync_service
 
@@ -35,7 +35,7 @@ app.add_middleware(
 )
 
 # Include Routers
-from app.routers import kiosk, queue, doctor, health, auth, receptionist, settings, ai
+from app.routers import kiosk, queue, doctor, health, auth, receptionist, settings as settings_router, ai
 
 app.include_router(health.router, prefix=settings.API_V1_STR)
 app.include_router(kiosk.router, prefix=settings.API_V1_STR)
@@ -43,7 +43,7 @@ app.include_router(queue.router, prefix=settings.API_V1_STR)
 app.include_router(doctor.router, prefix=settings.API_V1_STR)
 app.include_router(auth.router, prefix=settings.API_V1_STR)
 app.include_router(receptionist.router, prefix=f"{settings.API_V1_STR}/receptionist")
-app.include_router(settings.router, prefix=f"{settings.API_V1_STR}/settings")
+app.include_router(settings_router.router, prefix=f"{settings.API_V1_STR}/settings")
 app.include_router(ai.router, prefix=f"{settings.API_V1_STR}")
 
 @app.get("/")

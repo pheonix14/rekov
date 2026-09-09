@@ -3,6 +3,7 @@ import './globals.css';
 import { CursorEffect } from '@/components/common/CursorEffect';
 import { BackgroundLayer } from '@/components/common/BackgroundLayer';
 import { PageLoader } from '@/components/common/PageLoader';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 
 export const metadata: Metadata = {
   title: 'REKOV | Hospital Self-Service Kiosk',
@@ -17,13 +18,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <PageLoader />
-        <CursorEffect />
-        <BackgroundLayer />
-        <div className="bg-grain"></div>
-        <div className="vignette"></div>
-        <div id="wm" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '18vw' }}>REKOV</div>
-        {children}
+        <LanguageProvider>
+          <PageLoader />
+          <CursorEffect />
+          <BackgroundLayer />
+          <div className="bg-grain"></div>
+          <div className="vignette"></div>
+          <div id="wm" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '18vw' }}>REKOV</div>
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

@@ -30,27 +30,27 @@ export const CategoryNav: React.FC<CategoryNavProps> = ({ departments, selectedI
             style={{
               padding: '28px 20px', textAlign: 'center', cursor: 'pointer',
               display: 'flex', flexDirection: 'column', alignItems: 'center',
-              background: isSelected ? 'rgba(255,45,85,.08)' : 'rgba(255,255,255,.03)',
-              border: `1px solid ${isSelected ? 'rgba(255,45,85,.3)' : 'rgba(255,255,255,.08)'}`,
+              background: isSelected ? 'rgba(255,45,85,.08)' : 'var(--bg-card)',
+              border: `1px solid ${isSelected ? 'rgba(255,45,85,.3)' : 'var(--border-color)'}`,
               transition: 'background .2s, border-color .2s',
               position: 'relative'
             }}
           >
-            <span style={{ fontSize: 28, marginBottom: 10, color: isSelected ? '#ff2d55' : 'rgba(255,255,255,.5)' }}>{sym}</span>
+            <span style={{ fontSize: 28, marginBottom: 10, color: isSelected ? '#ff2d55' : 'var(--text-secondary)' }}>{sym}</span>
             <h3 style={{
               fontFamily: "'Space Grotesk'", fontSize: 14, fontWeight: 700,
-              color: isSelected ? '#fff' : 'rgba(255,255,255,.7)', marginBottom: 4
+              color: isSelected ? 'var(--text-primary)' : 'var(--text-secondary)', marginBottom: 4
             }}>{dep.name}</h3>
             <p style={{
               fontFamily: "'Space Grotesk'", fontSize: 11,
-              color: 'rgba(255,255,255,.3)', lineHeight: 1.4
+              color: 'var(--text-muted)', lineHeight: 1.4
             }}>{dep.description}</p>
             {dep.wait_time_minutes > 0 && (
               <span style={{
                 position: 'absolute', top: 8, right: 8,
                 fontFamily: "'Space Grotesk'", fontSize: 9, fontWeight: 700,
-                padding: '2px 8px', background: 'rgba(255,255,255,.06)',
-                border: '1px solid rgba(255,255,255,.1)', color: 'rgba(255,255,255,.4)'
+                padding: '2px 8px', background: 'var(--bg-card)',
+                border: '1px solid var(--border-color)', color: 'var(--text-secondary)'
               }}>
                 {dep.wait_time_minutes}m
               </span>

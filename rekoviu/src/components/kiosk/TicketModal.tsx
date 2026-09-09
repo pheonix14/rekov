@@ -32,14 +32,14 @@ export const TicketModal: React.FC<TicketModalProps> = ({ ticket, onClose }) => 
       padding: 16, background: 'rgba(0,0,0,.85)', backdropFilter: 'blur(8px)'
     }}>
       <div style={{
-        background: '#000', border: '1px solid rgba(255,255,255,.1)',
+        background: 'var(--bg-main)', border: '1px solid var(--border-color)',
         width: '100%', maxWidth: 420, position: 'relative', overflow: 'hidden'
       }}>
         {/* Close */}
         <button onClick={onClose} style={{
           position: 'absolute', top: 12, right: 12, width: 32, height: 32,
-          background: 'rgba(255,255,255,.06)', border: '1px solid rgba(255,255,255,.1)',
-          color: 'rgba(255,255,255,.4)', fontSize: 16, cursor: 'pointer',
+          background: 'var(--bg-hover)', border: '1px solid var(--border-color)',
+          color: 'var(--text-secondary)', fontSize: 16, cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10
         }}>&times;</button>
 
@@ -62,7 +62,7 @@ export const TicketModal: React.FC<TicketModalProps> = ({ ticket, onClose }) => 
           <div style={{ background: '#fff', color: '#000', padding: '32px 28px', position: 'relative' }}>
             {/* Zig-zag */}
             <div style={{
-              position: 'absolute', top: 0, left: 0, width: '100%', height: 6, background: '#000',
+              position: 'absolute', top: 0, left: 0, width: '100%', height: 6, background: 'var(--bg-main)',
               clipPath: 'polygon(0 0, 5% 100%, 10% 0, 15% 100%, 20% 0, 25% 100%, 30% 0, 35% 100%, 40% 0, 45% 100%, 50% 0, 55% 100%, 60% 0, 65% 100%, 70% 0, 75% 100%, 80% 0, 85% 100%, 90% 0, 95% 100%, 100% 0)'
             }} />
 
@@ -104,10 +104,10 @@ export const TicketModal: React.FC<TicketModalProps> = ({ ticket, onClose }) => 
         </div>
 
         {/* Footer */}
-        <div style={{ padding: 16, borderTop: '1px solid rgba(255,255,255,.08)', display: 'flex', gap: 12 }}>
+        <div style={{ padding: 16, borderTop: '1px solid var(--border-color)', display: 'flex', gap: 12 }}>
           <button onClick={handleDownload} style={{
-            flex: 1, padding: '16px', background: 'transparent', border: '1px solid rgba(255,255,255,.2)',
-            color: '#fff', fontFamily: "'Space Grotesk'", fontSize: 13, fontWeight: 700,
+            flex: 1, padding: '16px', background: 'transparent', border: '1px solid var(--border-color)',
+            color: 'var(--text-primary)', fontFamily: "'Space Grotesk'", fontSize: 13, fontWeight: 700,
             letterSpacing: '.1em', textTransform: 'uppercase', cursor: 'pointer'
           }}>DOWNLOAD</button>
           <button onClick={onClose} style={{

@@ -55,9 +55,9 @@ export default function QueueBoardPage() {
 
   if (!boardData) {
     return (
-      <main style={{
-        position: 'relative', zIndex: 10, height: '100vh', background: '#000',
-        display: 'flex', alignItems: 'center', justifyContent: 'center'
+      <div style={{
+        position: 'relative', zIndex: 10, height: '100vh', background: 'var(--bg-main)',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
       }}>
         <div style={{
           width: 48, height: 48, border: '3px solid rgba(255,255,255,.1)',
@@ -65,7 +65,7 @@ export default function QueueBoardPage() {
           animation: 'spin 1s linear infinite'
         }} />
         <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
-      </main>
+      </div>
     );
   }
 
@@ -94,8 +94,8 @@ export default function QueueBoardPage() {
             {now ? (
               <>
                 <h2 style={{
-                  fontFamily: "'Bebas Neue'", fontSize: 'clamp(60px, 10vw, 100px)',
-                  letterSpacing: '.06em', color: '#fff', lineHeight: 1, marginBottom: 12
+                  fontFamily: "'Bebas Neue'", fontSize: 'clamp(32px, 4vw, 48px)',
+                  letterSpacing: '.06em', color: 'var(--text-primary)', lineHeight: 1, marginBottom: 12
                 }}>{now.token_number}</h2>
                 <p style={{
                   fontFamily: "'Space Grotesk'", fontSize: 18, fontWeight: 700,
@@ -105,8 +105,8 @@ export default function QueueBoardPage() {
                   <StatusBadge type={now.priority_level} />
                   <span style={{
                     fontFamily: "'Space Grotesk'", fontSize: 11, fontWeight: 700,
-                    padding: '3px 10px', background: 'rgba(255,255,255,.06)',
-                    border: '1px solid rgba(255,255,255,.1)', color: '#fff'
+                    padding: '3px 10px', background: 'var(--bg-card)',
+                    border: '1px solid var(--border-color)', color: 'var(--text-primary)'
                   }}>{now.department_name}</span>
                 </div>
                 <div style={{
@@ -135,36 +135,32 @@ export default function QueueBoardPage() {
               background: 'rgba(255,255,255,.04)'
             }}>
               <div style={{ padding: 20, borderRight: '1px solid rgba(255,255,255,.06)' }}>
-                <p style={{ fontFamily: "'Space Grotesk'", fontSize: 10, color: 'rgba(255,255,255,.3)', letterSpacing: '.15em', textTransform: 'uppercase', marginBottom: 4 }}>IN QUEUE</p>
-                <p style={{ fontFamily: "'Bebas Neue'", fontSize: 36, color: '#fff', letterSpacing: '.04em' }}>{boardData.waiting_queue.length}</p>
+                <p style={{ fontFamily: "'Space Grotesk'", fontSize: 13, color: 'var(--text-secondary)', letterSpacing: '.1em', marginBottom: 4 }}>TOTAL WAITING</p>
+                <p style={{ fontFamily: "'Bebas Neue'", fontSize: 36, color: 'var(--text-primary)', letterSpacing: '.04em' }}>{boardData.waiting_queue.length}</p>
               </div>
               <div style={{ padding: 20 }}>
-                <p style={{ fontFamily: "'Space Grotesk'", fontSize: 10, color: 'rgba(255,255,255,.3)', letterSpacing: '.15em', textTransform: 'uppercase', marginBottom: 4 }}>AVG WAIT</p>
-                <p style={{ fontFamily: "'Bebas Neue'", fontSize: 36, color: '#fff', letterSpacing: '.04em' }}>{boardData.average_wait_minutes}<span style={{ fontSize: 18, color: 'rgba(255,255,255,.4)' }}> min</span></p>
+                <p style={{ fontFamily: "'Space Grotesk'", fontSize: 13, color: 'var(--text-secondary)', letterSpacing: '.1em', marginBottom: 4 }}>AVG WAIT</p>
+                <p style={{ fontFamily: "'Bebas Neue'", fontSize: 36, color: 'var(--text-primary)', letterSpacing: '.04em' }}>{boardData.average_wait_minutes}<span style={{ fontSize: 18, color: 'var(--text-muted)' }}> min</span></p>
               </div>
             </div>
             
             {/* Search Bar */}
-            <form onSubmit={handleSearch} style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,.06)', padding: '16px 24px', alignItems: 'center' }}>
-              <span style={{ fontSize: 18, color: 'rgba(255,255,255,.3)', marginRight: 12 }}>{'>'}</span>
+            <form onSubmit={handleSearch} style={{ display: 'flex', borderBottom: '1px solid var(--border-color)', padding: '16px 24px', gap: 16 }}>
               <input 
                 type="text" 
-                placeholder="Scan or enter Ticket ID (e.g. tck-1234)" 
+                placeholder="ENTER TOKEN NUMBER" 
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                style={{ flex: 1, background: 'transparent', border: 'none', color: '#fff', fontSize: 14, outline: 'none', fontFamily: "'Space Grotesk'" }}
+                onChange={e => setSearchQuery(e.target.value.toUpperCase())}
+                style={{ flex: 1, background: 'transparent', border: 'none', color: 'var(--text-primary)', fontSize: 14, outline: 'none', fontFamily: "'Space Grotesk'" }}
               />
               <button type="submit" style={{ background: '#ff2d55', color: '#fff', border: 'none', padding: '6px 12px', fontFamily: "'Space Grotesk'", fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>SEARCH</button>
             </form>
 
             {/* Waiting List */}
-            <div style={{ flex: 1, overflow: 'auto', padding: 0 }}>
-              <div style={{
-                padding: '16px 24px', borderBottom: '1px solid rgba(255,255,255,.06)',
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center'
-              }}>
-                <span style={{ fontFamily: "'Space Grotesk'", fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: '.05em' }}>WAITING TO BE CALLED</span>
-                <span style={{ fontFamily: "'Space Grotesk'", fontSize: 10, color: 'rgba(255,255,255,.3)' }}>TOKEN / ROOM</span>
+            <div style={{ flex: 1, overflow: 'auto', padding: 24 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)', paddingBottom: 16, marginBottom: 16 }}>
+                <span style={{ fontFamily: "'Space Grotesk'", fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '.05em' }}>WAITING TO BE CALLED</span>
+                <span style={{ fontFamily: "'Space Grotesk'", fontSize: 12, color: 'var(--text-secondary)' }}>UPDATED LIVE</span>
               </div>
 
               {boardData.waiting_queue.length === 0 ? (
@@ -175,7 +171,7 @@ export default function QueueBoardPage() {
                 boardData.waiting_queue.map((ticket, idx) => (
                   <div key={ticket.ticket_id} style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '16px 24px', borderBottom: '1px solid rgba(255,255,255,.04)',
+                    padding: '16px 0', borderBottom: '1px solid rgba(255,255,255,.04)',
                     opacity: idx < 3 ? 1 : 0.5
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
@@ -187,8 +183,8 @@ export default function QueueBoardPage() {
                         border: `1px solid ${idx === 0 ? 'rgba(255,45,85,.2)' : 'rgba(255,255,255,.08)'}`
                       }}>{idx + 1}</div>
                       <div>
-                        <p style={{ fontFamily: "'Bebas Neue'", fontSize: 22, color: '#fff', letterSpacing: '.04em' }}>{ticket.token_number}</p>
-                        <p style={{ fontFamily: "'Space Grotesk'", fontSize: 11, color: 'rgba(255,255,255,.3)' }}>{ticket.department_name}</p>
+                        <p style={{ fontFamily: "'Bebas Neue'", fontSize: 22, color: 'var(--text-primary)', letterSpacing: '.04em' }}>{ticket.token_number}</p>
+                        <p style={{ fontFamily: "'Space Grotesk'", fontSize: 11, color: 'var(--text-secondary)' }}>{ticket.department_name}</p>
                       </div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
@@ -225,12 +221,12 @@ export default function QueueBoardPage() {
         {/* Search Result Modal */}
         {(searchedTicket || searchError) && (
           <div style={{
-            position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)'
+            position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: 'var(--bg-card)', backdropFilter: 'blur(8px)'
           }} onClick={() => { setSearchedTicket(null); setSearchError(''); }}>
             <div style={{
-              background: '#111', border: '1px solid rgba(255,255,255,.1)', padding: 32, maxWidth: 400, width: '100%',
-              textAlign: 'center'
+              background: 'var(--bg-main)', border: '1px solid var(--border-color)', padding: 32, maxWidth: 400, width: '100%',
+              textAlign: 'center', position: 'relative'
             }} onClick={e => e.stopPropagation()}>
               {searchError ? (
                 <>
@@ -240,12 +236,16 @@ export default function QueueBoardPage() {
                 </>
               ) : searchedTicket && (
                 <>
-                  <h3 style={{ fontFamily: "'Bebas Neue'", fontSize: 32, color: '#fff', marginBottom: 8 }}>{searchedTicket.token_number}</h3>
+                  <span style={{ fontSize: 11, color: 'var(--text-secondary)', letterSpacing: '.1em' }}>TOKEN NUMBER</span>
+                  <h3 style={{ fontFamily: "'Bebas Neue'", fontSize: 32, color: 'var(--text-primary)', marginBottom: 8 }}>{searchedTicket.token_number}</h3>
                   <p style={{ fontFamily: "'Space Grotesk'", fontSize: 16, fontWeight: 700, color: '#ff2d55', marginBottom: 4 }}>STATUS: {searchedTicket.status.replace('_', ' ')}</p>
-                  <p style={{ fontFamily: "'Space Grotesk'", fontSize: 14, color: 'rgba(255,255,255,.7)', marginBottom: 16 }}>{searchedTicket.patient_name} - {searchedTicket.department_name}</p>
-                  <div style={{ background: 'rgba(255,255,255,.05)', padding: '12px', border: '1px solid rgba(255,255,255,.1)', marginBottom: 24 }}>
-                    <span style={{ fontFamily: "'Space Grotesk'", fontSize: 11, color: 'rgba(255,255,255,.4)', display: 'block', marginBottom: 4 }}>ASSIGNED ROOM</span>
-                    <span style={{ fontFamily: "'Bebas Neue'", fontSize: 28, color: '#fff' }}>{searchedTicket.room_number || 'PENDING'}</span>
+                  <p style={{ fontFamily: "'Space Grotesk'", fontSize: 14, color: 'var(--text-secondary)', marginBottom: 16 }}>{searchedTicket.patient_name} - {searchedTicket.department_name}</p>
+                  <div style={{
+                    display: 'inline-flex', flexDirection: 'column', alignItems: 'center',
+                    background: 'var(--bg-card)', padding: '12px', border: '1px solid var(--border-color)', marginBottom: 24
+                  }}>
+                    <span style={{ fontSize: 10, color: 'var(--text-secondary)', letterSpacing: '.1em', marginBottom: 4 }}>ROOM</span>
+                    <span style={{ fontFamily: "'Bebas Neue'", fontSize: 28, color: 'var(--text-primary)' }}>{searchedTicket.room_number || 'PENDING'}</span>
                   </div>
                 </>
               )}

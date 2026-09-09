@@ -66,14 +66,14 @@ export default function StatusPage() {
         <h1 style={{
           fontFamily: "'Bebas Neue', sans-serif",
           fontSize: 'clamp(36px, 6vw, 64px)',
-          letterSpacing: '.06em', color: '#fff', marginBottom: 8
+          letterSpacing: '.06em', color: 'var(--text-primary)', marginBottom: 8
         }}>
           Track Your Queue
         </h1>
 
         <p style={{
           fontFamily: "'Space Grotesk', sans-serif", fontSize: 13,
-          color: 'rgba(255,255,255,.4)', marginBottom: 36, maxWidth: 400
+          color: 'var(--text-secondary)', marginBottom: 36, maxWidth: 400
         }}>
           Enter your token number or reference ID. Enter a Doctor ID to access the clinical dashboard.
         </p>
@@ -89,8 +89,8 @@ export default function StatusPage() {
             onKeyDown={e => e.key === 'Enter' && handleLookup()}
             placeholder="GEN-101 or DOC_1"
             style={{
-              flex: 1, padding: '14px 20px', background: 'rgba(255,255,255,.06)',
-              border: '1px solid rgba(255,255,255,.12)', color: '#fff',
+              flex: 1, padding: '14px 20px', background: 'var(--bg-card)',
+              border: '1px solid var(--border-color)', color: 'var(--text-primary)',
               fontFamily: "'Space Grotesk', sans-serif", fontSize: 14,
               letterSpacing: '.05em', outline: 'none'
             }}
@@ -113,21 +113,21 @@ export default function StatusPage() {
         {/* Result Card */}
         {result && (
           <div style={{
-            width: '100%', maxWidth: 420, background: 'rgba(255,255,255,.04)',
-            border: '1px solid rgba(255,255,255,.1)', padding: 28, textAlign: 'left'
+            width: '100%', maxWidth: 420, background: 'var(--bg-card)',
+            border: '1px solid var(--border-color)', padding: 28, textAlign: 'left'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
               <span style={{
                 fontFamily: "'Bebas Neue', sans-serif", fontSize: 28,
-                letterSpacing: '.08em', color: '#fff'
+                letterSpacing: '.08em', color: 'var(--text-primary)'
               }}>{result.token_number}</span>
               <span style={{
                 fontFamily: "'Space Grotesk', sans-serif", fontSize: 11,
                 fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase',
                 padding: '4px 12px',
-                background: result.status === 'WAITING' ? 'rgba(255,45,85,.15)' : 'rgba(255,255,255,.1)',
-                color: result.status === 'WAITING' ? '#ff2d55' : '#fff',
-                border: `1px solid ${result.status === 'WAITING' ? 'rgba(255,45,85,.3)' : 'rgba(255,255,255,.15)'}`
+                background: result.status === 'WAITING' ? 'rgba(255,45,85,.15)' : 'var(--bg-hover)',
+                color: result.status === 'WAITING' ? '#ff2d55' : 'var(--text-primary)',
+                border: `1px solid ${result.status === 'WAITING' ? 'rgba(255,45,85,.3)' : 'var(--border-color)'}`
               }}>{result.status}</span>
             </div>
             <div style={{ display: 'grid', gap: 8 }}>
@@ -138,9 +138,9 @@ export default function StatusPage() {
                 ['Room', result.room_number],
                 ['Estimated Wait', result.estimated_wait],
               ].map(([label, value]) => (
-                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 8, borderBottom: '1px solid rgba(255,255,255,.05)' }}>
-                  <span style={{ fontFamily: "'Space Grotesk'", fontSize: 12, color: 'rgba(255,255,255,.4)' }}>{label}</span>
-                  <span style={{ fontFamily: "'Space Grotesk'", fontSize: 13, fontWeight: 700, color: '#fff' }}>{value}</span>
+                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 8, borderBottom: '1px solid var(--border-color)' }}>
+                  <span style={{ fontFamily: "'Space Grotesk'", fontSize: 12, color: 'var(--text-secondary)' }}>{label}</span>
+                  <span style={{ fontFamily: "'Space Grotesk'", fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>{value}</span>
                 </div>
               ))}
             </div>
@@ -154,7 +154,7 @@ export default function StatusPage() {
         {/* Back link */}
         <a href="/" style={{
           marginTop: 32, fontFamily: "'Space Grotesk'", fontSize: 12,
-          color: 'rgba(255,255,255,.35)', textDecoration: 'none', letterSpacing: '.1em'
+          color: 'var(--text-secondary)', textDecoration: 'none', letterSpacing: '.1em'
         }}>&#8592; BACK TO HOME</a>
       </main>
     </>

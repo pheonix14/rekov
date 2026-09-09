@@ -131,7 +131,7 @@ export default function KioskPage() {
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
       }}>
         <div style={{
-          width: 48, height: 48, border: '3px solid rgba(255,255,255,.1)',
+          width: 48, height: 48, border: '3px solid var(--border-color)',
           borderTopColor: '#ff2d55', borderRadius: '50%',
           animation: 'spin 1s linear infinite'
         }} />
@@ -159,8 +159,8 @@ export default function KioskPage() {
                     width: 36, height: 36, borderRadius: '50%',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontFamily: "'Space Grotesk'", fontSize: 14, fontWeight: 700,
-                    background: step === s ? '#ff2d55' : step > s ? 'rgba(255,255,255,.15)' : 'rgba(255,255,255,.05)',
-                    color: step >= s ? '#fff' : 'rgba(255,255,255,.3)',
+                    background: step === s ? '#ff2d55' : step > s ? 'var(--bg-hover)' : 'var(--bg-card)',
+                    color: step === s ? '#fff' : 'var(--text-primary)',
                     border: step === s ? '2px solid #ff2d55' : '1px solid var(--border-color)'
                   }}>
                     {step > s ? '\u2713' : s}
@@ -244,7 +244,7 @@ export default function KioskPage() {
           <div style={{
             padding: '16px 32px', borderTop: '1px solid var(--border-color)',
             display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            background: 'var(--bg-primary)', backdropFilter: 'blur(12px)',
+            background: 'var(--bg-main)', backdropFilter: 'blur(12px)',
             flexShrink: 0
           }}>
             <button onClick={handleBack} disabled={step === 1} style={{
