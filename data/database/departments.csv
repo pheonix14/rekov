@@ -1,0 +1,7 @@
+id,name,code,description,active_doctors_count,wait_time_minutes
+dep_gen,General Clinic,GEN,General health consultations,3,5
+dep_card,Cardiology,CARD,Heart health & ECG,2,12
+dep_ped,Pediatrics,PED,Child health,2,8
+dep_ortho,Orthopedics,ORTH,Bone & joint consults,1,15
+dep_pharm,Express Pharmacy,RX,Fast prescription pickup,4,3
+dep_emg,Emergency Triage,EMG,Immediate acute care,3,0
