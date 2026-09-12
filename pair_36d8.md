@@ -1,0 +1,1 @@
+Pair Extraordinaire badge automation test file
