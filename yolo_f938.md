@@ -1,0 +1,1 @@
+YOLO badge automation test file
