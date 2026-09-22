@@ -223,14 +223,19 @@ class QueueService:
 
             t = self._model_to_schema(db_ticket)
 
+            print(f"[TICKET]  CREATED   {token_num:12s} | {req.patient.full_name} | {dep.name} | Dr. {doc_name} | {priority_lvl} (score={triage_sc}) | fee={total_fee}")
+
             # Fire and forget PDF Generation + Supabase Upload
             def _process_receipts(tck: QueueTicket):
                 try:
+                    print(f"[RECEIPT]  GENERATING  {tck.token_number} for {tck.patient_name}")
                     user_path, our_path = generate_receipts(tck)
+                    print(f"[RECEIPT]  GENERATED   {tck.token_number} -> user={user_path}")
                     upload_receipt(user_path, "receipts", f"user/{tck.ticket_id}_user.pdf")
                     upload_receipt(our_path, "receipts", f"our/{tck.ticket_id}_our.pdf")
+                    print(f"[RECEIPT]  UPLOADED    {tck.token_number} to Supabase storage")
                 except Exception as e:
-                    print(f"Receipt processing failed: {e}")
+                    print(f"[RECEIPT]  FAILED      {tck.token_number} - {e}")
 
             threading.Thread(target=_process_receipts, args=(t,), daemon=True).start()
 

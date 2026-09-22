@@ -281,8 +281,19 @@ function KioskPage() {
             transition: pinchRef.current ? 'none' : 'transform 0.2s ease'
           }}>
 
-            {/* Session ID + Gesture hint */}
-            <GestureHint sessionId={sessionId.current} scale={scale} />
+            {/* Session ID — minimal pill, no banner text */}
+            {sessionId.current && (
+              <div style={{
+                fontFamily: "'Space Grotesk', monospace", fontSize: 11,
+                color: 'rgba(255,255,255,0.25)',
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: 20, padding: '3px 10px',
+                letterSpacing: '.04em', marginBottom: 10, display: 'inline-block'
+              }}>
+                SESSION: {sessionId.current.slice(0, 8).toUpperCase()}
+              </div>
+            )}
 
             {/* Progress Steps */}
             <div style={{ display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap', marginBottom: 40 }}>
@@ -389,16 +400,34 @@ function KioskPage() {
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = '#D91636'; e.currentTarget.style.color = '#D91636'; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-color)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
-            >{step === 1 ? '← HOME' : '← BACK'}</button>
+            >{step === 1 ? '<- HOME' : '<- BACK'}</button>
 
-            <button onClick={handleNext} disabled={(step === 1 && (!patientName || !patientPhone)) || (step === 2 && !selectedDepId) || loading} style={{
-              padding: '14px 40px', background: '#D91636', border: 'none',
-              color: '#fff', fontFamily: "'Space Grotesk'", fontSize: 'clamp(16px, 1.7vw, 20px)', fontWeight: 700,
-              letterSpacing: '.1em', textTransform: 'uppercase', cursor: 'pointer',
-              opacity: ((step === 1 && (!patientName || !patientPhone)) || (step === 2 && !selectedDepId) || loading) ? 0.4 : 1
-            }}>
-              {loading ? '...' : step === 4 ? 'COMPLETE CHECK-IN' : 'CONTINUE &#8594;'}
-            </button>
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+              {/* SKIP VITALS — only on step 4 */}
+              {step === 4 && (
+                <button
+                  onClick={handleNext}
+                  style={{
+                    padding: '14px 28px', background: 'transparent',
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    color: 'rgba(255,255,255,0.5)',
+                    fontFamily: "'Space Grotesk'", fontSize: 'clamp(13px, 1.3vw, 16px)', fontWeight: 700,
+                    letterSpacing: '.08em', textTransform: 'uppercase', cursor: 'pointer'
+                  }}
+                >
+                  SKIP VITALS
+                </button>
+              )}
+
+              <button onClick={handleNext} disabled={(step === 1 && (!patientName || !patientPhone)) || (step === 2 && !selectedDepId) || loading} style={{
+                padding: '14px 40px', background: '#D91636', border: 'none',
+                color: '#fff', fontFamily: "'Space Grotesk'", fontSize: 'clamp(16px, 1.7vw, 20px)', fontWeight: 700,
+                letterSpacing: '.1em', textTransform: 'uppercase', cursor: 'pointer',
+                opacity: ((step === 1 && (!patientName || !patientPhone)) || (step === 2 && !selectedDepId) || loading) ? 0.4 : 1
+              }}>
+                {loading ? '...' : step === 4 ? 'COMPLETE CHECK-IN' : 'CONTINUE ->'}
+              </button>
+            </div>
           </div>
         )}
 
@@ -414,53 +443,3 @@ function KioskPage() {
   );
 }
 
-// ── GestureHint: session ID pill + pinch hint badge ───────────────────────────
-function GestureHint({ sessionId, scale }: { sessionId: string; scale: number }) {
-  const [visible, setVisible] = useState(true);
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(false), 4000);
-    return () => clearTimeout(t);
-  }, []);
-
-  return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
-      {/* Session ID */}
-      {sessionId && (
-        <div style={{
-          fontFamily: "'Space Grotesk', monospace", fontSize: 11, color: 'rgba(255,255,255,0.3)',
-          background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
-          borderRadius: 20, padding: '3px 10px', letterSpacing: '.04em'
-        }}>
-          SESSION: {sessionId.slice(0, 8).toUpperCase()}
-        </div>
-      )}
-
-      {/* Pinch hint + live scale indicator */}
-      <div style={{
-        display: 'flex', alignItems: 'center', gap: 8,
-        opacity: visible || Math.abs(scale - 1) > 0.05 ? 1 : 0,
-        transition: 'opacity 0.6s ease'
-      }}>
-        {Math.abs(scale - 1) > 0.05 && (
-          <div style={{
-            fontFamily: "'Space Grotesk'", fontSize: 11, fontWeight: 700,
-            color: '#D91636', background: 'rgba(217,22,54,0.1)',
-            border: '1px solid rgba(217,22,54,0.3)', borderRadius: 20, padding: '3px 10px'
-          }}>
-            {Math.round(scale * 100)}%
-          </div>
-        )}
-        {visible && (
-          <div style={{
-            fontFamily: "'Space Grotesk'", fontSize: 11, color: 'rgba(255,255,255,0.35)',
-            background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
-            borderRadius: 20, padding: '3px 10px', letterSpacing: '.03em',
-            display: 'flex', alignItems: 'center', gap: 5
-          }}>
-            <span style={{ fontSize: 13 }}>🤏</span> Pinch to zoom  <span style={{ opacity: 0.5, margin: '0 3px' }}>|</span>  <span style={{ fontSize: 13 }}>☝️</span> Swipe to scroll
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}

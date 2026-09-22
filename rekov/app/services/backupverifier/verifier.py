@@ -55,7 +55,7 @@ os.makedirs(DATA_DIR, exist_ok=True)
 CSV_TABLE_MAP = {
     "doctors.csv":       "doctors",
     "departments.csv":   "departments",
-    "combos.csv":        "combos",
+    # combos not synced to Supabase (table not created there)
     "patients.csv":      "patients",
     "schedules.csv":     "schedules",
 }

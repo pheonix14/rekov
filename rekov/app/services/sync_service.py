@@ -35,7 +35,6 @@ def _backup_locally(ticket: dict):
 
 def sync_worker():
     """Background thread that runs every 30s to sync unsynced records to Supabase when connected to internet."""
-    pri_map = {"EMERGENCY": 3, "URGENT": 2, "STANDARD": 1}
     while True:
         try:
             url = os.environ.get("SUPABASE_URL")
@@ -51,8 +50,10 @@ def sync_worker():
             db = SessionLocal()
             unsynced = db.query(TicketModel).filter(TicketModel.synced == False).all()
             
+            if unsynced:
+                print(f"[SUPABASE] SYNC START  {len(unsynced)} unsynced ticket(s)")
+
             for record in unsynced:
-                pri_int = pri_map.get(str(record.priority_level).upper(), 1)
                 payload = {
                     "ticket_id": record.ticket_id,
                     "token_number": record.token_number,
@@ -61,7 +62,7 @@ def sync_worker():
                     "patient_name": record.patient_name,
                     "patient_phone": record.patient_phone,
                     "status": record.status,
-                    "priority_level": pri_int,
+                    "priority_level": str(record.priority_level).upper(),   # string, not int
                     "triage_score": record.triage_score or 1,
                     "total_fee": float(record.total_fee or 0.0),
                     "created_at": record.created_at.isoformat()
@@ -76,6 +77,7 @@ def sync_worker():
                         client.table('tickets').upsert(payload, on_conflict='ticket_id').execute()
                         record.synced = True
                         db.add(record)
+                        print(f"[SUPABASE] PUSH OK     {record.token_number} | {record.patient_name}")
                     except Exception as e:
                         err_str = str(e)
                         # If foreign key violation on department_id or doctor_id, retry without them
@@ -87,24 +89,26 @@ def sync_worker():
                                 client.table('tickets').upsert(safe_payload, on_conflict='ticket_id').execute()
                                 record.synced = True
                                 db.add(record)
+                                print(f"[SUPABASE] PUSH OK(FK) {record.token_number} | {record.patient_name}")
                             except Exception as err2:
-                                print(f"[Supabase Sync] Retry failed for {record.ticket_id}: {err2}")
+                                print(f"[SUPABASE] PUSH FAIL   {record.ticket_id}: {err2}")
                         else:
-                            print(f"[Supabase Sync] Upsert failed for {record.ticket_id}: {e}")
+                            print(f"[SUPABASE] PUSH FAIL   {record.ticket_id}: {e}")
                 else:
+                    # No internet — mark synced locally so it doesn't pile up
                     record.synced = True
                     db.add(record)
+                    print(f"[SUPABASE] OFFLINE     {record.token_number} saved locally only")
                     
             db.commit()
             db.close()
         except Exception as ex:
-            print(f"[Supabase Sync] Unexpected error: {ex}")
+            print(f"[SUPABASE] SYNC ERROR  {ex}")
             
         time.sleep(30)
 
 def run_sync_cycle() -> dict:
     """Forces an immediate sync cycle and offline JSON backup."""
-    pri_map = {"EMERGENCY": 3, "URGENT": 2, "STANDARD": 1}
     url = os.environ.get("SUPABASE_URL")
     key = os.environ.get("SUPABASE_KEY")
     
@@ -121,7 +125,6 @@ def run_sync_cycle() -> dict:
     
     # Ensure all existing tickets have local offline backup JSON
     for record in all_tickets:
-        pri_int = pri_map.get(str(record.priority_level).upper(), 1)
         _backup_locally({
             "ticket_id": record.ticket_id,
             "token_number": record.token_number,
@@ -130,7 +133,7 @@ def run_sync_cycle() -> dict:
             "patient_name": record.patient_name,
             "patient_phone": record.patient_phone,
             "status": record.status,
-            "priority_level": pri_int,
+            "priority_level": str(record.priority_level).upper(),
             "triage_score": record.triage_score or 1,
             "total_fee": float(record.total_fee or 0.0),
             "created_at": record.created_at.isoformat() if record.created_at else ""
@@ -138,7 +141,6 @@ def run_sync_cycle() -> dict:
 
     synced_in_this_run = 0
     for record in unsynced:
-        pri_int = pri_map.get(str(record.priority_level).upper(), 1)
         payload = {
             "ticket_id": record.ticket_id,
             "token_number": record.token_number,
@@ -147,7 +149,7 @@ def run_sync_cycle() -> dict:
             "patient_name": record.patient_name,
             "patient_phone": record.patient_phone,
             "status": record.status,
-            "priority_level": pri_int,
+            "priority_level": str(record.priority_level).upper(),
             "triage_score": record.triage_score or 1,
             "total_fee": float(record.total_fee or 0.0),
             "created_at": record.created_at.isoformat() if record.created_at else ""
