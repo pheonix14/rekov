@@ -12,6 +12,8 @@ if _backend_env.exists():
 if _root_env.exists():
     load_dotenv(_root_env)
 
+from app.core.config import settings
+
 # IMPORTANT: Replace this placeholder with your actual Hugging Face token.
 # Since your repository is private, you can hardcode it here or use environment variables.
 
@@ -22,7 +24,13 @@ def transcribe_audio_hf(audio_bytes: bytes) -> str:
     """
     Sends the audio bytes to Hugging Face Whisper API for transcription.
     """
-    hf_token = os.getenv("HF_API_TOKEN", os.getenv("HF_TOKEN", "hf_Placeholder"))
+    hf_token = (
+        settings.CONFIG.get("hf_token")
+        or settings.CONFIG.get("HF_TOKEN")
+        or getattr(settings, "HF_TOKEN", "")
+        or os.getenv("HF_API_TOKEN")
+        or os.getenv("HF_TOKEN", "hf_Placeholder")
+    )
     headers = {"Authorization": f"Bearer {hf_token}"}
     response = requests.post(WHISPER_URL, headers=headers, data=audio_bytes)
     response.raise_for_status()
@@ -42,7 +50,14 @@ def triage_symptoms_hf(transcript: str) -> dict:
     - department: A guessed department_id (e.g. Cardiology, General, Pediatrics, Orthopedics, Neurology, Dermatology).
     - is_emergency: Boolean.
     """
-    hf_token = os.getenv("HF_API_TOKEN", os.getenv("HUGGINGFACE_API_KEY", os.getenv("HF_TOKEN")))
+    hf_token = (
+        settings.CONFIG.get("hf_token")
+        or settings.CONFIG.get("HF_TOKEN")
+        or getattr(settings, "HF_TOKEN", "")
+        or os.getenv("HF_API_TOKEN")
+        or os.getenv("HUGGINGFACE_API_KEY")
+        or os.getenv("HF_TOKEN")
+    )
     if not hf_token:
         return {
             "issue": transcript,

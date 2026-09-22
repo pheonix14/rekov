@@ -242,6 +242,7 @@ export const VoiceCallProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setCallStatus('AI_THINKING');
 
     const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    setLatestUserQuery(userText);
     setMessages(prev => [...prev, { role: 'user', content: userText, timestamp }]);
 
     try {
@@ -261,12 +262,25 @@ export const VoiceCallProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
       const data = await res.json();
       const reply = data.reply || "I am here to help you. What department or service do you need?";
+      const replyTimestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      setMessages(prev => [...prev, { role: 'assistant', content: reply, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
+      setLatestAssistantReply(reply);
+      setMessages(prev => [...prev, { role: 'assistant', content: reply, timestamp: replyTimestamp }]);
 
-      // Check for actions (e.g. ticket booking action)
-      if (data.action === 'book_appointment' && data.intent) {
-        await handleTicketBooking(data.intent, reply);
+      // Handle actions returned by the backend
+      if (data.action === 'BOOK_TICKET' && data.action_data) {
+        // Backend already created the ticket — just grab it from response
+        const ticket = data.action_data.ticket || data.action_data;
+        setLatestTicket(ticket);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('current_ticket', JSON.stringify(ticket));
+        }
+        speakAIResponse(reply);
+      } else if (data.action === 'GO_TO_VOICE_ASSISTANT') {
+        speakAIResponse(reply);
+        setTimeout(() => {
+          if (typeof window !== 'undefined') window.location.href = '/voice-assistant';
+        }, 1800);
       } else {
         speakAIResponse(reply);
       }
@@ -276,52 +290,6 @@ export const VoiceCallProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       speakAIResponse(errMsg);
     } finally {
       isProcessingRef.current = false;
-    }
-  };
-
-  // Ticket booking helper action
-  const handleTicketBooking = async (intent: any, replyText: string) => {
-    try {
-      const host = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || `http://${host}:4040/api/v1`;
-
-      const pName = intent.patient_name || 'Kiosk Guest';
-      const pPhone = intent.patient_phone || '9999999999';
-      const dept = intent.department_name || 'General OPD';
-      const pAge = intent.patient_age || 30;
-
-      const res = await fetch(`${apiUrl}/tickets/create`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          department_name: dept,
-          priority_level: intent.is_emergency ? 'EMERGENCY' : 'STANDARD',
-          triage_score: intent.is_emergency ? 3 : 1,
-          combo_ids: [],
-          patient_info: {
-            national_id: 'GUEST-VOICE',
-            full_name: pName,
-            phone: pPhone,
-            age: pAge,
-            gender: 'O',
-            insurance_member: false
-          }
-        })
-      });
-
-      if (res.ok) {
-        const ticket = await res.json();
-        setLatestTicket(ticket);
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('current_ticket', JSON.stringify(ticket));
-        }
-        const confirmMsg = `${replyText} Your Token is ${ticket.token_number}.`;
-        speakAIResponse(confirmMsg);
-      } else {
-        speakAIResponse(replyText);
-      }
-    } catch (e) {
-      speakAIResponse(replyText);
     }
   };
 
@@ -415,6 +383,8 @@ export const VoiceCallProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         callStatus,
         isMuted,
         liveTranscript,
+        latestUserQuery,
+        latestAssistantReply,
         messages,
         sessionId,
         latestTicket,

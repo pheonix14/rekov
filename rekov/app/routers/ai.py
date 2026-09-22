@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from app.core.database import SessionLocal, TicketModel
+from app.core.config import settings
 
 from pathlib import Path
 
@@ -40,7 +41,14 @@ def get_ai_summary(ticket_id: str):
             f"Summary:"
         )
 
-        hf_api_token = os.getenv("HF_API_TOKEN", os.getenv("HUGGINGFACE_API_KEY", os.getenv("HF_TOKEN")))
+        hf_api_token = (
+            settings.CONFIG.get("hf_token")
+            or settings.CONFIG.get("HF_TOKEN")
+            or getattr(settings, "HF_TOKEN", "")
+            or os.getenv("HF_API_TOKEN")
+            or os.getenv("HUGGINGFACE_API_KEY")
+            or os.getenv("HF_TOKEN")
+        )
         if not hf_api_token:
             return AISummaryResponse(summary="[Offline Mode] Patient has a triage score of " + str(ticket.triage_score) + " and selected " + str(ticket.combos_selected))
 

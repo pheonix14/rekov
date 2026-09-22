@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { QueueTicket } from '@/types';
 import { StatusBadge } from '../common/StatusBadge';
 import { QRCodeSVG } from 'qrcode.react';
@@ -10,6 +11,7 @@ interface TicketModalProps {
 }
 
 export const TicketModal: React.FC<TicketModalProps> = ({ ticket, onClose }) => {
+  const router = useRouter();
   const receiptRef = useRef<HTMLDivElement>(null);
 
   if (!ticket) return null;
@@ -100,6 +102,46 @@ export const TicketModal: React.FC<TicketModalProps> = ({ ticket, onClose }) => 
               />
               <p style={{ fontFamily: "'Space Grotesk'", fontSize: 'clamp(11px, 1.1vw, 15px)', color: '#999', letterSpacing: '.1em', textTransform: 'uppercase' }}>Scan QR to save your receipt</p>
             </div>
+          </div>
+        </div>
+
+        {/* Voice Assistant Prompt: Ask Yes or No to proceed to voice assistant for future help */}
+        <div style={{
+          padding: '14px 16px', background: 'rgba(217, 22, 54, 0.08)',
+          borderTop: '1px solid var(--border-color)', textAlign: 'center'
+        }}>
+          <p style={{
+            fontFamily: "'Space Grotesk'", fontSize: 'clamp(12px, 1.2vw, 14px)',
+            fontWeight: 700, color: 'var(--text-primary)', marginBottom: 8
+          }}>
+            Need help or directions? Proceed to AI Voice Assistant?
+          </p>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button
+              onClick={() => {
+                if (typeof window !== 'undefined') {
+                  localStorage.setItem('current_ticket', JSON.stringify(ticket));
+                }
+                router.push('/voice-assistant');
+              }}
+              style={{
+                flex: 1, padding: '10px 12px', background: '#D91636', color: '#fff', border: 'none',
+                fontFamily: "'Space Grotesk'", fontSize: 'clamp(12px, 1.2vw, 14px)', fontWeight: 700,
+                letterSpacing: '.05em', cursor: 'pointer'
+              }}
+            >
+              YES &#8594; VOICE ASSISTANT
+            </button>
+            <button
+              onClick={onClose}
+              style={{
+                flex: 1, padding: '10px 12px', background: 'transparent', color: 'var(--text-secondary)',
+                border: '1px solid var(--border-color)', fontFamily: "'Space Grotesk'",
+                fontSize: 'clamp(12px, 1.2vw, 14px)', fontWeight: 700, letterSpacing: '.05em', cursor: 'pointer'
+              }}
+            >
+              NO, FINISH
+            </button>
           </div>
         </div>
 

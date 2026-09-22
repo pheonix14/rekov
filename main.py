@@ -16,6 +16,7 @@ import threading
 import time
 import socket
 import urllib.request
+import json
 from logger import sys_logger, UPDATE_LEVEL
 
 
@@ -209,19 +210,28 @@ def _is_service_healthy(url: str) -> bool:
 def _kill_port(port: int):
     """Kill any process holding a port (Windows)."""
     try:
-        result = subprocess.run(
-            ["netstat", "-ano"], capture_output=True, text=True, timeout=5
+        netstat_bin = shutil.which("netstat") or (
+            r"C:\Windows\System32\netstat.exe" if os.path.exists(r"C:\Windows\System32\netstat.exe") else "netstat"
         )
+        taskkill_bin = shutil.which("taskkill") or (
+            r"C:\Windows\System32\taskkill.exe" if os.path.exists(r"C:\Windows\System32\taskkill.exe") else "taskkill"
+        )
+        result = subprocess.run(
+            [netstat_bin, "-ano"], capture_output=True, text=True, timeout=5
+        )
+        killed_pids = set()
         for line in result.stdout.splitlines():
-            if f":{port}" in line and "LISTENING" in line:
-                parts = line.split()
-                pid = parts[-1]
-                if pid.isdigit() and int(pid) > 0:
-                    subprocess.run(
-                        ["taskkill", "/F", "/T", "/PID", pid],
-                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                    )
-                    sys_logger.warning(f"  [WRN]  [CLEANUP]  Killed stale PID {pid} on :{port}")
+            if f":{port}" in line:
+                parts = line.strip().split()
+                if parts:
+                    pid = parts[-1]
+                    if pid.isdigit() and int(pid) > 0 and pid not in killed_pids:
+                        killed_pids.add(pid)
+                        subprocess.run(
+                            [taskkill_bin, "/F", "/T", "/PID", pid],
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                        )
+                        sys_logger.warning(f"  [WRN]  [CLEANUP]  Killed stale PID {pid} on :{port}")
     except Exception:
         pass
 
@@ -309,28 +319,76 @@ def main():
     frontend_dir = os.path.join(root_dir, "rekoviu")
     is_win = sys.platform == "win32"
 
+    # ── Load config.json Supabase & Hugging Face credentials ─────────────────
+    config_candidates = [
+        os.path.join(root_dir, "config.json"),
+        os.path.join(backend_dir, "config.json"),
+    ]
+    for cfg_path in config_candidates:
+        if os.path.isfile(cfg_path):
+            try:
+                with open(cfg_path, "r", encoding="utf-8") as f:
+                    cfg_data = json.load(f)
+                    sb = cfg_data.get("supabase", {}) if isinstance(cfg_data.get("supabase"), dict) else {}
+                    url = sb.get("url") or cfg_data.get("SUPABASE_URL")
+                    key = sb.get("key") or cfg_data.get("SUPABASE_KEY")
+                    if url:
+                        os.environ["SUPABASE_URL"] = url
+                    if key:
+                        os.environ["SUPABASE_KEY"] = key
+                    hf = cfg_data.get("hf_token") or cfg_data.get("HF_TOKEN") or cfg_data.get("HF_API_TOKEN") or os.environ.get("HF_TOKEN") or os.environ.get("HF_API_TOKEN") or ""
+                    if hf:
+                        os.environ["HF_TOKEN"] = hf
+                        os.environ["HF_API_TOKEN"] = hf
+                        os.environ["HUGGINGFACE_API_KEY"] = hf
+                    sys_logger.success(f"  [OK]   [CONFIG] Supabase & Hugging Face credentials loaded from {os.path.basename(cfg_path)}")
+                    break
+            except Exception as e:
+                sys_logger.warning(f"  [WRN]  [CONFIG] Could not parse {cfg_path}: {e}")
+
     # ── 1. Backend Python dependencies ───────────────────────────────────────
-    sys_logger.update("  [UPD]  [SETUP]  Installing backend dependencies...")
+    backend_ready = False
     try:
-        subprocess.run(
-            [sys.executable, "-m", "pip", "install", "-r", "requirements.txt", "--quiet"],
-            cwd=backend_dir, check=True,
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        check_proc = subprocess.run(
+            [sys.executable, "-c", "import fastapi, uvicorn, pydantic, supabase, requests, edge_tts, fpdf"],
+            capture_output=True, text=True, timeout=5,
         )
+        if check_proc.returncode == 0:
+            backend_ready = True
+    except Exception:
+        backend_ready = False
+
+    if backend_ready:
         sys_logger.success("  [OK]   [SETUP]  Backend dependencies ready.")
-    except subprocess.CalledProcessError as e:
-        sys_logger.error(f"  [ERR]  [SETUP]  Backend dependencies failed: {e}")
-        sys.exit(1)
+    else:
+        sys_logger.update("  [UPD]  [SETUP]  Installing backend dependencies...")
+        req_file = os.path.join(backend_dir, "requirements.txt")
+        if not os.path.exists(req_file):
+            req_file = os.path.join(root_dir, "requirements.txt")
+        try:
+            subprocess.run(
+                [sys.executable, "-m", "pip", "install", "-r", req_file, "--quiet"],
+                cwd=backend_dir, check=True,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            )
+            sys_logger.success("  [OK]   [SETUP]  Backend dependencies ready.")
+        except subprocess.CalledProcessError as e:
+            sys_logger.error(f"  [ERR]  [SETUP]  Backend dependencies failed: {e}")
+            sys.exit(1)
 
     # ── 2. Frontend Node dependencies ────────────────────────────────────────
-    sys_logger.update("  [UPD]  [SETUP]  Installing frontend dependencies...")
-    try:
-        npm_cmd = "npm.cmd" if is_win else "npm"
-        subprocess.run([npm_cmd, "install", "--silent"], cwd=frontend_dir, check=True, shell=is_win)
+    node_modules_dir = os.path.join(frontend_dir, "node_modules")
+    if os.path.isdir(node_modules_dir):
         sys_logger.success("  [OK]   [SETUP]  Frontend dependencies ready.")
-    except subprocess.CalledProcessError as e:
-        sys_logger.error(f"  [ERR]  [SETUP]  Frontend dependencies failed: {e}")
-        sys.exit(1)
+    else:
+        sys_logger.update("  [UPD]  [SETUP]  Installing frontend dependencies (first-time setup)...")
+        try:
+            npm_cmd = shutil.which("npm.cmd") or shutil.which("npm") or ("npm.cmd" if is_win else "npm")
+            subprocess.run([npm_cmd, "install"], cwd=frontend_dir, check=True, shell=is_win)
+            sys_logger.success("  [OK]   [SETUP]  Frontend dependencies ready.")
+        except subprocess.CalledProcessError as e:
+            sys_logger.error(f"  [ERR]  [SETUP]  Frontend dependencies failed: {e}")
+            sys.exit(1)
 
     # ── 3. Clear stale .next webpack cache ───────────────────────────────────
     if not ui_alive:

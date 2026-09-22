@@ -15,8 +15,10 @@ load_dotenv()
 load_dotenv(os.path.join(ROOT_DIR, ".env"))
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), ".env"))
 
-SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+from app.core.config import settings
+
+SUPABASE_URL = settings.SUPABASE_URL
+SUPABASE_KEY = settings.SUPABASE_KEY
 
 supabase: Client | None = None
 if SUPABASE_URL and SUPABASE_KEY:

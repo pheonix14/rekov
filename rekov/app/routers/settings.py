@@ -4,8 +4,20 @@ import urllib.request
 import urllib.error
 import json
 import os
+from app.core.config import settings, save_config_key
 
 router = APIRouter()
+
+def _get_active_hf_token() -> str:
+    return (
+        settings.CONFIG.get("hf_token")
+        or settings.CONFIG.get("HF_TOKEN")
+        or getattr(settings, "HF_TOKEN", "")
+        or os.environ.get("HF_TOKEN")
+        or os.environ.get("HF_API_TOKEN")
+        or os.environ.get("HUGGINGFACE_API_KEY")
+        or ""
+    )
 
 # Module-level storage for user-overridden currency
 _user_currency_override: str | None = None
@@ -62,15 +74,14 @@ def set_currency(body: CurrencyUpdate):
 @router.put("/hf_token")
 def set_hf_token(body: HfTokenUpdate):
     token = body.token.strip()
-    os.environ["HF_API_TOKEN"] = token
-    os.environ["HF_TOKEN"] = token
+    save_config_key("hf_token", token)
     # Also return the live verification status
     verify_res = _verify_hf_token_direct(token)
     return {"status": "ok", "verification": verify_res}
 
 @router.get("/hf_token")
 def get_hf_token():
-    return {"token": os.environ.get("HF_API_TOKEN", os.environ.get("HF_TOKEN", ""))}
+    return {"token": _get_active_hf_token()}
 
 @router.post("/hf_token/verify", response_model=HfTokenStatusResponse)
 def verify_hf_token(body: HfTokenUpdate):
@@ -80,8 +91,8 @@ def verify_hf_token(body: HfTokenUpdate):
 
 @router.get("/hf_token/status", response_model=HfTokenStatusResponse)
 def get_current_hf_token_status():
-    """Verify currently configured environment token."""
-    cur_token = os.environ.get("HF_API_TOKEN", os.environ.get("HF_TOKEN", ""))
+    """Verify currently configured token from config."""
+    cur_token = _get_active_hf_token()
     res = _verify_hf_token_direct(cur_token)
     return HfTokenStatusResponse(**res)
 

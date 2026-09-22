@@ -118,3 +118,57 @@ USING (bucket_id = 'patient-documents');
 CREATE POLICY "Public Upload Patient Documents" 
 ON storage.objects FOR INSERT 
 WITH CHECK (bucket_id = 'patient-documents');
+
+-- ====================================================================
+-- SUPABASE STORAGE BUCKET: receipts
+-- ====================================================================
+
+INSERT INTO storage.buckets (id, name, public, avif_autodetection, allowed_mime_types) 
+VALUES (
+  'receipts', 
+  'receipts', 
+  true,
+  false,
+  ARRAY['application/pdf', 'image/png', 'image/jpeg']
+)
+ON CONFLICT (id) DO NOTHING;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'storage' AND tablename = 'objects'
+    AND policyname = 'Public Read Receipts'
+  ) THEN
+    CREATE POLICY "Public Read Receipts"
+    ON storage.objects FOR SELECT
+    USING (bucket_id = 'receipts');
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'storage' AND tablename = 'objects'
+    AND policyname = 'Public Upload Receipts'
+  ) THEN
+    CREATE POLICY "Public Upload Receipts"
+    ON storage.objects FOR INSERT
+    WITH CHECK (bucket_id = 'receipts');
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'storage' AND tablename = 'objects'
+    AND policyname = 'Public Update Receipts'
+  ) THEN
+    CREATE POLICY "Public Update Receipts"
+    ON storage.objects FOR UPDATE
+    USING (bucket_id = 'receipts');
+  END IF;
+END $$;
+

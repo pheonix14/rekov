@@ -32,12 +32,14 @@ ENV/
 env.bak/
 venv.bak/
 
-# Environment variables
+# Environment variables & configuration
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+config.json
+rekov/config.json
 
 # Next.js
 .next
@@ -53,4 +55,7 @@ data/backup_offline/
 backup/
 *receipts_user/
 *receiptsour/
+
+# TypeScript
+*.tsbuildinfo
 

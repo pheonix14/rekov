@@ -65,8 +65,10 @@ load_dotenv()
 load_dotenv(os.path.join(ROOT_DIR, ".env"))
 load_dotenv(os.path.join(ROOT_DIR, "rekov", ".env"))
 
-SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+from app.core.config import settings
+
+SUPABASE_URL = settings.SUPABASE_URL
+SUPABASE_KEY = settings.SUPABASE_KEY
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
