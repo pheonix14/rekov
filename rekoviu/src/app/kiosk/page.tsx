@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { MediVERSENav } from '@/components/common/MediVERSENav';
 import { PatientIdentity } from '@/components/kiosk/PatientIdentity';
 import { CategoryNav } from '@/components/kiosk/CategoryNav';
@@ -21,8 +21,18 @@ class ErrorBoundary extends React.Component<{children: React.ReactNode}, {hasErr
   }
 }
 
-export default function KioskPage() {
+// Wrap with Suspense because useSearchParams() requires it in App Router
+export default function KioskPageWrapper() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>Loading...</div>}>
+      <KioskPage />
+    </Suspense>
+  );
+}
+
+function KioskPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [step, setStep] = useState<number>(1);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
@@ -48,12 +58,52 @@ export default function KioskPage() {
   const [loading, setLoading] = useState(true);
   const [ticket, setTicket] = useState<QueueTicket | null>(null);
 
-  // Session tracking -- generate one ID per kiosk visit
-  const sessionId = useRef<string>(
-    typeof crypto !== 'undefined' && crypto.randomUUID
-      ? crypto.randomUUID()
-      : `kiosk-${Date.now()}`
-  );
+  // ── Session ID: read from URL or generate new one, then stamp it in the URL ──
+  const sessionId = useRef<string>('');
+  useEffect(() => {
+    const existing = searchParams?.get('session');
+    if (existing) {
+      sessionId.current = existing;
+    } else {
+      const newId = typeof crypto !== 'undefined' && crypto.randomUUID
+        ? crypto.randomUUID()
+        : `kiosk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      sessionId.current = newId;
+      // Stamp the session ID into the URL without a page reload
+      router.replace(`/kiosk?session=${newId}`, { scroll: false });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ── Gesture: pinch-to-zoom + touch drag scroll ─────────────────────────────
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const pinchRef = useRef<{ dist: number; scale: number } | null>(null);
+  const [scale, setScale] = useState(1);
+
+  const getTouchDist = (t: React.TouchList) =>
+    Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      pinchRef.current = { dist: getTouchDist(e.touches), scale };
+    }
+  }, [scale]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 2 && pinchRef.current) {
+      const newDist = getTouchDist(e.touches);
+      const ratio = newDist / pinchRef.current.dist;
+      const next = Math.min(2.5, Math.max(0.6, pinchRef.current.scale * ratio));
+      setScale(next);
+      e.preventDefault();
+    }
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    pinchRef.current = null;
+    // Snap scale back to 1 if very close
+    setScale(s => (Math.abs(s - 1) < 0.08 ? 1 : s));
+  }, []);
 
   useEffect(() => {
     async function loadCatalog() {
@@ -218,8 +268,21 @@ export default function KioskPage() {
         display: 'flex', flexDirection: 'column', paddingTop: 80
       }}>
 
-        <div style={{ flex: 1, overflowY: 'auto', padding: '24px 32px' }}>
-          <div style={{ maxWidth: 900, margin: '0 auto', paddingBottom: 40 }}>
+        <div
+          ref={scrollRef}
+          style={{ flex: 1, overflowY: 'auto', padding: '24px 32px', touchAction: 'pan-y pinch-zoom' }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div style={{
+            maxWidth: 900, margin: '0 auto', paddingBottom: 40,
+            transform: `scale(${scale})`, transformOrigin: 'top center',
+            transition: pinchRef.current ? 'none' : 'transform 0.2s ease'
+          }}>
+
+            {/* Session ID + Gesture hint */}
+            <GestureHint sessionId={sessionId.current} scale={scale} />
 
             {/* Progress Steps */}
             <div style={{ display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap', marginBottom: 40 }}>
@@ -348,5 +411,56 @@ export default function KioskPage() {
         )}
       </main>
     </ErrorBoundary>
+  );
+}
+
+// ── GestureHint: session ID pill + pinch hint badge ───────────────────────────
+function GestureHint({ sessionId, scale }: { sessionId: string; scale: number }) {
+  const [visible, setVisible] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(false), 4000);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
+      {/* Session ID */}
+      {sessionId && (
+        <div style={{
+          fontFamily: "'Space Grotesk', monospace", fontSize: 11, color: 'rgba(255,255,255,0.3)',
+          background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+          borderRadius: 20, padding: '3px 10px', letterSpacing: '.04em'
+        }}>
+          SESSION: {sessionId.slice(0, 8).toUpperCase()}
+        </div>
+      )}
+
+      {/* Pinch hint + live scale indicator */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 8,
+        opacity: visible || Math.abs(scale - 1) > 0.05 ? 1 : 0,
+        transition: 'opacity 0.6s ease'
+      }}>
+        {Math.abs(scale - 1) > 0.05 && (
+          <div style={{
+            fontFamily: "'Space Grotesk'", fontSize: 11, fontWeight: 700,
+            color: '#D91636', background: 'rgba(217,22,54,0.1)',
+            border: '1px solid rgba(217,22,54,0.3)', borderRadius: 20, padding: '3px 10px'
+          }}>
+            {Math.round(scale * 100)}%
+          </div>
+        )}
+        {visible && (
+          <div style={{
+            fontFamily: "'Space Grotesk'", fontSize: 11, color: 'rgba(255,255,255,0.35)',
+            background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+            borderRadius: 20, padding: '3px 10px', letterSpacing: '.03em',
+            display: 'flex', alignItems: 'center', gap: 5
+          }}>
+            <span style={{ fontSize: 13 }}>🤏</span> Pinch to zoom  <span style={{ opacity: 0.5, margin: '0 3px' }}>|</span>  <span style={{ fontSize: 13 }}>☝️</span> Swipe to scroll
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
