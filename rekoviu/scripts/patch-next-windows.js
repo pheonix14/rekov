@@ -1,22 +1,19 @@
 /**
  * Patch for Next.js 14 on Windows:
  * Resolves "Could not find the module '.../app-router.js#' in the React Client Manifest"
- * 
- * Root Cause:
- * On Windows, Webpack's client compiler plugin records modules in the React Client Manifest
- * using canonical filesystem casing (e.g. C:\Users\...) while the server loader/runtime
- * resolves references using process.cwd() casing (which can be lowercase c:\Users\...).
- * Because JavaScript object property lookups are case-sensitive, manifest["c:\\..."]
- * returns undefined, crashing with "Could not find the module ... in the React Client Manifest".
- * 
- * This patch ensures:
- * 1. load-components.js normalizes clientModules with both drive letter cases (C: and c:).
- * 2. flight-manifest-plugin.js registers both drive letter cases during compilation.
- * 3. app-page.runtime.dev.js and app-page.runtime.prod.js use resilient lookup with fallback.
+ *
+ * NOTE: This patch is ONLY needed on Windows. It exits silently on Linux/macOS.
  */
 
+const os = require('os');
 const fs = require('fs');
 const path = require('path');
+
+// Skip entirely on Linux/macOS (e.g. Render, Vercel, CI)
+if (os.platform() !== 'win32') {
+  console.log('[patch-next-windows] Non-Windows platform detected — skipping patch.');
+  process.exit(0);
+}
 
 const rootDir = path.resolve(__dirname, '..');
 const nextDir = path.join(rootDir, 'node_modules', 'next');

@@ -56,6 +56,7 @@ function KioskPage() {
   });
 
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false); // tracks ticket creation specifically
   const [ticket, setTicket] = useState<QueueTicket | null>(null);
 
   // ── Session ID: read from URL or generate new one, then stamp it in the URL ──
@@ -155,6 +156,7 @@ function KioskPage() {
   const handleNext = async () => {
     if (step === 1 && (!patientName || !patientPhone)) return;
     if (step === 2 && !selectedDepId) return;
+    if (submitting) return; // prevent double-click
 
     // Log step transitions
     logSessionEvent({
@@ -166,7 +168,7 @@ function KioskPage() {
     });
 
     if (step === 4) {
-      setLoading(true);
+      setSubmitting(true);
       try {
         const newTicket = await createTicket({
           department_id: selectedDepId!,
@@ -177,14 +179,13 @@ function KioskPage() {
             national_id: "ID-" + Math.floor(Math.random() * 1000000),
             full_name: patientName,
             phone: patientPhone,
-            age: 35, // placeholder for now
+            age: 35,
             gender: "Unknown",
             insurance_member: false
           },
           payment_method: "EXPRESS_KIOSK"
         });
         setTicket(newTicket);
-        // Log successful ticket creation
         logSessionEvent({
           session_id: sessionId.current,
           event_type: 'submit',
@@ -197,11 +198,41 @@ function KioskPage() {
       } catch (err) {
         console.error(err);
       } finally {
-        setLoading(false);
+        setSubmitting(false);
       }
       return;
     }
+    // Instant transition for steps 1-3
     setStep(s => s + 1);
+  };
+
+  // Skip vitals — immediately proceed to ticket creation with current (default) vitals
+  const handleSkipVitals = async () => {
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      const newTicket = await createTicket({
+        department_id: selectedDepId!,
+        doctor_id: selectedDocId || undefined,
+        combo_package_ids: selectedCombos,
+        vitals: { systolic_bp: 0, diastolic_bp: 0, heart_rate: 0, temperature_c: 0, pain_score: 0, symptoms: [] },
+        patient: {
+          national_id: "ID-" + Math.floor(Math.random() * 1000000),
+          full_name: patientName,
+          phone: patientPhone,
+          age: 35,
+          gender: "Unknown",
+          insurance_member: false
+        },
+        payment_method: "EXPRESS_KIOSK"
+      });
+      setTicket(newTicket);
+      setStep(5);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleBack = () => {
@@ -391,14 +422,15 @@ function KioskPage() {
             background: 'var(--bg-main)', backdropFilter: 'blur(12px)',
             flexShrink: 0
           }}>
-            <button onClick={handleBack} style={{
+            <button onClick={handleBack} disabled={submitting} style={{
               padding: '12px 24px', background: 'none', border: '1px solid var(--border-color)',
               color: 'var(--text-primary)',
               fontFamily: "'Space Grotesk'", fontSize: 'clamp(14px, 1.4vw, 18px)', fontWeight: 700,
-              letterSpacing: '.1em', textTransform: 'uppercase', cursor: 'pointer',
+              letterSpacing: '.1em', textTransform: 'uppercase', cursor: submitting ? 'not-allowed' : 'pointer',
+              opacity: submitting ? 0.4 : 1,
               transition: 'all 0.2s'
             }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = '#D91636'; e.currentTarget.style.color = '#D91636'; }}
+            onMouseEnter={e => { if (!submitting) { e.currentTarget.style.borderColor = '#D91636'; e.currentTarget.style.color = '#D91636'; }}}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-color)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
             >{step === 1 ? '<- HOME' : '<- BACK'}</button>
 
@@ -406,26 +438,61 @@ function KioskPage() {
               {/* SKIP VITALS — only on step 4 */}
               {step === 4 && (
                 <button
-                  onClick={handleNext}
+                  onClick={handleSkipVitals}
+                  disabled={submitting}
                   style={{
-                    padding: '14px 28px', background: 'transparent',
+                    padding: '14px 28px',
+                    background: submitting ? 'rgba(255,255,255,0.03)' : 'transparent',
                     border: '1px solid rgba(255,255,255,0.2)',
-                    color: 'rgba(255,255,255,0.5)',
+                    color: submitting ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.5)',
                     fontFamily: "'Space Grotesk'", fontSize: 'clamp(13px, 1.3vw, 16px)', fontWeight: 700,
-                    letterSpacing: '.08em', textTransform: 'uppercase', cursor: 'pointer'
+                    letterSpacing: '.08em', textTransform: 'uppercase',
+                    cursor: submitting ? 'not-allowed' : 'pointer',
+                    transition: 'all 0.15s',
+                    display: 'flex', alignItems: 'center', gap: 8,
                   }}
                 >
-                  SKIP VITALS
+                  {submitting ? (
+                    <>
+                      <span style={{
+                        width: 14, height: 14, border: '2px solid rgba(255,255,255,0.2)',
+                        borderTopColor: 'rgba(255,255,255,0.6)', borderRadius: '50%',
+                        display: 'inline-block', animation: 'spin 0.8s linear infinite'
+                      }} />
+                      PROCESSING...
+                    </>
+                  ) : 'SKIP VITALS'}
                 </button>
               )}
 
-              <button onClick={handleNext} disabled={(step === 1 && (!patientName || !patientPhone)) || (step === 2 && !selectedDepId) || loading} style={{
-                padding: '14px 40px', background: '#D91636', border: 'none',
-                color: '#fff', fontFamily: "'Space Grotesk'", fontSize: 'clamp(16px, 1.7vw, 20px)', fontWeight: 700,
-                letterSpacing: '.1em', textTransform: 'uppercase', cursor: 'pointer',
-                opacity: ((step === 1 && (!patientName || !patientPhone)) || (step === 2 && !selectedDepId) || loading) ? 0.4 : 1
-              }}>
-                {loading ? '...' : step === 4 ? 'COMPLETE CHECK-IN' : 'CONTINUE ->'}
+              <button
+                onClick={handleNext}
+                disabled={(step === 1 && (!patientName || !patientPhone)) || (step === 2 && !selectedDepId) || submitting}
+                style={{
+                  padding: '14px 40px', background: submitting ? 'rgba(180,10,35,0.7)' : '#D91636',
+                  border: 'none',
+                  color: '#fff', fontFamily: "'Space Grotesk'", fontSize: 'clamp(16px, 1.7vw, 20px)', fontWeight: 700,
+                  letterSpacing: '.1em', textTransform: 'uppercase',
+                  cursor: ((step === 1 && (!patientName || !patientPhone)) || (step === 2 && !selectedDepId) || submitting) ? 'not-allowed' : 'pointer',
+                  opacity: ((step === 1 && (!patientName || !patientPhone)) || (step === 2 && !selectedDepId)) ? 0.4 : 1,
+                  transition: 'all 0.15s',
+                  display: 'flex', alignItems: 'center', gap: 10,
+                  minWidth: 180, justifyContent: 'center',
+                }}
+              >
+                {submitting ? (
+                  <>
+                    <span style={{
+                      width: 18, height: 18, border: '2.5px solid rgba(255,255,255,0.3)',
+                      borderTopColor: '#fff', borderRadius: '50%',
+                      display: 'inline-block', animation: 'spin 0.8s linear infinite',
+                      flexShrink: 0
+                    }} />
+                    GENERATING TICKET...
+                  </>
+                ) : (
+                  step === 4 ? 'COMPLETE CHECK-IN' : 'CONTINUE ->'
+                )}
               </button>
             </div>
           </div>
