@@ -243,7 +243,10 @@ def _match_department(text: str, lang: str) -> str | None:
         keywords = _DEPT_KEYWORDS.get(dept_id, {})
         for kw_lang in [lang, "en", "hi", "bn", "ta", "te"]:
             for kw in keywords.get(kw_lang, []):
-                if kw in lower:
+                if len(kw) <= 4:
+                    if re.search(r'\b' + re.escape(kw) + r'\b', lower):
+                        return dept_id
+                elif kw in lower:
                     return dept_id
     return None
 
