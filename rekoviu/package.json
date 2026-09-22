@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "next lint",
-    "clean": "node -e \"const fs=require('fs'); try{fs.rmSync('.next',{recursive:true,force:true});console.log('Cleaned .next');}catch(e){}\"",
-    "postinstall": "node scripts/patch-next-windows.js"
+    "clean": "node -e \"const fs=require('fs'); try{fs.rmSync('.next',{recursive:true,force:true});console.log('Cleaned .next');}catch(e){}\""
   },
   "dependencies": {
     "@mediapipe/tasks-vision": "^1.0.1",
