@@ -8,7 +8,6 @@ import { GestureProvider } from '@/contexts/GestureContext';
 import { CurrencyProvider } from '@/contexts/CurrencyContext';
 import { GestureCursor } from '@/components/common/GestureCursor';
 import { VoiceCallProvider } from '@/contexts/VoiceCallContext';
-import { VoiceCallOverlay } from '@/components/voice/VoiceCallOverlay';
 
 export const metadata: Metadata = {
   title: 'MediVERSE | Hospital Self-Service Kiosk',
@@ -72,7 +71,6 @@ export default function RootLayout({
                 <div style={{ position: 'relative', zIndex: 10 }}>
                   {children}
                 </div>
-                <VoiceCallOverlay />
               </VoiceCallProvider>
             </CurrencyProvider>
           </LanguageProvider>

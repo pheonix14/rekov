@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { useLanguage, Language } from '@/contexts/LanguageContext';
 import { useGesture } from '@/contexts/GestureContext';
-import { useVoiceCall } from '@/contexts/VoiceCallContext';
 import { MediVERSENav } from '@/components/common/MediVERSENav';
 
 const LANG_GROUPS = [
@@ -45,16 +44,11 @@ export default function Home() {
   const router = useRouter();
   const { lang, setLang, t } = useLanguage();
   const { enabled: gestureEnabled, setEnabled: setGestureEnabled } = useGesture();
-  const { isCallActive, callStatus, liveTranscript, toggleCall, startCall } = useVoiceCall();
-
   const [expandedGroup, setExpandedGroup] = useState<string>('primary');
   const [isGestureSectionOpen, setIsGestureSectionOpen] = useState(false);
 
   const handleSelect = (l: Language) => { setLang(l); };
   const handleContinue = () => { router.push('/kiosk'); };
-
-  const isUserSpeaking = callStatus === 'USER_SPEAKING';
-  const isAISpeaking = callStatus === 'AI_SPEAKING';
 
   return (
     <>
@@ -166,29 +160,27 @@ export default function Home() {
         {/* SEGMENT 2 (MIDDLE): 24/7 Voice AI Assistant Button */}
         <div style={{
           flex: '1 1 340px', maxWidth: 420, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-          background: 'var(--bg-card)', border: `1px solid ${isCallActive ? '#30d158' : 'rgba(217, 22, 54, 0.4)'}`, borderRadius: 24, padding: '32px 24px',
-          boxShadow: isCallActive ? '0 8px 40px rgba(48, 209, 88, 0.3)' : '0 8px 32px rgba(217, 22, 54, 0.15)', textAlign: 'center', position: 'relative',
-          transition: 'all 0.3s'
+          background: 'var(--bg-card)', border: '1px solid rgba(48, 209, 88, 0.5)', borderRadius: 24, padding: '32px 24px',
+          boxShadow: '0 8px 40px rgba(48, 209, 88, 0.15)', textAlign: 'center', position: 'relative'
         }}>
           {/* Status Badge */}
-          <div 
-            onClick={toggleCall}
+          <div
+            onClick={() => router.push('/voice-assistant')}
             style={{
               cursor: 'pointer',
               display: 'flex', alignItems: 'center', gap: 8,
-              background: isCallActive ? 'rgba(48, 209, 88, 0.15)' : 'rgba(217, 22, 54, 0.15)',
-              border: `1px solid ${isCallActive ? '#30d158' : 'rgba(217, 22, 54, 0.4)'}`,
-              padding: '6px 16px', borderRadius: 20, marginBottom: 16, transition: 'all 0.3s'
+              background: 'rgba(48, 209, 88, 0.15)',
+              border: '1px solid #30d158',
+              padding: '6px 16px', borderRadius: 20, marginBottom: 16
             }}
           >
             <div style={{
               width: 8, height: 8, borderRadius: '50%',
-              background: isCallActive ? '#30d158' : '#D91636',
-              boxShadow: isCallActive ? '0 0 12px #30d158' : '0 0 8px #D91636',
-              animation: isUserSpeaking || isAISpeaking ? 'pulse 1s infinite' : 'none'
+              background: '#30d158',
+              boxShadow: '0 0 12px #30d158'
             }} />
-            <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 13, fontWeight: 700, color: isCallActive ? '#30d158' : '#ff4757', letterSpacing: '.05em' }}>
-              {isAISpeaking ? 'AI SPEAKING...' : isUserSpeaking ? 'LISTENING TO YOU...' : isCallActive ? 'VOICE CALL ACTIVE 24/7' : 'START VOICE CALL'}
+            <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 13, fontWeight: 700, color: '#30d158', letterSpacing: '.05em' }}>
+              PROCEED TO VOICE AI
             </span>
           </div>
 
@@ -206,8 +198,8 @@ export default function Home() {
           </p>
 
           {/* Interactive Voice Mic Circle */}
-          <div 
-            onClick={toggleCall}
+          <div
+            onClick={() => router.push('/voice-assistant')}
             style={{
               position: 'relative', cursor: 'pointer', margin: '8px 0 16px 0',
               display: 'flex', alignItems: 'center', justifyContent: 'center', width: 110, height: 110
@@ -215,23 +207,19 @@ export default function Home() {
           >
             <div style={{
               position: 'absolute', width: 100, height: 100, borderRadius: '50%',
-              background: isCallActive ? 'rgba(48, 209, 88, 0.25)' : 'rgba(217, 22, 54, 0.25)',
-              border: `2px solid ${isCallActive ? '#30d158' : 'rgba(217, 22, 54, 0.4)'}`,
-              boxShadow: isCallActive ? '0 0 32px rgba(48,209,88,0.8)' : '0 0 16px rgba(217,22,54,0.4)',
-              transform: isUserSpeaking || isAISpeaking ? 'scale(1.18)' : 'scale(1)',
-              transition: 'all 0.2s ease-in-out'
+              background: 'rgba(48, 209, 88, 0.25)',
+              border: '2px solid #30d158',
+              boxShadow: '0 0 32px rgba(48,209,88,0.8)',
+              animation: 'pulse 2s infinite ease-in-out'
             }} />
-            <button 
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleCall();
-              }}
+            <button
+              onClick={e => { e.stopPropagation(); router.push('/voice-assistant'); }}
               style={{
                 position: 'relative', zIndex: 2, width: 72, height: 72, borderRadius: '50%',
-                background: isCallActive ? 'linear-gradient(135deg, #30d158, #00b0ff)' : 'linear-gradient(135deg, #D91636, #ff2d55)',
+                background: 'linear-gradient(135deg, #30d158, #00b0ff)',
                 border: '2px solid rgba(255,255,255,0.6)',
                 color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer', boxShadow: isCallActive ? '0 4px 24px rgba(48,209,88,0.5)' : '0 4px 20px rgba(217, 22, 54, 0.5)',
+                cursor: 'pointer', boxShadow: '0 4px 24px rgba(48,209,88,0.5)',
                 transition: 'transform 0.2s'
               }}
               onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
@@ -245,39 +233,35 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Realtime Live Caption */}
+          {/* Caption hint */}
           <div style={{
-            background: 'rgba(0,0,0,0.5)', border: `1px solid ${isCallActive ? '#30d158' : 'var(--border-color)'}`,
+            background: 'rgba(0,0,0,0.5)', border: '1px solid #30d158',
             borderRadius: 12, padding: '10px 14px', width: '100%', minHeight: 48,
             display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16
           }}>
             <span style={{
               fontFamily: "'Space Grotesk', sans-serif", fontSize: 13,
-              color: liveTranscript ? '#64d2ff' : 'var(--text-secondary)', fontWeight: liveTranscript ? 600 : 400
+              color: 'var(--text-secondary)', fontWeight: 400
             }}>
-              {liveTranscript ? `"${liveTranscript}"` : isCallActive ? 'LISTENING 24/7... (Speak now)' : 'VOICE CALL OFF — CLICK TO START'}
+              Tap to open — voice starts instantly inside
             </span>
           </div>
 
           {/* Join / Start Call Primary Action Button */}
           <button
-            onClick={() => {
-              if (isCallActive) {
-                router.push('/voice-assistant');
-              } else {
-                startCall();
-              }
-            }}
+            onClick={() => router.push('/voice-assistant')}
             style={{
               width: '100%', padding: '14px 24px',
-              background: isCallActive ? '#30d158' : '#D91636',
+              background: '#30d158',
               color: '#fff', border: 'none', borderRadius: 28,
               fontFamily: "'Space Grotesk', sans-serif", fontSize: 16, fontWeight: 700,
-              cursor: 'pointer', boxShadow: isCallActive ? '0 4px 20px rgba(48,209,88,0.4)' : '0 4px 20px rgba(217,22,54,0.4)',
+              cursor: 'pointer', boxShadow: '0 4px 20px rgba(48,209,88,0.4)',
               transition: 'all 0.2s'
             }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.03)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
           >
-            {isCallActive ? 'OPEN FULL VOICE CHAT UI' : 'START VOICE CALL NOW'}
+            OPEN FULL VOICE CHAT UI
           </button>
         </div>
 
