@@ -2,10 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { QRCodeSVG } from 'qrcode.react';
 import { useLanguage, Language } from '@/contexts/LanguageContext';
 import { useGesture } from '@/contexts/GestureContext';
 import { MediVERSENav } from '@/components/common/MediVERSENav';
+import { SmartQRCard } from '@/components/common/SmartQRCard';
 
 const LANG_GROUPS = [
   { id: 'primary', tLabel: 'primary_lang', items: [
@@ -148,24 +148,8 @@ export default function Home() {
         {/* SEGMENT 2 (MIDDLE): Compact 24/7 Voice AI Card */}
         <div style={{ flex: '1 1 320px', maxWidth: 380, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           
-          {/* Telegram QR Card (Stacked half-on-top of Voice AI) */}
-          <div style={{
-            width: '90%', background: 'var(--bg-card)', border: '1px solid rgba(45, 155, 255, 0.4)',
-            borderRadius: 16, padding: 12, display: 'flex', alignItems: 'center', gap: 14,
-            position: 'relative', zIndex: 5, marginBottom: -32, boxShadow: '0 8px 24px rgba(0,0,0,0.5)'
-          }}>
-            <div style={{ background: '#fff', padding: 6, borderRadius: 8, flexShrink: 0 }}>
-              <QRCodeSVG value="https://t.me/rekov_bot" size={60} />
-            </div>
-            <div>
-              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 18, color: '#2d9bff', letterSpacing: '.05em' }}>
-                TELEGRAM CHAT
-              </div>
-              <p style={{ fontFamily: "'Space Grotesk', sans-serif", color: 'var(--text-secondary)', fontSize: 11, margin: '2px 0 6px', lineHeight: 1.2 }}>
-                Scan QR to get instant ticket updates!
-              </p>
-            </div>
-          </div>
+          {/* Smart Session QR Card (replaces Telegram QR) */}
+          <SmartQRCard />
 
           <div style={{
             width: '100%', background: 'var(--bg-card)', border: '1px solid rgba(48, 209, 88, 0.5)', borderRadius: 20, paddingTop: 48, paddingBottom: 20, paddingLeft: 20, paddingRight: 20,

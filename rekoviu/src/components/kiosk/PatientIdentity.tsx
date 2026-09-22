@@ -355,32 +355,32 @@ export const PatientIdentity: React.FC<PatientIdentityProps> = ({ name, phone, o
 
           {/* QWERTY or Numpad */}
           {isName ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'stretch', width: '100%' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'stretch', width: '100%', height: 420 }}>
               {QWERTY_ROWS.map((row, ri) => (
-                <div key={ri} style={{ display: 'flex', gap: 8, justifyContent: 'center', width: '100%' }}>
+                <div key={ri} style={{ display: 'flex', gap: 8, justifyContent: 'center', width: '100%', flex: 1 }}>
                   {row.map(k => (
-                    <button key={k} className="kb-key" onClick={() => pressKey(k)} style={{ ...kbKeyStyle(), flex: 1, height: 86, fontSize: 28 }}>
+                    <button key={k} className="kb-key" onClick={() => pressKey(k)} style={{ ...kbKeyStyle(), flex: 1, height: '100%', fontSize: 28 }}>
                       {k}
                     </button>
                   ))}
                 </div>
               ))}
               {/* Bottom row: SPACE, DELETE, CLEAR */}
-              <div style={{ display: 'flex', gap: 8, marginTop: 4, width: '100%' }}>
-                <button className="kb-key" onClick={() => pressKey('SPACE')} style={{ ...kbKeyStyle(true), flex: 2, height: 86, fontSize: 22 }}>SPACE</button>
-                <button className="kb-key" onClick={() => pressKey('⌫')} style={{ ...kbSpecialKey('255,100,100'), flex: 1, height: 86, fontSize: 22 }}>DELETE</button>
-                <button className="kb-key" onClick={() => onChange('name', '')} style={{ ...kbSpecialKey('255,50,50'), flex: 1, height: 86, fontSize: 22 }}>CLEAR</button>
+              <div style={{ display: 'flex', gap: 8, width: '100%', flex: 1 }}>
+                <button className="kb-key" onClick={() => pressKey('SPACE')} style={{ ...kbKeyStyle(true), flex: 2, height: '100%', fontSize: 22 }}>SPACE</button>
+                <button className="kb-key" onClick={() => pressKey('⌫')} style={{ ...kbSpecialKey('255,100,100'), flex: 1, height: '100%', fontSize: 22 }}>DELETE</button>
+                <button className="kb-key" onClick={() => onChange('name', '')} style={{ ...kbSpecialKey('255,50,50'), flex: 1, height: '100%', fontSize: 22 }}>CLEAR</button>
               </div>
             </div>
           ) : (
             // Numpad for phone
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'stretch', width: '100%' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'stretch', width: '100%', height: 420 }}>
               {NUMPAD_ROWS.map((row, ri) => (
-                <div key={ri} style={{ display: 'flex', gap: 16, width: '100%' }}>
+                <div key={ri} style={{ display: 'flex', gap: 12, width: '100%', flex: 1 }}>
                   {row.map(k => (
                     <button key={k} className="kb-key" onClick={() => pressKey(k === '⌫' ? '⌫' : k)}
                       style={{
-                        ...kbKeyStyle(), flex: 1, height: 104, fontSize: 40,
+                        ...kbKeyStyle(), flex: 1, height: '100%', fontSize: 40,
                         ...(k === '⌫' ? { background: 'rgba(255,100,100,0.18)', borderColor: 'rgba(255,100,100,0.5)', color: 'rgb(255,100,100)' } : {})
                       }}>
                       {k}
@@ -388,7 +388,7 @@ export const PatientIdentity: React.FC<PatientIdentityProps> = ({ name, phone, o
                   ))}
                 </div>
               ))}
-              <button className="kb-key" onClick={() => onChange('phone', '')} style={{ ...kbSpecialKey('255,50,50'), marginTop: 8, width: '100%', height: 96, fontSize: 28 }}>
+              <button className="kb-key" onClick={() => onChange('phone', '')} style={{ ...kbSpecialKey('255,50,50'), flex: 1, width: '100%', height: '100%', fontSize: 28 }}>
                 CLEAR ALL
               </button>
             </div>

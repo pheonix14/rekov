@@ -74,6 +74,7 @@ app.add_middleware(
 # Include Routers
 from app.routers import kiosk, queue, doctor, health, auth, receptionist, settings as settings_router, ai, ai_voice, sync as sync_router
 from app.routers import session_log as session_log_router
+from app.routers import mobile_session as mobile_session_router
 from rekovbot.telegram.router import router as telegram_router
 from rekovbot.whatsapp.router import router as whatsapp_router
 
@@ -88,6 +89,7 @@ app.include_router(sync_router.router, prefix=f"{settings.API_V1_STR}")
 app.include_router(ai.router, prefix=f"{settings.API_V1_STR}")
 app.include_router(ai_voice.router, prefix=f"{settings.API_V1_STR}")
 app.include_router(session_log_router.router, prefix=f"{settings.API_V1_STR}")
+app.include_router(mobile_session_router.router, prefix=f"{settings.API_V1_STR}")
 app.include_router(telegram_router, prefix=f"{settings.API_V1_STR}/bot")
 app.include_router(whatsapp_router, prefix=f"{settings.API_V1_STR}/bot")
 

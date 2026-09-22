@@ -28,6 +28,11 @@ export default function ReceptionistPage() {
   const [scanResult, setScanResult] = useState<string | null>(null);
   const [aiSummary, setAiSummary] = useState<string>('');
   const [loadingSummary, setLoadingSummary] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [editingTicket, setEditingTicket] = useState<any>(null);
+  const [editName, setEditName] = useState('');
+  const [editPhone, setEditPhone] = useState('');
+
 
   // Supabase & Offline Backup Sync State
   const [syncStatus, setSyncStatus] = useState<any>({
@@ -62,6 +67,24 @@ export default function ReceptionistPage() {
   }, []);
 
   const loadSyncStatus = async () => {
+    try {
+      const data = await fetchSyncStatus();
+      if (data) {
+        if (searchQuery) {
+          // If searching, hit the search API for tickets
+          const searchRes = await api.get(`/receptionist/tickets/search?query=${encodeURIComponent(searchQuery)}`);
+          data.recent_tickets = searchRes;
+        } else {
+          // Otherwise get the live queue
+          const liveRes = await api.get('/receptionist/tickets/live');
+          data.recent_tickets = liveRes;
+        }
+        setSyncStatus(data);
+      }
+    } catch (e) {
+      console.error('Failed to load sync status:', e);
+    }
+  };
     try {
       const data = await fetchSyncStatus();
       if (data) {
@@ -123,6 +146,35 @@ export default function ReceptionistPage() {
         setLoadingSummary(false);
       }
     }
+  };
+
+  const handleStatusChange = async (ticketId: string, status: 'SUCCESS' | 'FAILED') => {
+    try {
+      await api.put(`/receptionist/tickets/${ticketId}/status`, { status });
+      loadSyncStatus();
+    } catch (e) {
+      alert('Failed to update status');
+    }
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingTicket) return;
+    try {
+      await api.put(`/receptionist/patients/${editingTicket.ticket_id}`, {
+        patient_name: editName,
+        patient_phone: editPhone
+      });
+      setEditingTicket(null);
+      loadSyncStatus();
+    } catch (e) {
+      alert('Failed to save patient info');
+    }
+  };
+
+  const openEdit = (ticket: any) => {
+    setEditName(ticket.patient_name || '');
+    setEditPhone(ticket.patient_phone || '');
+    setEditingTicket(ticket);
   };
 
   return (
@@ -294,15 +346,27 @@ export default function ReceptionistPage() {
                   Real-time synchronization status between Local SQLite, Offline JSON, and Supabase Cloud.
                 </p>
               </div>
-              <button
-                onClick={loadSyncStatus}
-                style={{
-                  background: 'var(--bg-main)', border: '1px solid var(--border-color)', color: 'var(--text-primary)',
-                  padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontFamily: "'Space Grotesk'", fontWeight: 600
-                }}
-              >
-                Refresh Queue
-              </button>
+              <div style={{ display: 'flex', gap: 12 }}>
+                <input 
+                  type="text" 
+                  placeholder="Search by ID, Name, Phone..."
+                  value={searchQuery}
+                  onChange={e => { setSearchQuery(e.target.value); loadSyncStatus(); }}
+                  style={{
+                    padding: '8px 12px', background: 'var(--bg-main)', border: '1px solid var(--border-color)', 
+                    borderRadius: 6, color: '#fff', fontFamily: "'Space Grotesk'", width: 250
+                  }}
+                />
+                <button
+                  onClick={loadSyncStatus}
+                  style={{
+                    background: 'var(--bg-main)', border: '1px solid var(--border-color)', color: 'var(--text-primary)',
+                    padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontFamily: "'Space Grotesk'", fontWeight: 600
+                  }}
+                >
+                  Refresh Queue
+                </button>
+              </div>
             </div>
 
             {(!syncStatus.recent_tickets || syncStatus.recent_tickets.length === 0) ? (
@@ -315,12 +379,10 @@ export default function ReceptionistPage() {
                   <thead>
                     <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-secondary)', fontSize: 13, textTransform: 'uppercase' }}>
                       <th style={{ padding: '12px 16px' }}>Token #</th>
-                      <th style={{ padding: '12px 16px' }}>Patient Name</th>
-                      <th style={{ padding: '12px 16px' }}>Phone</th>
+                      <th style={{ padding: '12px 16px' }}>Patient Info</th>
                       <th style={{ padding: '12px 16px' }}>Department</th>
-                      <th style={{ padding: '12px 16px' }}>Doctor</th>
-                      <th style={{ padding: '12px 16px' }}>Status</th>
-                      <th style={{ padding: '12px 16px' }}>Sync State</th>
+                      <th style={{ padding: '12px 16px' }}>Status / Sync</th>
+                      <th style={{ padding: '12px 16px', textAlign: 'right' }}>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -329,40 +391,70 @@ export default function ReceptionistPage() {
                         <td style={{ padding: '14px 16px', fontWeight: 800, color: '#D91636' }}>
                           {ticket.token_number}
                         </td>
-                        <td style={{ padding: '14px 16px', fontWeight: 600 }}>
-                          {ticket.patient_name || 'Walk-in Patient'}
-                        </td>
-                        <td style={{ padding: '14px 16px', color: 'var(--text-secondary)' }}>
-                          {ticket.patient_phone || '—'}
+                        <td style={{ padding: '14px 16px' }}>
+                          {editingTicket?.ticket_id === ticket.ticket_id ? (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                              <input type="text" value={editName} onChange={e => setEditName(e.target.value)} style={{ padding: 4, background: '#000', color: '#fff', border: '1px solid var(--border-color)' }} />
+                              <input type="text" value={editPhone} onChange={e => setEditPhone(e.target.value)} style={{ padding: 4, background: '#000', color: '#fff', border: '1px solid var(--border-color)' }} />
+                              <div style={{ display: 'flex', gap: 8 }}>
+                                <button onClick={handleSaveEdit} style={{ background: '#34c759', border: 'none', borderRadius: 4, color: '#fff', padding: '4px 8px', cursor: 'pointer' }}>Save</button>
+                                <button onClick={() => setEditingTicket(null)} style={{ background: '#333', border: 'none', borderRadius: 4, color: '#fff', padding: '4px 8px', cursor: 'pointer' }}>Cancel</button>
+                              </div>
+                            </div>
+                          ) : (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                              <div>
+                                <div style={{ fontWeight: 600 }}>{ticket.patient_name || 'Walk-in Patient'}</div>
+                                <div style={{ color: 'var(--text-secondary)', fontSize: 12 }}>{ticket.patient_phone || '—'}</div>
+                              </div>
+                              <button onClick={() => openEdit(ticket)} style={{ background: 'none', border: 'none', color: '#007aff', cursor: 'pointer', fontSize: 12 }}>Edit</button>
+                            </div>
+                          )}
                         </td>
                         <td style={{ padding: '14px 16px', textTransform: 'uppercase', fontSize: 12 }}>
-                          {ticket.department_id ? ticket.department_id.replace('dep_', '') : 'GEN'}
-                        </td>
-                        <td style={{ padding: '14px 16px', color: 'var(--text-secondary)' }}>
-                          {ticket.doctor_id || 'Assigned Doctor'}
+                          <div>{ticket.department_id ? ticket.department_id.replace('dep_', '') : 'GEN'}</div>
+                          <div style={{ color: 'var(--text-secondary)' }}>{ticket.doctor_id || 'Duty'}</div>
                         </td>
                         <td style={{ padding: '14px 16px' }}>
-                          <span style={{
-                            padding: '4px 8px', borderRadius: 4, fontSize: 11, fontWeight: 700,
-                            background: ticket.status === 'WAITING' ? 'rgba(255, 214, 10, 0.15)' :
-                                        ticket.status === 'CALLING' ? 'rgba(217, 22, 54, 0.15)' :
-                                        'rgba(52, 199, 89, 0.15)',
-                            color: ticket.status === 'WAITING' ? '#ffd60a' :
-                                   ticket.status === 'CALLING' ? '#D91636' : '#34c759'
-                          }}>
-                            {ticket.status}
-                          </span>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                            <span style={{
+                              padding: '4px 8px', borderRadius: 4, fontSize: 11, fontWeight: 700, display: 'inline-block', width: 'fit-content',
+                              background: ticket.status === 'WAITING' ? 'rgba(255, 214, 10, 0.15)' :
+                                          ticket.status === 'CALLING' ? 'rgba(217, 22, 54, 0.15)' :
+                                          ticket.status === 'SUCCESS' ? 'rgba(52, 199, 89, 0.15)' :
+                                          ticket.status === 'FAILED' ? 'rgba(255, 59, 48, 0.15)' :
+                                          'rgba(0, 122, 255, 0.15)',
+                              color: ticket.status === 'WAITING' ? '#ffd60a' :
+                                     ticket.status === 'CALLING' ? '#D91636' : 
+                                     ticket.status === 'SUCCESS' ? '#34c759' : 
+                                     ticket.status === 'FAILED' ? '#ff3b30' : '#007aff'
+                            }}>
+                              {ticket.status}
+                            </span>
+                            <span style={{
+                              display: 'inline-flex', alignItems: 'center', gap: 6,
+                              padding: '2px 6px', borderRadius: 6, fontSize: 10, fontWeight: 700, width: 'fit-content',
+                              background: ticket.synced ? 'rgba(52, 199, 89, 0.15)' : 'rgba(0, 122, 255, 0.15)',
+                              border: `1px solid ${ticket.synced ? '#34c759' : '#007aff'}`,
+                              color: ticket.synced ? '#34c759' : '#007aff'
+                            }}>
+                              {ticket.synced ? 'CLOUD' : 'LOCAL'}
+                            </span>
+                          </div>
                         </td>
-                        <td style={{ padding: '14px 16px' }}>
-                          <span style={{
-                            display: 'inline-flex', alignItems: 'center', gap: 6,
-                            padding: '4px 10px', borderRadius: 6, fontSize: 12, fontWeight: 700,
-                            background: ticket.synced ? 'rgba(52, 199, 89, 0.15)' : 'rgba(0, 122, 255, 0.15)',
-                            border: `1px solid ${ticket.synced ? '#34c759' : '#007aff'}`,
-                            color: ticket.synced ? '#34c759' : '#007aff'
-                          }}>
-                            {ticket.synced ? '[CLOUD] SUPABASE SYNCED' : '[BACKUP] LOCAL BACKUP'}
-                          </span>
+                        <td style={{ padding: '14px 16px', textAlign: 'right' }}>
+                          {(ticket.status !== 'SUCCESS' && ticket.status !== 'FAILED') && (
+                            <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+                              <button onClick={() => handleStatusChange(ticket.ticket_id, 'SUCCESS')} style={{
+                                background: 'rgba(52, 199, 89, 0.1)', border: '1px solid #34c759', color: '#34c759', 
+                                padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontFamily: "'Space Grotesk'", fontWeight: 700, fontSize: 12
+                              }}>✓ Success</button>
+                              <button onClick={() => handleStatusChange(ticket.ticket_id, 'FAILED')} style={{
+                                background: 'rgba(255, 59, 48, 0.1)', border: '1px solid #ff3b30', color: '#ff3b30', 
+                                padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontFamily: "'Space Grotesk'", fontWeight: 700, fontSize: 12
+                              }}>✕ Fail</button>
+                            </div>
+                          )}
                         </td>
                       </tr>
                     ))}

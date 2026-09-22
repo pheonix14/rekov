@@ -75,6 +75,23 @@ class DoctorCredentials(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
 
+class MobileSession(Base):
+    """Pairs a kiosk session to a phone-submitted form via rotating QR code."""
+    __tablename__ = "mobile_sessions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    session_id = Column(String, unique=True, index=True)   # UUID shown in QR
+    status = Column(String, default="PENDING")              # PENDING | SUBMITTED | EXPIRED
+    patient_name = Column(String, nullable=True)
+    patient_phone = Column(String, nullable=True)
+    patient_dob = Column(String, nullable=True)
+    department_id = Column(String, nullable=True)
+    chief_complaint = Column(String, nullable=True)
+    documents = Column(String, default="[]")               # JSON list of {name, url, type}
+    created_at = Column(DateTime, default=datetime.utcnow)
+    expires_at = Column(DateTime, default=lambda: datetime.utcnow() + timedelta(seconds=30))
+
+
 def _hash_password(password: str) -> str:
     import hashlib
     return hashlib.sha256(password.encode()).hexdigest()

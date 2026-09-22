@@ -13,6 +13,13 @@ interface TicketModalProps {
 export const TicketModal: React.FC<TicketModalProps> = ({ ticket, onClose }) => {
   const router = useRouter();
   const receiptRef = useRef<HTMLDivElement>(null);
+  const [qrUrl, setQrUrl] = React.useState('');
+
+  React.useEffect(() => {
+    if (ticket && typeof window !== 'undefined') {
+      setQrUrl(ticket.receipt_pdf_url || `${window.location.protocol}//${window.location.host}/receipt?id=${ticket.ticket_id}`);
+    }
+  }, [ticket]);
 
   if (!ticket) return null;
 
@@ -96,7 +103,7 @@ export const TicketModal: React.FC<TicketModalProps> = ({ ticket, onClose }) => 
 
             <div style={{ marginTop: 24, paddingTop: 20, borderTop: '2px dashed #ddd', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <QRCodeSVG 
-                value={ticket.receipt_pdf_url || ''} 
+                value={qrUrl || 'generating...'} 
                 size={100} 
                 style={{ marginBottom: 16 }} 
               />
