@@ -357,8 +357,13 @@ def main():
                     key = sb.get("key") or cfg_data.get("SUPABASE_KEY")
                     if url:
                         os.environ["SUPABASE_URL"] = url
+                        # Also expose to Next.js frontend via NEXT_PUBLIC_ prefix
+                        os.environ["NEXT_PUBLIC_SUPABASE_URL"] = url
                     if key:
                         os.environ["SUPABASE_KEY"] = key
+                        os.environ["NEXT_PUBLIC_SUPABASE_KEY"] = key
+                    # Also set NEXT_PUBLIC_API_URL so the frontend always hits the right backend
+                    os.environ.setdefault("NEXT_PUBLIC_API_URL", "http://localhost:4040/api/v1")
                     hf = cfg_data.get("hf_token") or cfg_data.get("HF_TOKEN") or cfg_data.get("HF_API_TOKEN") or os.environ.get("HF_TOKEN") or os.environ.get("HF_API_TOKEN") or ""
                     if hf:
                         os.environ["HF_TOKEN"] = hf
@@ -468,13 +473,27 @@ def main():
                 if code != 0:
                     sys_logger.error(f"  [ERR]  [API]  Process exited (code {_exit_code_name(code)}) -- restarting in 3s...")
                     time.sleep(3)
+                    # Kill port before retry so uvicorn can bind
+                    _kill_port(4040)
+                    time.sleep(1)
                     backend_process = run_process(backend_cmd, backend_dir, "API")
+
             # Frontend crashed -- restart it
             if frontend_process and frontend_process.poll() is not None:
                 code = frontend_process.returncode
-                sys_logger.error(f"  [ERR]  [UI]   Process exited (code {_exit_code_name(code)}) -- restarting in 3s...")
-                time.sleep(3)
-                frontend_process = run_process(frontend_cmd, frontend_dir, "UI", shell=is_win)
+                if code == 0:
+                    # Code 0 = clean exit, almost always EADDRINUSE.
+                    # Must kill the port before retrying or we'll loop forever.
+                    sys_logger.warning(f"  [WRN]  [UI]   Process exited cleanly (port conflict?) -- clearing port 3000 and retrying...")
+                    _kill_port(3000)
+                    time.sleep(2)   # Give Windows time to release the port
+                    frontend_process = run_process(frontend_cmd, frontend_dir, "UI", shell=is_win)
+                else:
+                    sys_logger.error(f"  [ERR]  [UI]   Process exited (code {_exit_code_name(code)}) -- restarting in 3s...")
+                    time.sleep(3)
+                    _kill_port(3000)
+                    time.sleep(1)
+                    frontend_process = run_process(frontend_cmd, frontend_dir, "UI", shell=is_win)
             time.sleep(2)
     except KeyboardInterrupt:
         sys_logger.warning("  [WRN]  Shutting down all services...")
