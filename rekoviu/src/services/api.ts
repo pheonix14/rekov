@@ -95,6 +95,20 @@ export async function createTicket(payload: TicketCreateRequest): Promise<QueueT
   }
 }
 
+export async function getTicketStatus(ticketId: string): Promise<QueueTicket> {
+  const baseUrl = getApiBase();
+  try {
+    const res = await fetch(`${baseUrl}/receptionist/tickets/search?q=${encodeURIComponent(ticketId)}`, { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      const tickets: QueueTicket[] = data.tickets ?? data ?? [];
+      const match = tickets.find((t: QueueTicket) => t.ticket_id === ticketId);
+      if (match) return match;
+    }
+  } catch {}
+  throw new Error(`Ticket ${ticketId} not found`);
+}
+
 export async function fetchQueueBoard(): Promise<QueueBoardResponse> {
   try {
     const res = await fetch(`${API_BASE}/queue/board`, { cache: 'no-store' });
