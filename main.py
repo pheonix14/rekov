@@ -84,6 +84,7 @@ _ERROR_PATTERNS = {
 _SUPPRESS_PATTERNS = {
     "node_modules/next/dist/server/",
     "node_modules/next/dist/build/",
+    "node_modules/next/dist/compiled/",
     "at module.<anonymous>",
     "at wrapmoduleload",
     "at module._compile",
@@ -97,12 +98,16 @@ _SUPPRESS_PATTERNS = {
     "warn - next.js",
     "(node:internal/modules",
     "at c:\\users\\",
+    "at c:\\program",
     "at async",
     "},",
-    "]",
     "webpack-runtime.js",
     "react-dom/cjs",
     "react-server-dom-webpack",
+    "'c:\\users\\",
+    "- c:\\users\\",
+    "\\node_modules\\next\\",
+    "\\node_modules\\next\\dist\\",
 }
 
 # Lines that should just be INFO (cyan, neutral)
@@ -142,6 +147,18 @@ _INFO_PATTERNS = {
 }
 
 
+def _shorten_path_line(line: str) -> str:
+    """If a line is a raw file path (stack entry or require chain), shorten it to just the filename."""
+    import re
+    # Lines like: "  - C:\Users\...\some\file.js"  or  "  'C:\...'"
+    path_match = re.search(r"[A-Za-z]:\\[^'\"\n]+\.(?:js|ts|tsx|py)", line)
+    if path_match:
+        full = path_match.group(0)
+        import os as _os
+        return line[:path_match.start()] + _os.path.basename(full)
+    return line
+
+
 def _classify_and_log(line: str, name: str):
     """
     Route subprocess output lines to correct color level:
@@ -161,6 +178,9 @@ def _classify_and_log(line: str, name: str):
     stripped = line.strip("-=* \t")
     if not stripped:
         return
+
+    # Shorten raw file path lines to just the filename
+    line = _shorten_path_line(line)
 
     # Classify
     if any(p in lower for p in _ERROR_PATTERNS):
@@ -354,7 +374,7 @@ def main():
     try:
         check_proc = subprocess.run(
             [sys.executable, "-c", "import fastapi, uvicorn, pydantic, supabase, requests, edge_tts, fpdf"],
-            capture_output=True, text=True, timeout=5,
+            capture_output=True, text=True, timeout=15,
         )
         if check_proc.returncode == 0:
             backend_ready = True
@@ -435,17 +455,27 @@ def main():
     sys_logger.info("")
 
     # ── 6. Keep-alive loop ───────────────────────────────────────────────────
+    def _exit_code_name(code) -> str:
+        if code == 4294967295 or code == -1:
+            return "FORCE_KILLED"
+        return str(code)
+
     try:
         while True:
+            # Backend crashed -- restart it
             if backend_process and backend_process.poll() is not None:
-                if backend_process.returncode != 0:
-                    sys_logger.error(f"  [ERR]  [API]  Process exited (code {backend_process.returncode})")
-                    break
+                code = backend_process.returncode
+                if code != 0:
+                    sys_logger.error(f"  [ERR]  [API]  Process exited (code {_exit_code_name(code)}) -- restarting in 3s...")
+                    time.sleep(3)
+                    backend_process = run_process(backend_cmd, backend_dir, "API")
+            # Frontend crashed -- restart it
             if frontend_process and frontend_process.poll() is not None:
-                if not _is_port_in_use(3000):
-                    sys_logger.error(f"  [ERR]  [UI]   Process exited (code {frontend_process.returncode})")
-                    break
-            time.sleep(1)
+                code = frontend_process.returncode
+                sys_logger.error(f"  [ERR]  [UI]   Process exited (code {_exit_code_name(code)}) -- restarting in 3s...")
+                time.sleep(3)
+                frontend_process = run_process(frontend_cmd, frontend_dir, "UI", shell=is_win)
+            time.sleep(2)
     except KeyboardInterrupt:
         sys_logger.warning("  [WRN]  Shutting down all services...")
     finally:

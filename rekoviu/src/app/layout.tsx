@@ -13,6 +13,7 @@ import { VoiceCallOverlay } from '@/components/voice/VoiceCallOverlay';
 export const metadata: Metadata = {
   title: 'MediVERSE | Hospital Self-Service Kiosk',
   description: 'KFC-style hospital self-service kiosk. Express check-in, triage, and live queue management.',
+  icons: { icon: '/icon.jpg' },
 };
 
 export default function RootLayout({

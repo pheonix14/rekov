@@ -275,3 +275,30 @@ export const api = {
     return await res.json();
   }
 };
+
+// ── Session Event Tracking ──────────────────────────────────────────────────
+export interface SessionEventPayload {
+  session_id: string;
+  event_type: 'click' | 'navigate' | 'input' | 'submit' | 'voice';
+  page?: string;
+  element?: string;
+  value?: string;
+  extra?: Record<string, unknown>;
+}
+
+export async function logSessionEvent(payload: SessionEventPayload): Promise<{ verified_supabase: boolean } | null> {
+  try {
+    const baseUrl = getApiBase();
+    const res = await fetch(`${baseUrl}/session/event`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    // Non-critical -- never crash the UI over a tracking failure
+    return null;
+  }
+}
+

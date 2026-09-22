@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { QRCodeSVG } from 'qrcode.react';
 import { MediVERSENav } from '@/components/common/MediVERSENav';
 import { useVoiceCall } from '@/contexts/VoiceCallContext';
 

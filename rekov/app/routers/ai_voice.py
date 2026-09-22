@@ -44,14 +44,28 @@ def synthesize_tts(request: TTSRequest):
 def chat_with_voice_assistant(request: ChatRequest):
     """Send a message to the AI voice assistant. Returns reply + any actions + TTS audio."""
     result = generate_voice_response(request.session_id, request.message)
-    
+
+    # -- Structured terminal log --------------------------------------------------
+    sid = result.get("session_id", "?")
+    action_name = result.get("action") or "NONE"
+    action_data = result.get("action_data")
+    action_summary = ""
+    if action_data and isinstance(action_data, dict):
+        action_summary = "  " + "  ".join(f"{k}={v}" for k, v in list(action_data.items())[:4])
+    print(f"\n[VOICE] session={sid}")
+    print(f"  USER : {request.message}")
+    print(f"  AI   : {result.get('reply', '')}")
+    print(f"  ACTION : {action_name}{action_summary}")
+    print("-" * 60)
+    # -----------------------------------------------------------------------------
+
     # Generate ElevenLabs TTS
     audio_b64 = None
     if result.get("reply"):
         audio_bytes = generate_tts_audio(result["reply"])
         if audio_bytes:
             audio_b64 = base64.b64encode(audio_bytes).decode('utf-8')
-            
+
     return ChatResponse(
         session_id=result["session_id"],
         reply=result["reply"],

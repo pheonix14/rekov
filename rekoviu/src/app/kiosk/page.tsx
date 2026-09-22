@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { MediVERSENav } from '@/components/common/MediVERSENav';
 import { PatientIdentity } from '@/components/kiosk/PatientIdentity';
@@ -10,7 +10,7 @@ import { ComboCart } from '@/components/kiosk/ComboCart';
 import { VitalsPicker } from '@/components/kiosk/VitalsPicker';
 import { TicketModal } from '@/components/kiosk/TicketModal';
 import { Department, Doctor, HealthComboPackage, VitalsInput, QueueTicket } from '@/types';
-import { fetchDepartments, fetchDoctors, fetchHealthCombos, createTicket } from '@/services/api';
+import { fetchDepartments, fetchDoctors, fetchHealthCombos, createTicket, logSessionEvent } from '@/services/api';
 
 class ErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean, error: any}> {
   constructor(props: any) { super(props); this.state = { hasError: false, error: null }; }
@@ -47,6 +47,13 @@ export default function KioskPage() {
 
   const [loading, setLoading] = useState(true);
   const [ticket, setTicket] = useState<QueueTicket | null>(null);
+
+  // Session tracking -- generate one ID per kiosk visit
+  const sessionId = useRef<string>(
+    typeof crypto !== 'undefined' && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `kiosk-${Date.now()}`
+  );
 
   useEffect(() => {
     async function loadCatalog() {
@@ -98,6 +105,16 @@ export default function KioskPage() {
   const handleNext = async () => {
     if (step === 1 && (!patientName || !patientPhone)) return;
     if (step === 2 && !selectedDepId) return;
+
+    // Log step transitions
+    logSessionEvent({
+      session_id: sessionId.current,
+      event_type: 'navigate',
+      page: '/kiosk',
+      element: `step-${step}-next`,
+      extra: { from_step: step, to_step: step === 4 ? 5 : step + 1 },
+    });
+
     if (step === 4) {
       setLoading(true);
       try {
@@ -117,6 +134,15 @@ export default function KioskPage() {
           payment_method: "EXPRESS_KIOSK"
         });
         setTicket(newTicket);
+        // Log successful ticket creation
+        logSessionEvent({
+          session_id: sessionId.current,
+          event_type: 'submit',
+          page: '/kiosk',
+          element: 'create-ticket',
+          value: newTicket.token_number,
+          extra: { ticket_id: newTicket.ticket_id, department: newTicket.department_name, patient: patientName },
+        });
         setStep(5);
       } catch (err) {
         console.error(err);
@@ -145,6 +171,14 @@ export default function KioskPage() {
   const handleIdentityChange = (field: 'name' | 'phone', val: string) => {
     if (field === 'name') setPatientName(val);
     else setPatientPhone(val);
+    // Log input changes (debounce-free, fires on every change but non-blocking)
+    logSessionEvent({
+      session_id: sessionId.current,
+      event_type: 'input',
+      page: '/kiosk',
+      element: `patient-${field}`,
+      value: field === 'phone' ? '***' : val, // mask phone for privacy
+    });
   };
 
   const getFilteredDoctors = () => {
