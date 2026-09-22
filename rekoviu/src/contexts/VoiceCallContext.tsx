@@ -28,6 +28,7 @@ interface VoiceCallContextType {
   sendTextMessage: (text: string) => Promise<void>;
   interruptAI: () => void;
   addMessage: (msg: ChatMessage) => void;
+  isIvrMode: boolean;
 }
 
 const VoiceCallContext = createContext<VoiceCallContextType | undefined>(undefined);
@@ -42,6 +43,7 @@ export const VoiceCallProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [sessionId, setSessionId] = useState<string>('');
   const [latestTicket, setLatestTicket] = useState<any | null>(null);
+  const [isIvrMode, setIsIvrMode] = useState<boolean>(false);
 
   // Mutable refs for safe event handler access
   const isCallActiveRef = useRef<boolean>(false);
@@ -87,7 +89,7 @@ export const VoiceCallProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         const recognition = new SR();
         recognition.continuous = true;
         recognition.interimResults = true;
-        recognition.lang = 'hi-IN'; // Works great for English, Hindi & Hinglish
+        recognition.lang = window.navigator.language || 'en-IN'; // Works for global and Indian accents
 
         recognition.onstart = () => {
           isStartingRef.current = false;
@@ -143,6 +145,7 @@ export const VoiceCallProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         };
 
         recognition.onerror = (event: any) => {
+          console.error("Speech Recognition Error:", event.error, event.message || "");
           isStartingRef.current = false;
           isStartedRef.current = false;
           if (event.error === 'not-allowed') {
@@ -264,6 +267,12 @@ export const VoiceCallProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       const data = await res.json();
       const reply = data.reply || "I am here to help you. What department or service do you need?";
       const replyTimestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      if (data.is_ivr_mode) {
+        setIsIvrMode(true);
+      } else {
+        setIsIvrMode(false);
+      }
 
       setLatestAssistantReply(reply);
       setMessages(prev => [...prev, { role: 'assistant', content: reply, timestamp: replyTimestamp }]);
@@ -431,7 +440,8 @@ export const VoiceCallProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         toggleMute,
         sendTextMessage,
         interruptAI,
-        addMessage: (msg: ChatMessage) => setMessages(prev => [...prev, msg])
+        addMessage: (msg: ChatMessage) => setMessages(prev => [...prev, msg]),
+        isIvrMode
       }}
     >
       {children}

@@ -67,7 +67,7 @@ export default function RootLayout({
                 <BackgroundLayer />
                 <div className="bg-grain"></div>
                 <div className="vignette"></div>
-                <div id="wm" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '18vw' }}>MediVERSE</div>
+                <div id="wm" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '20vw', position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', opacity: 0.05, pointerEvents: 'none', zIndex: 0 }}>RITMO</div>
                 <div style={{ position: 'relative', zIndex: 10 }}>
                   {children}
                 </div>

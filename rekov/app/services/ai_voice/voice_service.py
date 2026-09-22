@@ -18,6 +18,7 @@ if _root_env.exists():
     load_dotenv(_root_env)
 
 from app.core.config import settings
+from app.services.ai_voice.medical_classifier import classify as medical_classify
 
 # ---- Load database context from CSV files ----
 DATA_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data" / "database"
@@ -753,6 +754,7 @@ def generate_voice_response(session_id: str | None, user_message: str) -> dict:
 
     reply = None
     qwen_models = [
+        "Qwen/Qwen2.5-7B-Instruct",
         "Qwen/Qwen2.5-72B-Instruct",
         "Qwen/Qwen2.5-Coder-32B-Instruct"
     ]
@@ -954,6 +956,23 @@ def _offline_flow(sid: str, history: List[dict], user_message: str) -> dict:
             "action_data": {"ref_id": sid}
         }
 
+    # Run medical classifier on every input for smart routing
+    classification = medical_classify(user_message)
+    intent = classification.get("intent", "QUERY")
+    class_dept_name = classification.get("department", "General Medicine")
+    
+    # Map department string to ID (e.g. "Emergency" -> "dep_emg")
+    dept_id = None
+    if intent == "MEDICAL" or intent == "CONFIRM":
+        # Rough mapping from classifier to internal ID
+        name_to_id = {
+            "Emergency": "dep_emg", "Cardiology": "dep_card", "Orthopedics": "dep_ortho",
+            "Pediatrics": "dep_ped", "Neurology": "dep_neuro", "Dermatology": "dep_derm",
+            "ENT": "dep_ent", "Gastroenterology": "dep_gastro", "General Medicine": "dep_gen",
+            "Pharmacy": "dep_pharm" # Assuming Pharmacy might be there
+        }
+        dept_id = name_to_id.get(class_dept_name) or _match_department(user_message, lang)
+
     # Handle greetings / generic hellos
     greet_words = ["hi", "hello", "hey", "hii", "hiii", "namaste", "namaskar", "helo",
                    "namaskaram", "vanakkam", "sat sri akal", "assalam", "salam"]
@@ -964,9 +983,7 @@ def _offline_flow(sid: str, history: List[dict], user_message: str) -> dict:
     )
 
     if state["step"] == "greeting" or is_greeting:
-        # Check if user already mentioned symptoms in greeting
-        dept_id = _match_department(user_message, lang)
-        if dept_id:
+        if intent == "MEDICAL" and dept_id:
             state["dept_id"] = dept_id
             doctor = _get_best_doctor(dept_id)
             state["doctor"] = doctor
@@ -976,6 +993,7 @@ def _offline_flow(sid: str, history: List[dict], user_message: str) -> dict:
                 reply = _offline_reply(lang, "emergency")
                 state["step"] = "confirm_name"
             else:
+                doc_info = ""
                 if doctor:
                     doc_name = doctor.get("name", "?").replace("Dr. ", "").replace("Dr ", "").replace("Dr.", "")
                     doc_info = _offline_reply(lang, "doctor_info",
@@ -983,8 +1001,6 @@ def _offline_flow(sid: str, history: List[dict], user_message: str) -> dict:
                         room=doctor.get("room_number", "?"),
                         fee=doctor.get("consultation_fee", "?"),
                         wait=doctor.get("estimated_wait_minutes", "?"))
-                else:
-                    doc_info = ""
                 reply = _offline_reply(lang, "suggest_dept", dept=dept_name, doctor_info=doc_info)
                 state["step"] = "confirm_dept"
         else:
@@ -992,8 +1008,7 @@ def _offline_flow(sid: str, history: List[dict], user_message: str) -> dict:
             state["step"] = "ask_symptom"
 
     elif state["step"] == "ask_symptom":
-        dept_id = _match_department(user_message, lang)
-        if dept_id:
+        if intent == "MEDICAL" and dept_id:
             state["dept_id"] = dept_id
             doctor = _get_best_doctor(dept_id)
             state["doctor"] = doctor
@@ -1149,5 +1164,6 @@ def _offline_flow(sid: str, history: List[dict], user_message: str) -> dict:
         "session_id": sid,
         "reply": reply,
         "action": action,
-        "action_data": action_data
+        "action_data": action_data,
+        "is_ivr_mode": True
     }

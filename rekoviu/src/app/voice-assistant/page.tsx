@@ -42,7 +42,8 @@ export default function VoiceAssistantPage() {
     toggleMute,
     sendTextMessage,
     interruptAI,
-    addMessage
+    addMessage,
+    isIvrMode
   } = useVoiceCall();
 
   const [inputVal, setInputVal] = useState('');
@@ -106,7 +107,7 @@ export default function VoiceAssistantPage() {
   const statusText = isMuted
     ? 'MIC MUTED'
     : isAISpeaking
-    ? 'AI SPEAKING...'
+    ? (isIvrMode ? 'IVR SPEAKING...' : 'AI SPEAKING...')
     : isThinking
     ? 'THINKING...'
     : liveTranscript
@@ -255,16 +256,16 @@ export default function VoiceAssistantPage() {
             {/* Outer Pulsing Glow Ring */}
             <div style={{
               position: 'absolute', width: 220, height: 220, borderRadius: '50%',
-              background: isMuted ? 'rgba(255,59,48,0.15)' : isAISpeaking ? 'rgba(191,90,242,0.2)' : isUserSpeaking ? 'rgba(100,210,255,0.2)' : isCallActive ? 'rgba(48,209,88,0.15)' : 'rgba(217,22,54,0.15)',
-              border: `2px solid ${isMuted ? '#ff3b30' : isAISpeaking ? '#bf5af2' : isUserSpeaking ? '#64d2ff' : isCallActive ? '#30d158' : '#D91636'}`,
-              boxShadow: `0 0 40px ${isMuted ? 'rgba(255,59,48,0.4)' : isAISpeaking ? 'rgba(191,90,242,0.5)' : isUserSpeaking ? 'rgba(100,210,255,0.5)' : isCallActive ? 'rgba(48,209,88,0.4)' : 'rgba(217,22,54,0.4)'}`,
+              background: isMuted ? 'rgba(255,59,48,0.15)' : isAISpeaking ? (isIvrMode ? 'rgba(0,122,255,0.2)' : 'rgba(191,90,242,0.2)') : isUserSpeaking ? 'rgba(100,210,255,0.2)' : isCallActive ? 'rgba(48,209,88,0.15)' : 'rgba(217,22,54,0.15)',
+              border: `2px solid ${isMuted ? '#ff3b30' : isAISpeaking ? (isIvrMode ? '#007aff' : '#bf5af2') : isUserSpeaking ? '#64d2ff' : isCallActive ? '#30d158' : '#D91636'}`,
+              boxShadow: `0 0 40px ${isMuted ? 'rgba(255,59,48,0.4)' : isAISpeaking ? (isIvrMode ? 'rgba(0,122,255,0.5)' : 'rgba(191,90,242,0.5)') : isUserSpeaking ? 'rgba(100,210,255,0.5)' : isCallActive ? 'rgba(48,209,88,0.4)' : 'rgba(217,22,54,0.4)'}`,
               animation: isUserSpeaking || isAISpeaking ? 'pulse 1.2s infinite ease-in-out' : 'none'
             }} />
 
             {/* Inner Core Button */}
             <div style={{
               position: 'relative', zIndex: 2, width: 140, height: 140, borderRadius: '50%',
-              background: isMuted ? '#ff3b30' : isAISpeaking ? '#bf5af2' : isUserSpeaking ? '#64d2ff' : isCallActive ? '#30d158' : '#D91636',
+              background: isMuted ? '#ff3b30' : isAISpeaking ? (isIvrMode ? '#007aff' : '#bf5af2') : isUserSpeaking ? '#64d2ff' : isCallActive ? '#30d158' : '#D91636',
               display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff',
               boxShadow: '0 8px 32px rgba(0,0,0,0.5)', transition: 'all 0.3s ease'
             }}>
@@ -279,7 +280,7 @@ export default function VoiceAssistantPage() {
           {/* Status Label */}
           <div style={{
             fontFamily: "'Space Grotesk', sans-serif", fontSize: 16, fontWeight: 700,
-            color: isMuted ? '#ff3b30' : isAISpeaking ? '#bf5af2' : isUserSpeaking ? '#64d2ff' : isCallActive ? '#30d158' : '#ff4757',
+            color: isMuted ? '#ff3b30' : isAISpeaking ? (isIvrMode ? '#007aff' : '#bf5af2') : isUserSpeaking ? '#64d2ff' : isCallActive ? '#30d158' : '#ff4757',
             letterSpacing: '0.06em', textAlign: 'center', marginBottom: 24
           }}>
             {statusText}
