@@ -6,9 +6,12 @@
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start -p 3000",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean": "node -e \"const fs=require('fs'); try{fs.rmSync('.next',{recursive:true,force:true});console.log('Cleaned .next');}catch(e){}\"",
+    "postinstall": "node scripts/patch-next-windows.js"
   },
   "dependencies": {
+    "@mediapipe/tasks-vision": "^1.0.1",
     "@yudiel/react-qr-scanner": "^2.6.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.3.19",

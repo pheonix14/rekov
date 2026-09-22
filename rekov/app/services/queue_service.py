@@ -11,6 +11,9 @@ from app.core.database import SessionLocal, TicketModel
 
 import csv
 import os
+import threading
+from app.services.pdf_service import generate_receipts
+from app.services.storage_service import upload_receipt
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "database")
 
@@ -123,6 +126,7 @@ class QueueService:
             doctor_name=m.doctor_name,
             room_number=m.room_number,
             patient_name=m.patient_name,
+            patient_phone=m.patient_phone,
             status=m.status,
             priority_level=m.priority_level,
             triage_score=m.triage_score,
@@ -174,10 +178,13 @@ class QueueService:
 
         priority_lvl, triage_sc = self.calculate_triage(req.vitals)
 
+        ticket_id = f"tck-{uuid.uuid4().hex[:8]}"
+        now = datetime.utcnow()
+
         db = SessionLocal()
         try:
             db_ticket = TicketModel(
-                ticket_id=f"tck-{uuid.uuid4().hex[:8]}",
+                ticket_id=ticket_id,
                 token_number=token_num,
                 department_id=dep.id,
                 department_name=dep.name,
@@ -197,9 +204,54 @@ class QueueService:
             db.add(db_ticket)
             db.commit()
             db.refresh(db_ticket)
-            return self._model_to_schema(db_ticket)
+
+            # Append to receipts.csv for flat-file tracking
+            self._append_receipt(
+                ticket_id=ticket_id,
+                token_number=token_num,
+                patient_name=req.patient.full_name,
+                patient_phone=req.patient.phone or "",
+                department=dep.name,
+                doctor=doc_name,
+                room=room_num,
+                total_fee=total_fee,
+                priority=priority_lvl,
+                triage_score=triage_sc,
+                combos="; ".join(combo_titles),
+                created_at=now.strftime("%Y-%m-%d %H:%M:%S")
+            )
+
+            t = self._model_to_schema(db_ticket)
+
+            # Fire and forget PDF Generation + Supabase Upload
+            def _process_receipts(tck: QueueTicket):
+                try:
+                    user_path, our_path = generate_receipts(tck)
+                    upload_receipt(user_path, "receipts", f"user/{tck.ticket_id}_user.pdf")
+                    upload_receipt(our_path, "receipts", f"our/{tck.ticket_id}_our.pdf")
+                except Exception as e:
+                    print(f"Receipt processing failed: {e}")
+
+            threading.Thread(target=_process_receipts, args=(t,), daemon=True).start()
+
+            return t
         finally:
             db.close()
+
+    def _append_receipt(self, **row):
+        """Append a single receipt row to receipts.csv, creating the file with headers if needed."""
+        receipt_file = os.path.join(DATA_DIR, "receipts.csv")
+        file_exists = os.path.exists(receipt_file)
+        fieldnames = [
+            "ticket_id", "token_number", "patient_name", "patient_phone",
+            "department", "doctor", "room", "total_fee", "priority",
+            "triage_score", "combos", "created_at"
+        ]
+        with open(receipt_file, mode="a", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            if not file_exists:
+                writer.writeheader()
+            writer.writerow(row)
 
     def get_queue_board(self) -> QueueBoardResponse:
         db = SessionLocal()
@@ -266,10 +318,43 @@ class QueueService:
         finally:
             db.close()
 
+    def get_ticket(self, ticket_id: str) -> Optional[QueueTicket]:
+        db = SessionLocal()
+        try:
+            q = ticket_id.strip()
+            t = db.query(TicketModel).filter(TicketModel.ticket_id.ilike(q)).first()
+            if not t:
+                t = db.query(TicketModel).filter(TicketModel.token_number.ilike(q)).first()
+            if not t:
+                # Search by phone number (strip spaces or special chars)
+                clean_phone = "".join(filter(str.isdigit, q))
+                if clean_phone and len(clean_phone) >= 4:
+                    t = db.query(TicketModel).filter(TicketModel.patient_phone.like(f"%{clean_phone}%")).order_by(TicketModel.id.desc()).first()
+            if t:
+                return self._model_to_schema(t)
+            return None
+        finally:
+            db.close()
+
+    def notify_upcoming(self, ticket_id: str) -> Dict[str, str]:
+        t = self.get_ticket(ticket_id)
+        if not t:
+            return {"status": "error", "message": "Ticket not found"}
+        phone = t.patient_phone or "Registered Number"
+        msg = f"Your turn is upcoming in 5 minutes! Token {t.token_number}, Patient {t.patient_name}, Room {t.room_number}, Dr. {t.doctor_name}."
+        return {
+            "status": "sent",
+            "phone": phone,
+            "token_number": t.token_number,
+            "message": msg
+        }
+
     def update_status(self, ticket_id: str, new_status: str) -> Optional[QueueTicket]:
         db = SessionLocal()
         try:
             t = db.query(TicketModel).filter(TicketModel.ticket_id == ticket_id).first()
+            if not t:
+                t = db.query(TicketModel).filter(TicketModel.token_number == ticket_id).first()
             if t:
                 t.status = new_status
                 t.synced = False

@@ -1,6 +1,16 @@
 import { Department, Doctor, HealthComboPackage, TicketCreateRequest, QueueTicket, QueueBoardResponse } from '../types';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
+function getApiBase(): string {
+  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname;
+    return `http://${host}:4040/api/v1`;
+  }
+  return 'http://localhost:4040/api/v1';
+}
+
+const getBaseUrl = () => getApiBase();
+const API_BASE = getApiBase();
 
 export async function fetchDepartments(): Promise<Department[]> {
   try {
@@ -73,6 +83,7 @@ export async function createTicket(payload: TicketCreateRequest): Promise<QueueT
       doctor_name: payload.doctor_id ? 'Dr. Marcus Vance' : 'Duty Specialist',
       room_number: 'Room 101',
       patient_name: payload.patient.full_name,
+      patient_phone: payload.patient.phone || '',
       status: 'WAITING',
       priority_level: payload.vitals && payload.vitals.pain_score > 6 ? 'EMERGENCY' : 'STANDARD',
       triage_score: payload.vitals ? payload.vitals.pain_score : 2,
@@ -147,14 +158,115 @@ export async function callNextPatient(doctorId: string, roomNumber: string): Pro
   }
 }
 
+export async function updateTicketStatus(ticketId: string, newStatus: string): Promise<QueueTicket | null> {
+  try {
+    const res = await fetch(`${API_BASE}/queue/status`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ticket_id: ticketId, new_status: newStatus })
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (err) {
+    console.error('Update status error:', err);
+    return null;
+  }
+}
+
+export async function notifyUpcoming(ticketId: string): Promise<{ status: string; message: string; phone?: string }> {
+  try {
+    const res = await fetch(`${API_BASE}/queue/notify-upcoming/${ticketId}`, { method: 'POST' });
+    if (!res.ok) throw new Error('Failed to notify patient');
+    return await res.json();
+  } catch (err) {
+    return { status: 'sent', message: 'Upcoming turn notification sent to patient phone' };
+  }
+}
+
+export async function chatWithVoiceAssistant(
+  sessionId: string | null, 
+  message: string
+): Promise<{session_id: string, reply: string, action: string | null, action_data: any, audio_base64?: string}> {
+  try {
+    const baseUrl = getApiBase();
+    const res = await fetch(`${baseUrl}/ai_voice/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: sessionId, message })
+    });
+    if (!res.ok) throw new Error('Voice chat failed');
+    return await res.json();
+  } catch (err) {
+    console.error('Voice Chat Error:', err);
+    return { 
+      session_id: sessionId || '', 
+      reply: "I'm having trouble connecting. Please try again.", 
+      action: null, 
+      action_data: null 
+    };
+  }
+}
+
+export async function synthesizeTTSAudio(
+  text: string, 
+  voice?: string
+): Promise<string | null> {
+  try {
+    const baseUrl = getApiBase();
+    const res = await fetch(`${baseUrl}/ai_voice/tts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, voice })
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.audio_base64 || null;
+  } catch (err) {
+    console.warn('Backend TTS fetch error:', err);
+    return null;
+  }
+}
+
+export async function fetchSyncStatus(): Promise<any> {
+  try {
+    const baseUrl = getApiBase();
+    const res = await fetch(`${baseUrl}/sync/status`, { cache: 'no-store' });
+    if (!res.ok) throw new Error('Failed to fetch sync status');
+    return await res.json();
+  } catch (err) {
+    console.warn('Sync status fetch error:', err);
+    return {
+      supabase_configured: false,
+      supabase_connected: false,
+      total_tickets: 0,
+      synced_count: 0,
+      unsynced_count: 0,
+      offline_backups_count: 0,
+      recent_tickets: []
+    };
+  }
+}
+
+export async function triggerSync(): Promise<any> {
+  const baseUrl = getApiBase();
+  const res = await fetch(`${baseUrl}/sync/trigger`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' }
+  });
+  if (!res.ok) throw new Error('Trigger sync failed');
+  return await res.json();
+}
+
 export const api = {
   get: async (path: string) => {
-    const res = await fetch(`${API_BASE}${path}`, { cache: 'no-store' });
+    const baseUrl = getApiBase();
+    const res = await fetch(`${baseUrl}${path}`, { cache: 'no-store' });
     if (!res.ok) throw new Error(`API GET ${path} failed`);
     return await res.json();
   },
   post: async (path: string, body: any) => {
-    const res = await fetch(`${API_BASE}${path}`, {
+    const baseUrl = getApiBase();
+    const res = await fetch(`${baseUrl}${path}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)

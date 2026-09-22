@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { RekovNav } from '@/components/common/RekovNav';
+import { useRouter } from 'next/navigation';
+import { MediVERSENav } from '@/components/common/MediVERSENav';
 import { PatientIdentity } from '@/components/kiosk/PatientIdentity';
 import { CategoryNav } from '@/components/kiosk/CategoryNav';
 import { DoctorCard } from '@/components/kiosk/DoctorCard';
@@ -21,6 +22,7 @@ class ErrorBoundary extends React.Component<{children: React.ReactNode}, {hasErr
 }
 
 export default function KioskPage() {
+  const router = useRouter();
   const [step, setStep] = useState<number>(1);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
@@ -60,10 +62,20 @@ export default function KioskPage() {
       const intentIssue = localStorage.getItem('voice_intent_issue');
       const intentEmergency = localStorage.getItem('voice_intent_emergency') === 'true';
       const whatsappPhone = localStorage.getItem('whatsapp_phone');
+      const telName = localStorage.getItem('telegram_name');
+      const telSymptoms = localStorage.getItem('telegram_symptoms');
 
       if (whatsappPhone) {
         setPatientPhone(whatsappPhone);
         localStorage.removeItem('whatsapp_phone');
+      }
+      if (telName) {
+        setPatientName(telName);
+        localStorage.removeItem('telegram_name');
+      }
+      if (telSymptoms) {
+        setVitals(v => ({ ...v, symptoms: [telSymptoms] }));
+        localStorage.removeItem('telegram_symptoms');
       }
 
       if (intentDept) {
@@ -116,7 +128,13 @@ export default function KioskPage() {
     setStep(s => s + 1);
   };
 
-  const handleBack = () => setStep(s => Math.max(1, s - 1));
+  const handleBack = () => {
+    if (step === 1) {
+      router.push('/');
+    } else {
+      setStep(s => s - 1);
+    }
+  };
 
   const toggleCombo = (id: string) => {
     setSelectedCombos(prev =>
@@ -150,17 +168,17 @@ export default function KioskPage() {
       }}>
         <div style={{
           width: 48, height: 48, border: '3px solid var(--border-color)',
-          borderTopColor: '#ff2d55', borderRadius: '50%',
+          borderTopColor: '#D91636', borderRadius: '50%',
           animation: 'spin 1s linear infinite'
         }} />
-        <p style={{ fontFamily: "'Space Grotesk'", fontSize: 14, color: 'var(--text-secondary)', marginTop: 16 }}>Loading Kiosk System...</p>
+        <p style={{ fontFamily: "'Space Grotesk'", fontSize: 'clamp(16px, 1.7vw, 20px)', color: 'var(--text-secondary)', marginTop: 16 }}>Loading Kiosk System...</p>
       </main>
     );
   }
 
   return (
     <ErrorBoundary>
-      <RekovNav currentModule="kiosk" />
+      <MediVERSENav currentModule="kiosk" />
       <main style={{
         position: 'relative', zIndex: 10, height: '100vh',
         display: 'flex', flexDirection: 'column', paddingTop: 80
@@ -176,15 +194,15 @@ export default function KioskPage() {
                   <div style={{
                     width: 36, height: 36, borderRadius: '50%',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontFamily: "'Space Grotesk'", fontSize: 14, fontWeight: 700,
-                    background: step === s ? '#ff2d55' : step > s ? 'var(--bg-hover)' : 'var(--bg-card)',
+                    fontFamily: "'Space Grotesk'", fontSize: 'clamp(16px, 1.7vw, 20px)', fontWeight: 700,
+                    background: step === s ? '#D91636' : step > s ? 'var(--bg-hover)' : 'var(--bg-card)',
                     color: step === s ? '#fff' : 'var(--text-primary)',
-                    border: step === s ? '2px solid #ff2d55' : '1px solid var(--border-color)'
+                    border: step === s ? '2px solid #D91636' : '1px solid var(--border-color)'
                   }}>
                     {step > s ? '\u2713' : s}
                   </div>
                   <span style={{
-                    fontFamily: "'Space Grotesk'", fontSize: 10, marginTop: 6,
+                    fontFamily: "'Space Grotesk'", fontSize: 'clamp(12px, 1.2vw, 16px)', marginTop: 6,
                     color: step >= s ? 'var(--text-primary)' : 'var(--text-secondary)',
                     letterSpacing: '.05em', textAlign: 'center'
                   }}>
@@ -206,7 +224,7 @@ export default function KioskPage() {
               <div>
                 <div style={{ textAlign: 'center', marginBottom: 32 }}>
                   <h1 style={{ fontFamily: "'Bebas Neue'", fontSize: 40, color: 'var(--text-primary)', letterSpacing: '.06em' }}>SELECT A SERVICE</h1>
-                  <p style={{ fontFamily: "'Space Grotesk'", fontSize: 13, color: 'var(--text-secondary)', marginTop: 8 }}>Choose the medical department you need today.</p>
+                  <p style={{ fontFamily: "'Space Grotesk'", fontSize: 'clamp(15px, 1.6vw, 19px)', color: 'var(--text-secondary)', marginTop: 8 }}>Choose the medical department you need today.</p>
                 </div>
                 <CategoryNav departments={departments} selectedId={selectedDepId} onSelect={setSelectedDepId} />
               </div>
@@ -214,10 +232,10 @@ export default function KioskPage() {
 
             {/* Step 3: Doctor & Cart */}
             {step === 3 && (
-              <div className="rekov-responsive-grid">
+              <div className="MediVERSE-responsive-grid">
                 <div style={{ flex: '1 1 500px' }}>
                   <h2 style={{ fontFamily: "'Bebas Neue'", fontSize: 28, color: 'var(--text-primary)', letterSpacing: '.06em', marginBottom: 4 }}>SELECT A DOCTOR</h2>
-                  <p style={{ fontFamily: "'Space Grotesk'", fontSize: 12, color: 'var(--text-secondary)', marginBottom: 20 }}>Or proceed with the next available specialist.</p>
+                  <p style={{ fontFamily: "'Space Grotesk'", fontSize: 'clamp(14px, 1.4vw, 18px)', color: 'var(--text-secondary)', marginBottom: 20 }}>Or proceed with the next available specialist.</p>
 
                   <button
                     onClick={() => setSelectedDocId(null)}
@@ -226,12 +244,12 @@ export default function KioskPage() {
                       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                       background: selectedDocId === null ? 'rgba(255,45,85,.08)' : 'var(--bg-card)',
                       border: `1px solid ${selectedDocId === null ? 'rgba(255,45,85,.3)' : 'var(--border-color)'}`,
-                      color: 'var(--text-primary)', fontFamily: "'Space Grotesk'", fontSize: 13, fontWeight: 700,
+                      color: 'var(--text-primary)', fontFamily: "'Space Grotesk'", fontSize: 'clamp(15px, 1.6vw, 19px)', fontWeight: 700,
                       cursor: 'pointer', marginBottom: 12
                     }}
                   >
                     <span>Next Available Duty Specialist</span>
-                    <span style={{ fontSize: 11, color: 'var(--text-secondary)' }}>Wait: ~5m</span>
+                    <span style={{ fontSize: 'clamp(13px, 1.3vw, 17px)', color: 'var(--text-secondary)' }}>Wait: ~5m</span>
                   </button>
 
                   {getFilteredDoctors().map(doc => (
@@ -249,7 +267,7 @@ export default function KioskPage() {
               <div style={{ maxWidth: 600, margin: '0 auto' }}>
                 <div style={{ textAlign: 'center', marginBottom: 32 }}>
                   <h1 style={{ fontFamily: "'Bebas Neue'", fontSize: 40, color: 'var(--text-primary)', letterSpacing: '.06em' }}>EXPRESS TRIAGE</h1>
-                  <p style={{ fontFamily: "'Space Grotesk'", fontSize: 13, color: 'var(--text-secondary)', marginTop: 8 }}>Help us prioritize your care by entering your current vitals.</p>
+                  <p style={{ fontFamily: "'Space Grotesk'", fontSize: 'clamp(15px, 1.6vw, 19px)', color: 'var(--text-secondary)', marginTop: 8 }}>Help us prioritize your care by entering your current vitals.</p>
                 </div>
                 <VitalsPicker vitals={vitals} onChange={setVitals} />
               </div>
@@ -265,16 +283,20 @@ export default function KioskPage() {
             background: 'var(--bg-main)', backdropFilter: 'blur(12px)',
             flexShrink: 0
           }}>
-            <button onClick={handleBack} disabled={step === 1} style={{
+            <button onClick={handleBack} style={{
               padding: '12px 24px', background: 'none', border: '1px solid var(--border-color)',
-              color: step === 1 ? 'var(--text-muted)' : 'var(--text-primary)',
-              fontFamily: "'Space Grotesk'", fontSize: 12, fontWeight: 700,
-              letterSpacing: '.1em', textTransform: 'uppercase', cursor: step === 1 ? 'not-allowed' : 'pointer'
-            }}>&#8592; BACK</button>
+              color: 'var(--text-primary)',
+              fontFamily: "'Space Grotesk'", fontSize: 'clamp(14px, 1.4vw, 18px)', fontWeight: 700,
+              letterSpacing: '.1em', textTransform: 'uppercase', cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = '#D91636'; e.currentTarget.style.color = '#D91636'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-color)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+            >{step === 1 ? '← HOME' : '← BACK'}</button>
 
             <button onClick={handleNext} disabled={(step === 1 && (!patientName || !patientPhone)) || (step === 2 && !selectedDepId) || loading} style={{
-              padding: '14px 40px', background: '#ff2d55', border: 'none',
-              color: '#fff', fontFamily: "'Space Grotesk'", fontSize: 14, fontWeight: 700,
+              padding: '14px 40px', background: '#D91636', border: 'none',
+              color: '#fff', fontFamily: "'Space Grotesk'", fontSize: 'clamp(16px, 1.7vw, 20px)', fontWeight: 700,
               letterSpacing: '.1em', textTransform: 'uppercase', cursor: 'pointer',
               opacity: ((step === 1 && (!patientName || !patientPhone)) || (step === 2 && !selectedDepId) || loading) ? 0.4 : 1
             }}>

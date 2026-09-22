@@ -1,1 +1,1 @@
-# rekov backend package
+# services package

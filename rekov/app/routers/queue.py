@@ -25,7 +25,15 @@ def update_ticket_status(req: UpdateTicketStatusRequest):
 
 @router.get("/ticket/{ticket_id}", response_model=QueueTicket)
 def get_single_ticket(ticket_id: str):
-    t = queue_service.tickets.get(ticket_id)
+    t = queue_service.get_ticket(ticket_id)
     if not t:
         raise HTTPException(status_code=404, detail="Ticket not found")
     return t
+
+@router.post("/notify-upcoming/{ticket_id}")
+def notify_upcoming_patient(ticket_id: str):
+    res = queue_service.notify_upcoming(ticket_id)
+    if res.get("status") == "error":
+        raise HTTPException(status_code=404, detail=res.get("message"))
+    return res
+

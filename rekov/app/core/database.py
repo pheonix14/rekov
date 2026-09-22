@@ -4,9 +4,9 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from datetime import datetime
 import json
 
-# Ensure data directories exist
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-DATA_DIR = os.path.join(ROOT_DIR, "data", "database")
+# Canonical database directory: always rekov/data/database
+BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+DATA_DIR = os.getenv("DATA_DIR") or os.path.join(BACKEND_DIR, "data", "database")
 os.makedirs(DATA_DIR, exist_ok=True)
 
 DB_PATH = os.path.join(DATA_DIR, "local.db")
@@ -18,6 +18,8 @@ engine = create_engine(
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+
+from datetime import datetime, timedelta
 
 class TicketModel(Base):
     __tablename__ = "tickets"
@@ -38,6 +40,7 @@ class TicketModel(Base):
     combos_selected = Column(String, default="[]") # JSON string
     total_fee = Column(Float, default=0.0)
     created_at = Column(DateTime, default=datetime.utcnow)
+    expires_at = Column(DateTime, default=lambda: datetime.utcnow() + timedelta(hours=24))
     estimated_call_time = Column(String)
     synced = Column(Boolean, default=False) # For offline -> Supabase sync
 
@@ -48,6 +51,17 @@ class WhatsappSession(Base):
     phone_number = Column(String, index=True)
     status = Column(String, default="pending") # pending, consumed
     created_at = Column(DateTime, default=datetime.utcnow)
+
+class BotSession(Base):
+    __tablename__ = "bot_sessions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    session_id = Column(String, unique=True, index=True)
+    platform = Column(String)  # 'telegram' or 'whatsapp'
+    chat_id = Column(String, index=True)
+    state = Column(String, default="{}")  # JSON encoded state dict
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 class DoctorCredentials(Base):
     __tablename__ = "doctor_credentials"
@@ -90,6 +104,26 @@ def seed_doctors(db):
 
 def init_db():
     Base.metadata.create_all(bind=engine)
+    from sqlalchemy import inspect, text
+    try:
+        inspector = inspect(engine)
+        if "tickets" in inspector.get_table_names():
+            columns = [c["name"] for c in inspector.get_columns("tickets")]
+            with engine.connect() as conn:
+                if "patient_phone" not in columns:
+                    conn.execute(text("ALTER TABLE tickets ADD COLUMN patient_phone VARCHAR"))
+                if "expires_at" not in columns:
+                    conn.execute(text("ALTER TABLE tickets ADD COLUMN expires_at DATETIME"))
+                conn.commit()
+            
+            # Clean up expired receipts older than 24 hours
+            now_iso = datetime.utcnow().isoformat()
+            with engine.connect() as conn:
+                conn.execute(text("DELETE FROM tickets WHERE expires_at IS NOT NULL AND expires_at < :now"), {"now": now_iso})
+                conn.commit()
+    except Exception as e:
+        print(f"Migration check warning: {e}")
+
     db = SessionLocal()
     try:
         seed_doctors(db)
@@ -102,3 +136,21 @@ def get_db():
         yield db
     finally:
         db.close()
+
+def purge_stale_sessions(max_age_hours: int = 24):
+    """Purges BotSession rows that haven't been updated in max_age_hours."""
+    db = SessionLocal()
+    try:
+        cutoff = datetime.utcnow() - timedelta(hours=max_age_hours)
+        db.query(BotSession).filter(BotSession.updated_at < cutoff).delete()
+        db.commit()
+    except Exception as e:
+        print(f"Failed to purge stale sessions: {e}")
+    finally:
+        db.close()
+
+# Auto-initialize and migrate schema on module import
+try:
+    init_db()
+except Exception as e:
+    print(f"Auto init_db warning: {e}")
