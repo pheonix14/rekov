@@ -268,7 +268,7 @@ def run_process(cmd, cwd: str, name: str, shell: bool = False):
         process = subprocess.Popen(
             cmd, cwd=cwd,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-            env=env, shell=shell,
+            env=env, shell=shell, stdin=subprocess.DEVNULL,
         )
         threading.Thread(target=read_stream, args=(process.stdout, name, False), daemon=True).start()
         threading.Thread(target=read_stream, args=(process.stderr, name, True),  daemon=True).start()
