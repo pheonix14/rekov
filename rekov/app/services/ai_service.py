@@ -103,13 +103,16 @@ def triage_symptoms_hf(transcript: str) -> dict:
                     text_output = choices[0]["message"]["content"].strip()
                     text_output = text_output.replace("```json", "").replace("```", "").strip()
                     data = json.loads(text_output)
+                    print(f"[QWEN] TRIAGE OK  {model} -> dept={data.get('department')} emg={data.get('is_emergency')}")
                     return {
                         "issue": data.get("issue", transcript),
                         "department": data.get("department", "General"),
                         "is_emergency": bool(data.get("is_emergency", False))
                     }
+            else:
+                print(f"[QWEN] TRIAGE FAIL {model} HTTP {response.status_code}: {response.text[:200]}")
         except Exception as e:
-            print(f"[Triage] Error calling {model}: {e}")
+            print(f"[QWEN] TRIAGE ERR  {model}: {e}")
 
     # Fallback heuristic
     lower = transcript.lower()

@@ -91,6 +91,7 @@ class QueueTicket(BaseModel):
     total_fee: float
     created_at: str
     estimated_call_time: str
+    receipt_pdf_url: Optional[str] = None
 
 class QueueBoardResponse(BaseModel):
     now_calling: Optional[QueueTicket] = None

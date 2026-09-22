@@ -136,7 +136,7 @@ function ReceiptContent() {
   const whatsappUrl = cleanPhone ? `https://wa.me/${cleanPhone}?text=${shareText}` : `https://wa.me/?text=${shareText}`;
   const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}&text=${shareText}`;
   const smsUrl = cleanPhone ? `sms:${cleanPhone}?body=${shareText}` : `sms:?body=${shareText}`;
-  const smartQrValue = `${typeof window !== 'undefined' ? window.location.origin : ''}/receipt?id=${ticket.ticket_id}&phone=${cleanPhone}`;
+  const smartQrValue = ticket.receipt_pdf_url || '';
 
   return (
     <>

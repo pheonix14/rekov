@@ -165,9 +165,10 @@ export function GestureProvider({ children }: { children: React.ReactNode }) {
               const dist = Math.sqrt(dx * dx + dy * dy);
 
               const wasPinching = isPinchingRef.current;
+              // Make pinch start easier (larger threshold) to make clicking easier
               const nowPinching = wasPinching
-                ? dist < PINCH_END_DIST    // Wider threshold to release
-                : dist < PINCH_START_DIST; // Tighter threshold to start
+                ? dist < 0.08    // Wider threshold to release (was PINCH_END_DIST)
+                : dist < 0.06;   // Tighter threshold to start (was PINCH_START_DIST)
 
               if (nowPinching && !wasPinching && clickCooldownRef.current <= 0) {
                 // Fire synthetic click
@@ -181,6 +182,21 @@ export function GestureProvider({ children }: { children: React.ReactNode }) {
                 // 15 frame cooldown (~250ms) to prevent double clicks
                 clickCooldownRef.current = 15;
               }
+              
+              // Scrolling: If pinching and moving Y significantly
+              if (nowPinching && wasPinching) {
+                  if ((window as any)._lastPinchY !== undefined) {
+                      const deltaY = smoothPosRef.current.y - (window as any)._lastPinchY;
+                      // Only scroll if delta is meaningful to prevent jitter
+                      if (Math.abs(deltaY) > 2) {
+                          // Scroll opposite to movement, scaled up a bit
+                          window.scrollBy({ top: -deltaY * 2.5, behavior: 'instant' });
+                      }
+                  }
+                  (window as any)._lastPinchY = smoothPosRef.current.y;
+              } else {
+                  (window as any)._lastPinchY = undefined;
+              }
 
               isPinchingRef.current = nowPinching;
               setIsPinching(nowPinching);
@@ -188,6 +204,7 @@ export function GestureProvider({ children }: { children: React.ReactNode }) {
               // Hand lost
               setPointerPos(null);
               smoothPosRef.current = null;
+              (window as any)._lastPinchY = undefined;
               setIsPinching(false);
               isPinchingRef.current = false;
               setStatus('tracking');

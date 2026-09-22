@@ -307,89 +307,50 @@ def _offline_reply(lang: str, key: str, **kwargs) -> str:
 
 def classify_speech_intent(user_message: str, hf_api_token: str | None) -> dict:
     """
-    Real-time speech intent and moderation classifier using Hugging Face router.
-    Detects user intent (CONFIRM, DENY, MEDICAL, QUERY, OFF_TOPIC),
-    identifies nonsense/shit-talk/trolling, and detects language.
+    Classify patient utterance using the dedicated medical_classifier module.
+    Handles English, Hindi, Hinglish, slang (e.g. 'naali me girgya madadad chahiye').
+    Returns: {intent, is_nonsense, lang, department, urgency, is_emergency}
     """
-    lower = user_message.lower().strip()
+    try:
+        from app.services.ai_voice.medical_classifier import classify
+        result = classify(user_message, hf_token=hf_api_token)
+        # Map to the format expected by voice_service
+        intent = result.get("intent", "MEDICAL")
+        lang = result.get("lang", _detect_language(user_message))
+        is_emergency = result.get("is_emergency", False)
 
-    # 1. Ultra-fast (<1ms) heuristic checks for obvious binary yes/no responses
-    confirm_words = [
-        "yes", "haan", "ha", "haa", "haji", "ji haan", "sure", "proceed", "continue",
-        "ok", "okay", "theek hai", "thik hai", "kar do", "chalo", "book it", "confirm",
-        "yes please", "sahi hai", "pakka"
-    ]
-    deny_words = [
-        "no", "nahi", "nahin", "naa", "cancel", "stop", "mat karo", "ruko", "reject",
-        "dont", "don't", "wrong", "galat", "dusra", "change"
-    ]
-    
-    words = lower.split()
-    if any(lower == w or (len(words) <= 3 and w in words) for w in confirm_words):
-        is_hi = any(k in lower for k in ["haan", "ha", "ji", "kar do", "theek", "chalo"])
-        return {"intent": "CONFIRM", "is_nonsense": False, "lang": "hi" if is_hi else "en"}
+        # Profanity filter (override intent for abusive input)
+        abusive_words = ["fuck", "shit", "bitch", "asshole", "chutiya", "madarchod", "bhosdike", "gandu",
+                         "idiot", "bakwaas", "faltu", "stupid", "lodu", "kutta", "harami"]
+        lower = user_message.lower()
+        is_nonsense = any(aw in lower for aw in abusive_words)
+        if is_nonsense:
+            intent = "OFF_TOPIC"
 
-    if any(lower == w or (len(words) <= 3 and w in words) for w in deny_words):
-        is_hi = any(k in lower for k in ["nahi", "nahin", "naa", "mat", "ruko", "galat"])
-        return {"intent": "DENY", "is_nonsense": False, "lang": "hi" if is_hi else "en"}
-
-    # 2. Local medical check: If medical symptom or department is found, classify immediately without waiting
-    lang = _detect_language(user_message)
-    dept_id = _match_department(user_message, lang)
-    if dept_id:
-        return {"intent": "MEDICAL", "is_nonsense": False, "lang": lang}
-
-    # 3. Profanity, abuse, or blatant trolling ("shit talk") filter
-    abusive_words = [
-        "fuck", "shit", "bitch", "asshole", "chutiya", "madarchod", "bhosdike", "gandu",
-        "idiot", "bakwaas", "faltu", "stupid", "lodu", "kutta", "harami", "rubbish"
-    ]
-    if any(aw in lower for aw in abusive_words):
-        is_hi = any(k in lower for k in ["chutiya", "bakwaas", "faltu", "kutta", "harami", "gandu", "bhosdike"])
-        return {"intent": "OFF_TOPIC", "is_nonsense": True, "lang": "hi" if is_hi else "en"}
-
-    # 4. Call Hugging Face Router for intelligent real-time classification
-    if hf_api_token:
-        API_URL = "https://router.huggingface.co/v1/chat/completions"
-        headers = {
-            "Authorization": f"Bearer {hf_api_token}",
-            "Content-Type": "application/json"
+        return {
+            "intent": intent,
+            "is_nonsense": is_nonsense,
+            "lang": lang,
+            "department": result.get("department", "General Medicine"),
+            "urgency": result.get("urgency", "LOW"),
+            "is_emergency": is_emergency,
         }
-        sys_p = (
-            "You are an ultra-fast speech intent & moderation classifier for a hospital voice kiosk.\n"
-            "Classify user utterance (English, Hindi, Hinglish, or slang/trolling/shit-talk).\n"
-            "Return ONLY JSON:\n"
-            "{\n"
-            '  "intent": "CONFIRM" | "DENY" | "MEDICAL" | "QUERY" | "OFF_TOPIC",\n'
-            '  "is_nonsense": boolean,\n'
-            '  "lang": "en" | "hi" | "hinglish"\n'
-            "}"
-        )
-        try:
-            res = requests.post(API_URL, headers=headers, json={
-                "model": "Qwen/Qwen2.5-72B-Instruct",
-                "messages": [
-                    {"role": "system", "content": sys_p},
-                    {"role": "user", "content": user_message}
-                ],
-                "max_tokens": 50,
-                "temperature": 0.0
-            }, timeout=3.5)
-            if res.status_code == 200:
-                raw = res.json().get("choices", [{}])[0].get("message", {}).get("content", "").strip()
-                raw = raw.replace("```json", "").replace("```", "").strip()
-                parsed = json.loads(raw)
-                return {
-                    "intent": parsed.get("intent", "MEDICAL"),
-                    "is_nonsense": bool(parsed.get("is_nonsense", False)),
-                    "lang": parsed.get("lang", "en")
-                }
-        except Exception as e:
-            # Fallback to local heuristic
-            pass
-
-    # 5. Local heuristic fallback
-    return {"intent": "QUERY", "is_nonsense": False, "lang": lang}
+    except Exception as e:
+        print(f"[CLASSIFIER] Error: {e} — using basic heuristic")
+        lang = _detect_language(user_message)
+        lower = user_message.lower()
+        words = lower.split()
+        confirm_words = ["yes", "haan", "ha", "sure", "ok", "okay", "theek", "bilkul", "proceed", "confirm"]
+        deny_words = ["no", "nahi", "nahin", "naa", "cancel", "mat", "ruko"]
+        emg_words = ["emergency", "accident", "unconscious", "behosh", "girgya", "naali", "bachao", "bleeding"]
+        if any(w in words for w in confirm_words) and len(words) <= 4:
+            return {"intent": "CONFIRM", "is_nonsense": False, "lang": lang, "department": "General Medicine", "urgency": "LOW", "is_emergency": False}
+        if any(w in words for w in deny_words) and len(words) <= 3:
+            return {"intent": "DENY", "is_nonsense": False, "lang": lang, "department": "General Medicine", "urgency": "LOW", "is_emergency": False}
+        is_emg = any(kw in lower for kw in emg_words)
+        return {"intent": "MEDICAL", "is_nonsense": False, "lang": lang,
+                "department": "Emergency" if is_emg else "General Medicine",
+                "urgency": "HIGH" if is_emg else "LOW", "is_emergency": is_emg}
 
 
 def _extract_name_from_text(text: str, is_explicit_name_turn: bool = False) -> str:

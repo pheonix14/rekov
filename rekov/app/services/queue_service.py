@@ -132,8 +132,9 @@ class QueueService:
             triage_score=m.triage_score,
             combos_selected=json.loads(m.combos_selected),
             total_fee=m.total_fee,
-            created_at=m.created_at.strftime("%H:%M:%S"),
-            estimated_call_time=m.estimated_call_time
+            created_at=m.created_at.strftime("%H:%M:%S") if m.created_at else "",
+            estimated_call_time=m.estimated_call_time,
+            receipt_pdf_url=m.receipt_pdf_url
         )
 
     def calculate_triage(self, vitals: Optional[VitalsInput]) -> tuple[str, int]:
@@ -183,6 +184,9 @@ class QueueService:
 
         db = SessionLocal()
         try:
+            url = os.environ.get("SUPABASE_URL")
+            expected_pdf_url = f"{url}/storage/v1/object/public/receipts/user/{ticket_id}_user.pdf" if url else ""
+
             db_ticket = TicketModel(
                 ticket_id=ticket_id,
                 token_number=token_num,
@@ -199,7 +203,8 @@ class QueueService:
                 combos_selected=json.dumps(combo_titles),
                 total_fee=total_fee,
                 estimated_call_time="~5-10 mins",
-                synced=False
+                synced=False,
+                receipt_pdf_url=expected_pdf_url
             )
             db.add(db_ticket)
             db.commit()
@@ -225,15 +230,49 @@ class QueueService:
 
             print(f"[TICKET]  CREATED   {token_num:12s} | {req.patient.full_name} | {dep.name} | Dr. {doc_name} | {priority_lvl} (score={triage_sc}) | fee={total_fee}")
 
-            # Fire and forget PDF Generation + Supabase Upload
+            # Fire and forget PDF Generation + Supabase Upload + Local QR Management
             def _process_receipts(tck: QueueTicket):
                 try:
                     print(f"[RECEIPT]  GENERATING  {tck.token_number} for {tck.patient_name}")
                     user_path, our_path = generate_receipts(tck)
                     print(f"[RECEIPT]  GENERATED   {tck.token_number} -> user={user_path}")
-                    upload_receipt(user_path, "receipts", f"user/{tck.ticket_id}_user.pdf")
+                    
+                    # Upload PDF receipt to Supabase bucket
+                    pub_url = upload_receipt(user_path, "receipts", f"user/{tck.ticket_id}_user.pdf")
                     upload_receipt(our_path, "receipts", f"our/{tck.ticket_id}_our.pdf")
-                    print(f"[RECEIPT]  UPLOADED    {tck.token_number} to Supabase storage")
+                    
+                    # Generate local QR code PNG in data/qr_codes/
+                    qr_dir = os.path.join(os.path.dirname(DATA_DIR), "qr_codes")
+                    os.makedirs(qr_dir, exist_ok=True)
+                    qr_path = os.path.join(qr_dir, f"{tck.ticket_id}_qr.png")
+                    
+                    url = os.environ.get("SUPABASE_URL")
+                    fallback_url = f"{url}/storage/v1/object/public/receipts/user/{tck.ticket_id}_user.pdf" if url else f"http://localhost:3000/receipt?id={tck.ticket_id}"
+                    target_qr_content = pub_url or fallback_url
+                    
+                    try:
+                        import qrcode
+                        qr_img = qrcode.make(target_qr_content)
+                        qr_img.save(qr_path)
+                        upload_receipt(qr_path, "receipts", f"qr/{tck.ticket_id}_qr.png")
+                        print(f"[RECEIPT]  QR SAVED   {tck.token_number} -> {qr_path}")
+                    except Exception as qr_err:
+                        print(f"[RECEIPT]  QR WARN    {qr_err}")
+
+                    if pub_url:
+                        # Save public PDF URL to database record
+                        db2 = SessionLocal()
+                        try:
+                            t_db = db2.query(TicketModel).filter(TicketModel.ticket_id == tck.ticket_id).first()
+                            if t_db:
+                                t_db.receipt_pdf_url = pub_url
+                                t_db.synced = False  # trigger resync with receipt_pdf_url
+                                db2.add(t_db)
+                                db2.commit()
+                        finally:
+                            db2.close()
+
+                    print(f"[RECEIPT]  UPLOADED    {tck.token_number} -> {pub_url or 'Local Only'}")
                 except Exception as e:
                     print(f"[RECEIPT]  FAILED      {tck.token_number} - {e}")
 

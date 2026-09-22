@@ -324,10 +324,22 @@ def main():
     if not ui_alive and _is_port_in_use(3000):
         sys_logger.warning("  [WRN]  [CLEANUP]  Port 3000 occupied — killing stale process...")
         _kill_port(3000)
+        # Wait until confirmed free (max 6s in 0.5s steps)
+        for _ in range(12):
+            if not _is_port_in_use(3000):
+                break
+            time.sleep(0.5)
+        else:
+            sys_logger.warning("  [WRN]  [CLEANUP]  Port 3000 still occupied — proceeding anyway")
     if not api_alive and _is_port_in_use(4040):
         sys_logger.warning("  [WRN]  [CLEANUP]  Port 4040 occupied — killing stale process...")
         _kill_port(4040)
-    time.sleep(0.5)
+        for _ in range(12):
+            if not _is_port_in_use(4040):
+                break
+            time.sleep(0.5)
+    time.sleep(0.5)  # extra settle time
+
 
     # ── Re-check health after cleanup ─────────────────────────────────────────
     api_alive = _is_service_healthy("http://127.0.0.1:4040/api/v1/health") or \
@@ -513,12 +525,21 @@ def main():
                 else:
                     # Port is either gone or not responding — real exit
                     if code == 0:
-                        sys_logger.warning("  [WRN]  [UI]   Process exited cleanly — port free, restarting...")
+                        sys_logger.warning("  [WRN]  [UI]   Process exited cleanly — waiting for port to free...")
                     else:
                         sys_logger.error(f"  [ERR]  [UI]   Process exited (code {_exit_code_name(code)}) -- restarting in 3s...")
                         time.sleep(3)
+
+                    # Kill any stale holder and wait until port is confirmed free
                     _kill_port(3000)
-                    time.sleep(2)
+                    for _wait in range(10):          # up to 5 seconds
+                        if not _is_port_in_use(3000):
+                            break
+                        time.sleep(0.5)
+                    else:
+                        sys_logger.warning("  [WRN]  [UI]   Port 3000 still occupied after kill — force-trying anyway")
+
+                    time.sleep(1)   # small extra cushion
                     ui_orphaned = False
                     frontend_process = run_process(frontend_cmd, frontend_dir, "UI")
 

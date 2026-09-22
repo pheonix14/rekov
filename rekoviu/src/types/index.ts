@@ -76,6 +76,7 @@ export interface QueueTicket {
   total_fee: number;
   created_at: string;
   estimated_call_time: string;
+  receipt_pdf_url?: string;
 }
 
 export interface QueueBoardResponse {

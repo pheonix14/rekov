@@ -33,12 +33,41 @@ def _backup_locally(ticket: dict):
     with open(backup_file, "w") as f:
         json.dump(ticket, f)
 
+def _map_priority_level(val) -> int:
+    if isinstance(val, int):
+        return val
+    s = str(val).upper()
+    if s == "EMERGENCY" or s == "3":
+        return 3
+    elif s == "URGENT" or s == "2":
+        return 2
+    return 1
+
+def _get_supabase_config():
+    url = os.environ.get("SUPABASE_URL")
+    key = os.environ.get("SUPABASE_KEY")
+    if not (url and key):
+        for cfg_path in [os.path.join(ROOT_DIR, "config.json"), os.path.join(ROOT_DIR, "rekov", "config.json")]:
+            if os.path.isfile(cfg_path):
+                try:
+                    with open(cfg_path, "r", encoding="utf-8") as f:
+                        cfg_data = json.load(f)
+                        sb = cfg_data.get("supabase", {}) if isinstance(cfg_data.get("supabase"), dict) else {}
+                        url = url or sb.get("url") or cfg_data.get("SUPABASE_URL")
+                        key = key or sb.get("key") or cfg_data.get("SUPABASE_KEY")
+                        if url and key:
+                            os.environ["SUPABASE_URL"] = url
+                            os.environ["SUPABASE_KEY"] = key
+                            break
+                except Exception:
+                    pass
+    return url, key
+
 def sync_worker():
     """Background thread that runs every 30s to sync unsynced records to Supabase when connected to internet."""
     while True:
         try:
-            url = os.environ.get("SUPABASE_URL")
-            key = os.environ.get("SUPABASE_KEY")
+            url, key = _get_supabase_config()
             
             client = None
             if url and key:
@@ -54,6 +83,11 @@ def sync_worker():
                 print(f"[SUPABASE] SYNC START  {len(unsynced)} unsynced ticket(s)")
 
             for record in unsynced:
+                # Use environment config url instead of hardcoded
+                pdf_url = record.receipt_pdf_url
+                if not pdf_url and url:
+                    pdf_url = f"{url}/storage/v1/object/public/receipts/user/{record.ticket_id}_user.pdf"
+                
                 payload = {
                     "ticket_id": record.ticket_id,
                     "token_number": record.token_number,
@@ -62,10 +96,11 @@ def sync_worker():
                     "patient_name": record.patient_name,
                     "patient_phone": record.patient_phone,
                     "status": record.status,
-                    "priority_level": str(record.priority_level).upper(),   # string, not int
+                    "priority_level": _map_priority_level(record.priority_level),
                     "triage_score": record.triage_score or 1,
                     "total_fee": float(record.total_fee or 0.0),
-                    "created_at": record.created_at.isoformat()
+                    "receipt_pdf_url": pdf_url or "",
+                    "created_at": record.created_at.isoformat() if record.created_at else ""
                 }
                 
                 # Always create local offline backup
@@ -80,25 +115,22 @@ def sync_worker():
                         print(f"[SUPABASE] PUSH OK     {record.token_number} | {record.patient_name}")
                     except Exception as e:
                         err_str = str(e)
-                        # If foreign key violation on department_id or doctor_id, retry without them
-                        if "foreign key constraint" in err_str or "23503" in err_str:
-                            try:
-                                safe_payload = dict(payload)
+                        # Fallback: remove unknown columns (like receipt_pdf_url or FKs) and retry
+                        try:
+                            safe_payload = dict(payload)
+                            safe_payload.pop("receipt_pdf_url", None)
+                            if "foreign key constraint" in err_str or "23503" in err_str:
                                 safe_payload["department_id"] = None
                                 safe_payload["doctor_id"] = None
-                                client.table('tickets').upsert(safe_payload, on_conflict='ticket_id').execute()
-                                record.synced = True
-                                db.add(record)
-                                print(f"[SUPABASE] PUSH OK(FK) {record.token_number} | {record.patient_name}")
-                            except Exception as err2:
-                                print(f"[SUPABASE] PUSH FAIL   {record.ticket_id}: {err2}")
-                        else:
-                            print(f"[SUPABASE] PUSH FAIL   {record.ticket_id}: {e}")
+                            client.table('tickets').upsert(safe_payload, on_conflict='ticket_id').execute()
+                            record.synced = True
+                            db.add(record)
+                            print(f"[SUPABASE] PUSH OK(FB) {record.token_number} | {record.patient_name}")
+                        except Exception as err2:
+                            print(f"[SUPABASE] PUSH FAIL   {record.ticket_id}: {err2}")
                 else:
-                    # No internet — mark synced locally so it doesn't pile up
-                    record.synced = True
-                    db.add(record)
-                    print(f"[SUPABASE] OFFLINE     {record.token_number} saved locally only")
+                    # No internet — do NOT mark synced locally so it retries next time
+                    print(f"[SUPABASE] OFFLINE     {record.token_number} saved locally only, will retry")
                     
             db.commit()
             db.close()
@@ -109,8 +141,7 @@ def sync_worker():
 
 def run_sync_cycle() -> dict:
     """Forces an immediate sync cycle and offline JSON backup."""
-    url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_KEY")
+    url, key = _get_supabase_config()
     
     client = None
     if url and key:
@@ -133,7 +164,7 @@ def run_sync_cycle() -> dict:
             "patient_name": record.patient_name,
             "patient_phone": record.patient_phone,
             "status": record.status,
-            "priority_level": str(record.priority_level).upper(),
+            "priority_level": _map_priority_level(record.priority_level),
             "triage_score": record.triage_score or 1,
             "total_fee": float(record.total_fee or 0.0),
             "created_at": record.created_at.isoformat() if record.created_at else ""
@@ -141,6 +172,10 @@ def run_sync_cycle() -> dict:
 
     synced_in_this_run = 0
     for record in unsynced:
+        pdf_url = record.receipt_pdf_url
+        if not pdf_url and url:
+            pdf_url = f"{url}/storage/v1/object/public/receipts/user/{record.ticket_id}_user.pdf"
+            
         payload = {
             "ticket_id": record.ticket_id,
             "token_number": record.token_number,
@@ -149,9 +184,10 @@ def run_sync_cycle() -> dict:
             "patient_name": record.patient_name,
             "patient_phone": record.patient_phone,
             "status": record.status,
-            "priority_level": str(record.priority_level).upper(),
+            "priority_level": _map_priority_level(record.priority_level),
             "triage_score": record.triage_score or 1,
             "total_fee": float(record.total_fee or 0.0),
+            "receipt_pdf_url": pdf_url or "",
             "created_at": record.created_at.isoformat() if record.created_at else ""
         }
         
@@ -163,21 +199,21 @@ def run_sync_cycle() -> dict:
                 synced_in_this_run += 1
             except Exception as e:
                 err_str = str(e)
-                if "foreign key constraint" in err_str or "23503" in err_str:
-                    try:
-                        safe_payload = dict(payload)
+                try:
+                    safe_payload = dict(payload)
+                    safe_payload.pop("receipt_pdf_url", None)
+                    if "foreign key constraint" in err_str or "23503" in err_str:
                         safe_payload["department_id"] = None
                         safe_payload["doctor_id"] = None
-                        client.table('tickets').upsert(safe_payload, on_conflict='ticket_id').execute()
-                        record.synced = True
-                        db.add(record)
-                        synced_in_this_run += 1
-                    except Exception:
-                        pass
+                    client.table('tickets').upsert(safe_payload, on_conflict='ticket_id').execute()
+                    record.synced = True
+                    db.add(record)
+                    synced_in_this_run += 1
+                except Exception:
+                    pass
         else:
-            record.synced = True
-            db.add(record)
-            synced_in_this_run += 1
+            # Keep unsynced if we couldn't connect
+            pass
 
     db.commit()
     db.close()

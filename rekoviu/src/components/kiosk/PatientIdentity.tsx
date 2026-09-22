@@ -27,7 +27,6 @@ export const PatientIdentity: React.FC<PatientIdentityProps> = ({ name, phone, o
 
   // Which field has the keyboard/mic focus
   const [activeField, setActiveField] = useState<'name' | 'phone' | null>(null);
-  const [kbOpen, setKbOpen] = useState(false);
   const [listening, setListening] = useState(false);
   const [liveText, setLiveText] = useState('');
   const recognitionRef = useRef<any>(null);
@@ -157,12 +156,15 @@ export const PatientIdentity: React.FC<PatientIdentityProps> = ({ name, phone, o
   const isName = activeField === 'name';
 
   return (
-    <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', padding: '20px 24px' }}>
+    <div style={{ display: 'flex', gap: 32, alignItems: 'flex-start', width: '100%' }}>
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes micPulse { 0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(217,22,54,0.6)} 50%{transform:scale(1.1);box-shadow:0 0 0 8px rgba(217,22,54,0)} }
         .kb-key:hover { background: rgba(217,22,54,0.25) !important; border-color: #D91636 !important; transform: scale(1.07); }
         .kb-key:active { transform: scale(0.95); }
       `}} />
+
+      {/* ── LEFT COLUMN: FORM ── */}
+      <div style={{ flex: '1 1 50%', background: 'var(--bg-card)', border: '1px solid var(--border-color)', padding: '20px 24px', borderRadius: 16 }}>
 
       {/* ── Header ── */}
       <div style={{ textAlign: 'center', marginBottom: 16 }}>
@@ -185,7 +187,7 @@ export const PatientIdentity: React.FC<PatientIdentityProps> = ({ name, phone, o
           boxShadow: '0 8px 40px rgba(0,0,0,0.8)',
         }}>
           <p style={{ fontFamily: "'Bebas Neue'", fontSize: 16, color: '#D91636', letterSpacing: '.1em', margin: '0 0 6px' }}>
-            🎙 VOICE CMDS
+            VOICE COMMANDS
           </p>
           {[
             { cmd: 'BACKSPACE', desc: 'Delete last char' },
@@ -289,33 +291,20 @@ export const PatientIdentity: React.FC<PatientIdentityProps> = ({ name, phone, o
         </p>
       </div>
 
-      {/* ── KEYBOARD TOGGLE BUTTON ── */}
-      <button
-        onClick={() => { setKbOpen(o => !o); }}
-        style={{
-          marginTop: 12, width: '100%', padding: '13px 0',
-          background: kbOpen ? 'rgba(217,22,54,0.15)' : 'rgba(255,255,255,0.05)',
-          border: `1.5px solid ${kbOpen ? '#D91636' : 'rgba(255,255,255,0.15)'}`,
-          borderRadius: 10, color: kbOpen ? '#D91636' : 'var(--text-secondary)',
-          fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 15,
-          letterSpacing: '.08em', cursor: 'pointer', display: 'flex',
-          alignItems: 'center', justifyContent: 'center', gap: 10, transition: 'all 0.2s'
-        }}
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <rect x="2" y="4" width="20" height="16" rx="2"/>
-          <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/>
-        </svg>
-        {kbOpen ? 'HIDE KEYBOARD' : '⌨ OPEN ON-SCREEN KEYBOARD'}
-      </button>
+      </div>
 
-      {/* ── ON-SCREEN KEYBOARD ── */}
-      {kbOpen && (
-        <div style={{
-          marginTop: 12, padding: 16,
-          background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)',
-          borderRadius: 16, backdropFilter: 'blur(8px)'
-        }}>
+      {/* ── RIGHT COLUMN: ON-SCREEN KEYBOARD ── */}
+      <div style={{
+        flex: '1 1 50%', padding: 24,
+        background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: 16, backdropFilter: 'blur(12px)',
+        display: 'flex', flexDirection: 'column',
+        boxShadow: '0 12px 40px rgba(0,0,0,0.4)',
+        animation: 'slideInRight 0.4s ease-out'
+      }}>
+        <style dangerouslySetInnerHTML={{ __html: `
+          @keyframes slideInRight { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+        `}} />
           {/* Active field indicator */}
           <div style={{ display: 'flex', gap: 8, marginBottom: 12, justifyContent: 'center' }}>
             {(['name', 'phone'] as const).map(f => (
@@ -326,7 +315,7 @@ export const PatientIdentity: React.FC<PatientIdentityProps> = ({ name, phone, o
                 color: '#fff', fontFamily: "'Space Grotesk'", fontWeight: 700, fontSize: 13,
                 cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '.07em'
               }}>
-                {f === 'name' ? '👤 Name' : '📱 Phone'}
+                {f === 'name' ? 'Name' : 'Phone'}
               </button>
             ))}
           </div>
@@ -341,7 +330,7 @@ export const PatientIdentity: React.FC<PatientIdentityProps> = ({ name, phone, o
           }}>
             {activeField === 'name' ? (name || <span style={{ color: 'rgba(255,255,255,0.3)' }}>Full Name</span>)
               : activeField === 'phone' ? (phone || <span style={{ color: 'rgba(255,255,255,0.3)' }}>Phone Number</span>)
-              : <span style={{ color: 'rgba(255,255,255,0.3)' }}>← Select a field above</span>}
+              : <span style={{ color: 'rgba(255,255,255,0.3)' }}>Select a field above</span>}
             <span style={{ width: 2, height: 22, background: '#D91636', display: 'inline-block', marginLeft: 2, animation: 'micPulse 1s infinite' }} />
           </div>
 
@@ -357,11 +346,11 @@ export const PatientIdentity: React.FC<PatientIdentityProps> = ({ name, phone, o
                   ))}
                 </div>
               ))}
-              {/* Bottom row: SPACE, ⌫, CLEAR */}
+              {/* Bottom row: SPACE, DELETE, CLEAR */}
               <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
                 <button className="kb-key" onClick={() => pressKey('SPACE')} style={{ ...kbKeyStyle(true), minWidth: 180, fontSize: 15 }}>SPACE</button>
-                <button className="kb-key" onClick={() => pressKey('⌫')} style={kbSpecialKey('255,100,100')}>⌫ DELETE</button>
-                <button className="kb-key" onClick={() => onChange('name', '')} style={kbSpecialKey('255,50,50')}>✕ CLEAR</button>
+                <button className="kb-key" onClick={() => pressKey('⌫')} style={kbSpecialKey('255,100,100')}>DELETE</button>
+                <button className="kb-key" onClick={() => onChange('name', '')} style={kbSpecialKey('255,50,50')}>CLEAR</button>
               </div>
             </div>
           ) : (
@@ -381,12 +370,11 @@ export const PatientIdentity: React.FC<PatientIdentityProps> = ({ name, phone, o
                 </div>
               ))}
               <button className="kb-key" onClick={() => onChange('phone', '')} style={{ ...kbSpecialKey('255,50,50'), marginTop: 4, width: '100%', minWidth: 220 }}>
-                ✕ CLEAR ALL
+                CLEAR ALL
               </button>
             </div>
           )}
         </div>
-      )}
     </div>
   );
 };

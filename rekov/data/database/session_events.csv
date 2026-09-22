@@ -1,0 +1,89 @@
+ts,session_id,event_type,page,element,value,extra
+2026-09-22T17:27:20Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-name,1,
+2026-09-22T17:27:20Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-name,12,
+2026-09-22T17:27:20Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-name,123,
+2026-09-22T17:27:20Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-name,1234,
+2026-09-22T17:27:21Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-name,12345,
+2026-09-22T17:27:21Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-name,123455,
+2026-09-22T17:27:21Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-name,1234556,
+2026-09-22T17:27:21Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-name,12345563,
+2026-09-22T17:27:21Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-name,123455634,
+2026-09-22T17:27:25Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-name,1234556345,
+2026-09-22T17:27:25Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,navigate,/kiosk,step-1-next,,"{""from_step"": 1, ""to_step"": 2}"
+2026-09-22T17:27:26Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-name,12345563453,
+2026-09-22T17:27:26Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-phone,***,
+2026-09-22T17:27:28Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-phone,***,
+2026-09-22T17:27:28Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-phone,***,
+2026-09-22T17:27:28Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-phone,***,
+2026-09-22T17:27:28Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-phone,***,
+2026-09-22T17:27:28Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-phone,***,
+2026-09-22T17:27:34Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-phone,***,
+2026-09-22T17:27:34Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-phone,***,
+2026-09-22T17:27:34Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-phone,***,
+2026-09-22T17:27:34Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-phone,***,
+2026-09-22T17:27:36Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-phone,***,
+2026-09-22T17:27:36Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,input,/kiosk,patient-phone,***,
+2026-09-22T17:35:17Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,navigate,/kiosk,step-2-next,,"{""from_step"": 2, ""to_step"": 3}"
+2026-09-22T17:35:20Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,navigate,/kiosk,step-3-next,,"{""from_step"": 3, ""to_step"": 4}"
+2026-09-22T17:36:12Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,navigate,/kiosk,step-4-next,,"{""from_step"": 4, ""to_step"": 5}"
+2026-09-22T17:36:13Z,b2c6bb17-422e-415b-8e5f-5b2e8ece69f5,submit,/kiosk,create-ticket,PUL-395,"{""ticket_id"": ""tck-local-1790098572843"", ""department"": ""PULM Clinic"", ""patient"": ""12345563453""}"
+2026-09-22T18:03:45Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-name,R,
+2026-09-22T18:03:46Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-name,RA,
+2026-09-22T18:03:47Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-name,RAH,
+2026-09-22T18:03:49Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-name,RAHU,
+2026-09-22T18:03:51Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-name,RAHUJ,
+2026-09-22T18:03:53Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-name,RAHUJ ,
+2026-09-22T18:03:53Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-name,RAHUJ L,
+2026-09-22T18:03:54Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-name,RAHUJ LH,
+2026-09-22T18:03:54Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-name,RAHUJ LHJ,
+2026-09-22T18:04:01Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-phone,***,
+2026-09-22T18:04:01Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-phone,***,
+2026-09-22T18:04:01Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-phone,***,
+2026-09-22T18:04:02Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-phone,***,
+2026-09-22T18:04:05Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-phone,***,
+2026-09-22T18:04:08Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,navigate,/kiosk,step-1-next,,"{""from_step"": 1, ""to_step"": 2}"
+2026-09-22T18:04:09Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-phone,***,
+2026-09-22T18:04:09Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,navigate,/kiosk,step-2-next,,"{""from_step"": 2, ""to_step"": 3}"
+2026-09-22T18:04:09Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-phone,***,
+2026-09-22T18:04:12Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-phone,***,
+2026-09-22T18:04:14Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,navigate,/kiosk,step-4-next,,"{""from_step"": 4, ""to_step"": 5}"
+2026-09-22T18:04:14Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,input,/kiosk,patient-phone,***,
+2026-09-22T18:04:14Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,navigate,/kiosk,step-3-next,,"{""from_step"": 3, ""to_step"": 4}"
+2026-09-22T18:04:19Z,d0fcd16b-566c-4be8-9fcc-54cb33fb3054,submit,/kiosk,create-ticket,ONC-202,"{""ticket_id"": ""tck-local-1790100259470"", ""department"": ""ONC Clinic"", ""patient"": ""RAHUJ LHJ""}"
+2026-09-22T18:50:02Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,1,
+2026-09-22T18:50:02Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,12,
+2026-09-22T18:50:04Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,123,
+2026-09-22T18:50:04Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,1233,
+2026-09-22T18:50:04Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,12332,
+2026-09-22T18:50:04Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,123324,
+2026-09-22T18:50:05Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,1233242,
+2026-09-22T18:50:05Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,12332424,
+2026-09-22T18:50:12Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,123324243,
+2026-09-22T18:50:18Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,12332424354,
+2026-09-22T18:50:17Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,1233242435,
+2026-09-22T18:50:18Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,,
+2026-09-22T18:50:18Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,h,
+2026-09-22T18:50:18Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,ha,
+2026-09-22T18:50:18Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,hal,
+2026-09-22T18:50:23Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,hall,
+2026-09-22T18:50:23Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,hall u,
+2026-09-22T18:50:23Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,hall ,
+2026-09-22T18:50:24Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,hall uo,
+2026-09-22T18:50:24Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,input,/kiosk,patient-name,hall uoi,
+2026-09-22T18:50:24Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,navigate,/kiosk,step-1-next,,"{""from_step"": 1, ""to_step"": 2}"
+2026-09-22T18:50:29Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,navigate,/kiosk,step-2-next,,"{""from_step"": 2, ""to_step"": 3}"
+2026-09-22T18:50:29Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,navigate,/kiosk,step-3-next,,"{""from_step"": 3, ""to_step"": 4}"
+2026-09-22T18:50:29Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,navigate,/kiosk,step-4-next,,"{""from_step"": 4, ""to_step"": 5}"
+2026-09-22T18:50:30Z,85fdc4ac-a1ee-4633-8df2-e29e7c166e86,submit,/kiosk,create-ticket,ONC-734,"{""ticket_id"": ""tck-local-1790103030641"", ""department"": ""ONC Clinic"", ""patient"": ""hall uoi""}"
+2026-09-22T19:16:00Z,0ff80117-7015-43a6-9fae-2b98237c74a1,input,/kiosk,patient-name,Test Patient 1,
+2026-09-22T19:16:00Z,0ff80117-7015-43a6-9fae-2b98237c74a1,input,/kiosk,patient-phone,***,
+2026-09-22T19:16:02Z,0ff80117-7015-43a6-9fae-2b98237c74a1,navigate,/kiosk,step-1-next,,"{""from_step"": 1, ""to_step"": 2}"
+2026-09-22T19:16:14Z,db9dff31-56be-486f-a7e6-37873d309bd0,input,/kiosk,patient-name,Test Patient 2,
+2026-09-22T19:16:14Z,db9dff31-56be-486f-a7e6-37873d309bd0,input,/kiosk,patient-phone,***,
+2026-09-22T19:16:16Z,db9dff31-56be-486f-a7e6-37873d309bd0,navigate,/kiosk,step-1-next,,"{""from_step"": 1, ""to_step"": 2}"
+2026-09-22T19:16:28Z,c0f3011d-9143-4771-9850-f4472aff00fd,input,/kiosk,patient-name,Test Patient 3,
+2026-09-22T19:16:28Z,c0f3011d-9143-4771-9850-f4472aff00fd,input,/kiosk,patient-phone,***,
+2026-09-22T19:16:30Z,c0f3011d-9143-4771-9850-f4472aff00fd,navigate,/kiosk,step-1-next,,"{""from_step"": 1, ""to_step"": 2}"
+2026-09-22T19:16:43Z,0254d41e-0300-43a4-a737-9755e4a9a421,input,/kiosk,patient-name,Test Patient 4,
+2026-09-22T19:16:43Z,0254d41e-0300-43a4-a737-9755e4a9a421,input,/kiosk,patient-phone,***,
+2026-09-22T19:16:45Z,0254d41e-0300-43a4-a737-9755e4a9a421,navigate,/kiosk,step-1-next,,"{""from_step"": 1, ""to_step"": 2}"

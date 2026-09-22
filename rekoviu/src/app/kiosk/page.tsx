@@ -322,7 +322,7 @@ function KioskPage() {
 
             {/* Step 1: Identity */}
             {step === 1 && (
-              <div style={{ maxWidth: 500, margin: '0 auto' }}>
+              <div style={{ width: '100%' }}>
                 <PatientIdentity name={patientName} phone={patientPhone} onChange={handleIdentityChange} />
               </div>
             )}

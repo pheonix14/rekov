@@ -43,6 +43,7 @@ class TicketModel(Base):
     expires_at = Column(DateTime, default=lambda: datetime.utcnow() + timedelta(hours=24))
     estimated_call_time = Column(String)
     synced = Column(Boolean, default=False) # For offline -> Supabase sync
+    receipt_pdf_url = Column(String, nullable=True) # Public URL to Supabase PDF receipt
 
 class WhatsappSession(Base):
     __tablename__ = "whatsapp_sessions"
@@ -114,6 +115,8 @@ def init_db():
                     conn.execute(text("ALTER TABLE tickets ADD COLUMN patient_phone VARCHAR"))
                 if "expires_at" not in columns:
                     conn.execute(text("ALTER TABLE tickets ADD COLUMN expires_at DATETIME"))
+                if "receipt_pdf_url" not in columns:
+                    conn.execute(text("ALTER TABLE tickets ADD COLUMN receipt_pdf_url VARCHAR"))
                 conn.commit()
             
             # Clean up expired receipts older than 24 hours

@@ -96,11 +96,11 @@ export const TicketModal: React.FC<TicketModalProps> = ({ ticket, onClose }) => 
 
             <div style={{ marginTop: 24, paddingTop: 20, borderTop: '2px dashed #ddd', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <QRCodeSVG 
-                value={`${typeof window !== 'undefined' ? window.location.origin : ''}/receipt?id=${ticket.ticket_id}`} 
+                value={ticket.receipt_pdf_url || ''} 
                 size={100} 
                 style={{ marginBottom: 16 }} 
               />
-              <p style={{ fontFamily: "'Space Grotesk'", fontSize: 'clamp(11px, 1.1vw, 15px)', color: '#999', letterSpacing: '.1em', textTransform: 'uppercase' }}>Scan QR to save your receipt</p>
+              <p style={{ fontFamily: "'Space Grotesk'", fontSize: 'clamp(11px, 1.1vw, 15px)', color: '#999', letterSpacing: '.1em', textTransform: 'uppercase' }}>Scan QR to view/download PDF receipt</p>
             </div>
           </div>
         </div>
