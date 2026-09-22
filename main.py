@@ -437,12 +437,31 @@ def main():
                 sys_logger.warning(f"  [WRN]  [UI]     Next.js patch script note: {_pe}")
 
     # ── 4. Launch services ───────────────────────────────────────────────────
-    backend_cmd  = [sys.executable, "-m", "uvicorn", "main:app",
-                    "--host", "0.0.0.0", "--port", "4040", "--reload"]
-    frontend_cmd = "npm run dev" if is_win else ["npm", "run", "dev"]
+    backend_cmd = [sys.executable, "-m", "uvicorn", "main:app",
+                   "--host", "0.0.0.0", "--port", "4040", "--reload"]
+
+    # Use explicit npm binary (no shell=True) so Python owns the npm process
+    # directly instead of through cmd.exe, which can exit early on Windows.
+    _npm_bin = (
+        shutil.which("npm.cmd")   # Windows npm wrapper
+        or shutil.which("npm")    # Unix / PATH fallback
+        or "npm.cmd"
+    )
+
+    # On Windows, npm.cmd is a batch file that exits after spawning node,
+    # giving us a false code-0 exit every time. Bypass it and call node + next
+    # directly so Python owns the real node process.
+    _next_bin = os.path.join(frontend_dir, "node_modules", "next", "dist", "bin", "next")
+    _node_bin = shutil.which("node") or "node"
+    if os.path.isfile(_next_bin):
+        frontend_cmd = [_node_bin, _next_bin, "dev", "-p", "3000"]
+        sys_logger.info("  [INF]  [UI]   Launching Next.js directly via node (bypasses npm.cmd wrapper)")
+    else:
+        # Fallback: npm run dev without shell so we at least own npm.cmd
+        frontend_cmd = [_npm_bin, "run", "dev"]
 
     backend_process  = run_process(backend_cmd,  backend_dir,  "API") if not api_alive else None
-    frontend_process = run_process(frontend_cmd, frontend_dir, "UI", shell=is_win) if not ui_alive else None
+    frontend_process = run_process(frontend_cmd, frontend_dir, "UI") if not ui_alive else None
 
     # ── 5. Startup banner ────────────────────────────────────────────────────
     sys_logger.info("")
@@ -465,36 +484,54 @@ def main():
             return "FORCE_KILLED"
         return str(code)
 
+    # ui_orphaned: True when npm process exited but Next.js node is still alive
+    ui_orphaned = False
+
     try:
         while True:
-            # Backend crashed -- restart it
+            # ── Backend: restart on non-zero exit ────────────────────────────
             if backend_process and backend_process.poll() is not None:
                 code = backend_process.returncode
                 if code != 0:
                     sys_logger.error(f"  [ERR]  [API]  Process exited (code {_exit_code_name(code)}) -- restarting in 3s...")
                     time.sleep(3)
-                    # Kill port before retry so uvicorn can bind
                     _kill_port(4040)
                     time.sleep(1)
                     backend_process = run_process(backend_cmd, backend_dir, "API")
 
-            # Frontend crashed -- restart it
+            # ── Frontend: process-based tracking ─────────────────────────────
             if frontend_process and frontend_process.poll() is not None:
                 code = frontend_process.returncode
-                if code == 0:
-                    # Code 0 = clean exit, almost always EADDRINUSE.
-                    # Must kill the port before retrying or we'll loop forever.
-                    sys_logger.warning(f"  [WRN]  [UI]   Process exited cleanly (port conflict?) -- clearing port 3000 and retrying...")
-                    _kill_port(3000)
-                    time.sleep(2)   # Give Windows time to release the port
-                    frontend_process = run_process(frontend_cmd, frontend_dir, "UI", shell=is_win)
+                frontend_process = None
+
+                # Before killing anything, check if Next.js is actually serving.
+                # On Windows, the npm wrapper can exit (code 0) while the node
+                # child is still alive and healthy on :3000.
+                if _is_service_healthy("http://127.0.0.1:3000/"):
+                    sys_logger.info("  [INF]  [UI]   npm process exited but Next.js is still serving on :3000 — switching to port monitor")
+                    ui_orphaned = True
                 else:
-                    sys_logger.error(f"  [ERR]  [UI]   Process exited (code {_exit_code_name(code)}) -- restarting in 3s...")
-                    time.sleep(3)
+                    # Port is either gone or not responding — real exit
+                    if code == 0:
+                        sys_logger.warning("  [WRN]  [UI]   Process exited cleanly — port free, restarting...")
+                    else:
+                        sys_logger.error(f"  [ERR]  [UI]   Process exited (code {_exit_code_name(code)}) -- restarting in 3s...")
+                        time.sleep(3)
                     _kill_port(3000)
-                    time.sleep(1)
-                    frontend_process = run_process(frontend_cmd, frontend_dir, "UI", shell=is_win)
-            time.sleep(2)
+                    time.sleep(2)
+                    ui_orphaned = False
+                    frontend_process = run_process(frontend_cmd, frontend_dir, "UI")
+
+            # ── Frontend: port-health monitor (orphan mode) ───────────────────
+            elif ui_orphaned:
+                if not _is_service_healthy("http://127.0.0.1:3000/"):
+                    sys_logger.warning("  [WRN]  [UI]   Next.js went down — clearing port and restarting...")
+                    _kill_port(3000)
+                    time.sleep(2)
+                    ui_orphaned = False
+                    frontend_process = run_process(frontend_cmd, frontend_dir, "UI")
+
+            time.sleep(3)
     except KeyboardInterrupt:
         sys_logger.warning("  [WRN]  Shutting down all services...")
     finally:
