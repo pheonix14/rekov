@@ -39,12 +39,14 @@ if (fs.existsSync(loadComponentsPath)) {
         // __WINDOWS_DRIVE_LETTER_PATCH__
         const mObj = context.__RSC_MANIFEST && context.__RSC_MANIFEST[entryName];
         if (mObj && mObj.clientModules) {
+          const aliased = { ...mObj.clientModules };
           for (const k of Object.keys(mObj.clientModules)) {
             if (k.length > 2 && k[1] === ':') {
               const flipped = (k[0] === k[0].toUpperCase() ? k[0].toLowerCase() : k[0].toUpperCase()) + k.slice(1);
-              if (!mObj.clientModules[flipped]) mObj.clientModules[flipped] = mObj.clientModules[k];
+              if (!aliased[flipped]) aliased[flipped] = mObj.clientModules[k];
             }
           }
+          return { ...mObj, clientModules: aliased };
         }`;
       content = content.replace(target, replacement);
       fs.writeFileSync(loadComponentsPath, content, 'utf8');
