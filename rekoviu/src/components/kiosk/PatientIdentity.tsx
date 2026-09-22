@@ -57,27 +57,46 @@ export const PatientIdentity: React.FC<PatientIdentityProps> = ({ name, phone, o
       setLiveText(interim);
 
       if (finalText) {
-        const words = finalText.trim().split(/\s+/);
-        if (field === 'name') {
-          let cur = name;
-          for (const w of words) {
-            const low = w.toLowerCase();
-            if (low === 'backspace' || low === 'delete') cur = cur.slice(0, -1);
-            else if (low === 'clear' || low === 'clear all') cur = '';
-            else if (low === 'space') cur += ' ';
-            else cur += w.length === 1 ? w.toUpperCase() : w + ' ';
+        const textToProcess = finalText.trim();
+        const host = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || `http://${host}:4040/api/v1`;
+        
+        fetch(`${apiUrl}/ai/parse_identity`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: textToProcess, field })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.extracted) {
+            onChange(field, data.extracted);
           }
-          onChange('name', cur.trimEnd());
-        } else {
-          let cur = phone;
-          for (const w of words) {
-            const low = w.toLowerCase();
-            if (low === 'backspace' || low === 'delete') cur = cur.slice(0, -1);
-            else if (low === 'clear' || low === 'clear all') cur = '';
-            else cur += w.replace(/\D/g, '');
+        })
+        .catch(err => {
+          console.error("Parse identity error:", err);
+          // Fallback basic logic
+          const words = textToProcess.split(/\s+/);
+          if (field === 'name') {
+            let cur = name;
+            for (const w of words) {
+              const low = w.toLowerCase();
+              if (low === 'backspace' || low === 'delete') cur = cur.slice(0, -1);
+              else if (low === 'clear' || low === 'clear all') cur = '';
+              else if (low === 'space') cur += ' ';
+              else cur += w.length === 1 ? w.toUpperCase() : w + ' ';
+            }
+            onChange('name', cur.trimEnd());
+          } else {
+            let cur = phone;
+            for (const w of words) {
+              const low = w.toLowerCase();
+              if (low === 'backspace' || low === 'delete') cur = cur.slice(0, -1);
+              else if (low === 'clear' || low === 'clear all') cur = '';
+              else cur += w.replace(/\D/g, '');
+            }
+            onChange('phone', cur);
           }
-          onChange('phone', cur);
-        }
+        });
         setLiveText('');
       }
     };
@@ -340,7 +359,7 @@ export const PatientIdentity: React.FC<PatientIdentityProps> = ({ name, phone, o
               {QWERTY_ROWS.map((row, ri) => (
                 <div key={ri} style={{ display: 'flex', gap: 8, justifyContent: 'center', width: '100%' }}>
                   {row.map(k => (
-                    <button key={k} className="kb-key" onClick={() => pressKey(k)} style={{ ...kbKeyStyle(), flex: 1, height: 72, fontSize: 24 }}>
+                    <button key={k} className="kb-key" onClick={() => pressKey(k)} style={{ ...kbKeyStyle(), flex: 1, height: 86, fontSize: 28 }}>
                       {k}
                     </button>
                   ))}
@@ -348,9 +367,9 @@ export const PatientIdentity: React.FC<PatientIdentityProps> = ({ name, phone, o
               ))}
               {/* Bottom row: SPACE, DELETE, CLEAR */}
               <div style={{ display: 'flex', gap: 8, marginTop: 4, width: '100%' }}>
-                <button className="kb-key" onClick={() => pressKey('SPACE')} style={{ ...kbKeyStyle(true), flex: 2, height: 72, fontSize: 18 }}>SPACE</button>
-                <button className="kb-key" onClick={() => pressKey('⌫')} style={{ ...kbSpecialKey('255,100,100'), flex: 1, height: 72, fontSize: 18 }}>DELETE</button>
-                <button className="kb-key" onClick={() => onChange('name', '')} style={{ ...kbSpecialKey('255,50,50'), flex: 1, height: 72, fontSize: 18 }}>CLEAR</button>
+                <button className="kb-key" onClick={() => pressKey('SPACE')} style={{ ...kbKeyStyle(true), flex: 2, height: 86, fontSize: 22 }}>SPACE</button>
+                <button className="kb-key" onClick={() => pressKey('⌫')} style={{ ...kbSpecialKey('255,100,100'), flex: 1, height: 86, fontSize: 22 }}>DELETE</button>
+                <button className="kb-key" onClick={() => onChange('name', '')} style={{ ...kbSpecialKey('255,50,50'), flex: 1, height: 86, fontSize: 22 }}>CLEAR</button>
               </div>
             </div>
           ) : (
@@ -361,7 +380,7 @@ export const PatientIdentity: React.FC<PatientIdentityProps> = ({ name, phone, o
                   {row.map(k => (
                     <button key={k} className="kb-key" onClick={() => pressKey(k === '⌫' ? '⌫' : k)}
                       style={{
-                        ...kbKeyStyle(), flex: 1, height: 96, fontSize: 36,
+                        ...kbKeyStyle(), flex: 1, height: 104, fontSize: 40,
                         ...(k === '⌫' ? { background: 'rgba(255,100,100,0.18)', borderColor: 'rgba(255,100,100,0.5)', color: 'rgb(255,100,100)' } : {})
                       }}>
                       {k}
@@ -369,7 +388,7 @@ export const PatientIdentity: React.FC<PatientIdentityProps> = ({ name, phone, o
                   ))}
                 </div>
               ))}
-              <button className="kb-key" onClick={() => onChange('phone', '')} style={{ ...kbSpecialKey('255,50,50'), marginTop: 8, width: '100%', height: 80, fontSize: 24 }}>
+              <button className="kb-key" onClick={() => onChange('phone', '')} style={{ ...kbSpecialKey('255,50,50'), marginTop: 8, width: '100%', height: 96, fontSize: 28 }}>
                 CLEAR ALL
               </button>
             </div>

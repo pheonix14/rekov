@@ -246,9 +246,8 @@ class QueueService:
                     os.makedirs(qr_dir, exist_ok=True)
                     qr_path = os.path.join(qr_dir, f"{tck.ticket_id}_qr.png")
                     
-                    url = os.environ.get("SUPABASE_URL")
-                    fallback_url = f"{url}/storage/v1/object/public/receipts/user/{tck.ticket_id}_user.pdf" if url else f"http://localhost:3000/receipt?id={tck.ticket_id}"
-                    target_qr_content = pub_url or fallback_url
+                    # The user specifically requested that scanning the QR downloads/opens the PDF from Supabase directly
+                    target_qr_content = tck.receipt_pdf_url if tck.receipt_pdf_url else f"http://localhost:3000/receipt?id={tck.ticket_id}"
                     
                     try:
                         import qrcode

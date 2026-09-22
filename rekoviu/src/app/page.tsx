@@ -146,39 +146,29 @@ export default function Home() {
         <div style={{ width: 1, background: 'var(--border-color)', flexShrink: 0, alignSelf: 'stretch' }} className="mobile-hidden" />
 
         {/* SEGMENT 2 (MIDDLE): Compact 24/7 Voice AI Card */}
-        <div style={{ flex: '1 1 320px', maxWidth: 380, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
+        <div style={{ flex: '1 1 320px', maxWidth: 380, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           
-          {/* Telegram QR Card (Stacked above Voice AI) */}
+          {/* Telegram QR Card (Stacked half-on-top of Voice AI) */}
           <div style={{
-            width: '100%', background: 'var(--bg-card)', border: '1px solid rgba(45, 155, 255, 0.3)',
-            borderRadius: 16, padding: 14, display: 'flex', alignItems: 'center', gap: 14
+            width: '90%', background: 'var(--bg-card)', border: '1px solid rgba(45, 155, 255, 0.4)',
+            borderRadius: 16, padding: 12, display: 'flex', alignItems: 'center', gap: 14,
+            position: 'relative', zIndex: 5, marginBottom: -32, boxShadow: '0 8px 24px rgba(0,0,0,0.5)'
           }}>
             <div style={{ background: '#fff', padding: 6, borderRadius: 8, flexShrink: 0 }}>
-              <QRCodeSVG value="https://t.me/rekov_bot" size={72} />
+              <QRCodeSVG value="https://t.me/rekov_bot" size={60} />
             </div>
             <div>
               <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 18, color: '#2d9bff', letterSpacing: '.05em' }}>
-                TELEGRAM CHAT REGISTER
+                TELEGRAM CHAT
               </div>
-              <p style={{ fontFamily: "'Space Grotesk', sans-serif", color: 'var(--text-secondary)', fontSize: 11, margin: '2px 0 6px' }}>
-                Scan QR to register & get instant ticket updates via Telegram!
+              <p style={{ fontFamily: "'Space Grotesk', sans-serif", color: 'var(--text-secondary)', fontSize: 11, margin: '2px 0 6px', lineHeight: 1.2 }}>
+                Scan QR to get instant ticket updates!
               </p>
-              <a
-                href="https://t.me/rekov_bot"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  color: '#2d9bff', textDecoration: 'none', fontSize: 12, fontWeight: 700,
-                  fontFamily: "'Space Grotesk', sans-serif"
-                }}
-              >
-                Open Telegram Bot →
-              </a>
             </div>
           </div>
 
           <div style={{
-            width: '100%', background: 'var(--bg-card)', border: '1px solid rgba(48, 209, 88, 0.5)', borderRadius: 20, padding: '20px 20px',
+            width: '100%', background: 'var(--bg-card)', border: '1px solid rgba(48, 209, 88, 0.5)', borderRadius: 20, paddingTop: 48, paddingBottom: 20, paddingLeft: 20, paddingRight: 20,
             boxShadow: '0 8px 32px rgba(48, 209, 88, 0.12)', textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center'
           }}>
             {/* Status Badge */}

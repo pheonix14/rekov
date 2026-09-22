@@ -89,3 +89,92 @@ def get_ai_summary(ticket_id: str):
 
     finally:
         db.close()
+
+
+class ParseIdentityRequest(BaseModel):
+    text: str
+    field: str  # "name" or "phone"
+
+class ParseIdentityResponse(BaseModel):
+    extracted: str
+
+@router.post("/parse_identity", response_model=ParseIdentityResponse)
+def parse_identity(request: ParseIdentityRequest):
+    """Use AI to extract name or phone from natural language spoken text."""
+    hf_api_token = (
+        settings.CONFIG.get("hf_token")
+        or settings.CONFIG.get("HF_TOKEN")
+        or getattr(settings, "HF_TOKEN", "")
+        or os.getenv("HF_API_TOKEN")
+        or os.getenv("HUGGINGFACE_API_KEY")
+        or os.getenv("HF_TOKEN")
+    )
+
+    # Basic fallback if API is not available
+    if not hf_api_token:
+        # Simple fallback parsing
+        if request.field == "phone":
+            import re
+            digits = re.sub(r"\D", "", request.text)
+            return ParseIdentityResponse(extracted=digits[-10:] if digits else "")
+        else:
+            return ParseIdentityResponse(extracted=request.text)
+
+    API_URL = "https://router.huggingface.co/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {hf_api_token}",
+        "Content-Type": "application/json"
+    }
+
+    if request.field == "name":
+        system_prompt = (
+            "Extract ONLY the person's full name from the input text. "
+            "Output NOTHING else. No conversational filler, no punctuation. "
+            "If the user spells it out or adds words like 'my name is', remove them.\n"
+            "Examples:\n"
+            "'my name is john wick' -> 'John Wick'\n"
+            "'I am Alice' -> 'Alice'\n"
+            "'john d o e' -> 'John Doe'"
+        )
+    else:
+        system_prompt = (
+            "Extract ONLY the 10-digit phone number from the text. "
+            "Output NOTHING else. No spaces, no symbols."
+        )
+
+    qwen_models = [
+        "Qwen/Qwen2.5-72B-Instruct",
+        "Qwen/Qwen2.5-Coder-32B-Instruct"
+    ]
+
+    for model_name in qwen_models:
+        try:
+            response = requests.post(API_URL, headers=headers, json={
+                "model": model_name,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": request.text}
+                ],
+                "max_tokens": 30,
+                "temperature": 0.1
+            }, timeout=10)
+
+            if response.status_code == 200:
+                result = response.json()
+                choices = result.get("choices", [])
+                if choices and "message" in choices[0] and "content" in choices[0]["message"]:
+                    extracted = choices[0]["message"]["content"].strip()
+                    # Final cleanup
+                    if request.field == "phone":
+                        import re
+                        extracted = re.sub(r"\D", "", extracted)[-10:]
+                    return ParseIdentityResponse(extracted=extracted)
+        except Exception as e:
+            print(f"[AI Parse Identity] Error with {model_name}: {e}")
+
+    # Fallback if both fail
+    if request.field == "phone":
+        import re
+        digits = re.sub(r"\D", "", request.text)
+        return ParseIdentityResponse(extracted=digits[-10:] if digits else "")
+    return ParseIdentityResponse(extracted=request.text)
