@@ -61,9 +61,22 @@ def _build_db_context() -> str:
 
     return "\n".join(lines)
 
-DB_CONTEXT = _build_db_context()
+def _get_dynamic_system_prompt() -> str:
+    base_db = _build_db_context()
+    
+    # Try fetching recent tickets
+    recent_tickets_context = ""
+    try:
+        from app.services.queue_service import queue_service
+        all_tickets = queue_service.get_all_tickets()
+        if all_tickets:
+            recent_tickets_context = "\n\n-- RECENT APPOINTMENT TICKETS --\n"
+            for t in sorted(all_tickets, key=lambda x: x.created_at, reverse=True)[:10]:
+                recent_tickets_context += f"  TICKET: {t.token_number} | Patient: {t.patient_name} | Dept: {t.department_name} | Doctor: {t.doctor_name} | Room: {t.room_number}\n"
+    except Exception:
+        pass
 
-SYSTEM_PROMPT = f"""You are REKOV AI, the hospital's voice assistant. You speak naturally, helpfully, and concisely.
+    return f"""You are RITMO, the hospital's voice assistant. You speak naturally, helpfully, and concisely.
 
 CRITICAL RULES:
 1. AUTO-DETECT LANGUAGE & MATCH EXACTLY:
@@ -79,14 +92,17 @@ CRITICAL RULES:
    - When proposing a doctor, ALWAYS end with: "Shall I book your appointment token now? Say Yes or No."
    - When the user confirms with "yes", "haan", "sure", "proceed", or "ok", output EXACTLY:
      [BOOK_TICKET] dept_id=<ID> doctor_id=<ID> priority=<STANDARD|URGENT|EMERGENCY> patient_name=<name>
-4. EMERGENCY TRIAGE:
+4. RECEIPT GENERATION:
+   - If the user asks for a receipt, bill, or invoice for their ticket, output EXACTLY:
+     [GENERATE_RECEIPT] ticket_id=<ID>
+5. EMERGENCY TRIAGE:
    - For chest pain, heavy bleeding, breathing difficulty, or unconsciousness, route immediately to Emergency with EMERGENCY priority.
-5. SHORT & DIRECT:
+6. SHORT & DIRECT:
    - Maximum 30 words per turn. Be fast, direct, and conversational.
-6. HOSPITAL DATABASE ONLY:
+7. HOSPITAL DATABASE ONLY:
    - Only use the real doctors, departments, and fees from the database below:
 
-{DB_CONTEXT}
+{base_db}{recent_tickets_context}
 """
 
 # ---- Session storage with action state tracking ----
@@ -218,17 +234,17 @@ _DEPT_KEYWORDS = {
 
 # Replies in detected language (ZERO EMOJIS)
 _GREETINGS = {
-    "en": "Hello! I am the MediVERSE AI assistant. What health issue can I help you with today?",
-    "hi": "नमस्ते! मैं MediVERSE AI सहायक हूँ। आज मैं आपकी क्या मदद कर सकता हूँ?",
-    "bn": "নমস্কার! আমি MediVERSE AI সহায়ক। আজ আপনার কী সমস্যা?",
-    "ta": "வணக்கம்! நான் MediVERSE AI உதவியாளர். இன்று என்ன உதவி வேண்டும்?",
-    "te": "నమస్కారం! నేను MediVERSE AI సహాయకుడిని. ఈరోజు ఏమి సహాయం కావాలి?",
-    "mr": "नमस्कार! मी MediVERSE AI सहाय्यक आहे. आज काय मदत करू?",
-    "gu": "નમસ્તે! હું MediVERSE AI સહાયક છું. આજે શું મદદ કરું?",
-    "kn": "ನಮಸ್ಕಾರ! ನಾನು MediVERSE AI ಸಹಾಯಕ. ಇವತ್ತು ಏನು ಸಹಾಯ ಬೇಕು?",
-    "ml": "നമസ്കാരം! ഞാൻ MediVERSE AI സഹായിയാണ്. ഇന്ന് എന്ത് സഹായം വേണം?",
-    "pa": "ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ MediVERSE AI ਸਹਾਇਕ ਹਾਂ। ਅੱਜ ਕੀ ਮਦਦ ਕਰਾਂ?",
-    "ur": "السلام علیکم! میں MediVERSE AI اسسٹنٹ ہوں۔ آج کیا مدد کر سکتا ہوں؟",
+    "en": "Hello! I am the RITMO assistant. What health issue can I help you with today?",
+    "hi": "नमस्ते! मैं RITMO सहायक हूँ। आज मैं आपकी क्या मदद कर सकता हूँ?",
+    "bn": "নমস্কার! আমি RITMO সহায়ক। আজ আপনার কী সমস্যা?",
+    "ta": "வணக்கம்! நான் RITMO உதவியாளர். இன்று என்ன உதவி வேண்டும்?",
+    "te": "నమస్కారం! నేను RITMO సహాయకుడిని. ఈరోజు ఏమి సహాయం కావాలి?",
+    "mr": "नमस्कार! मी RITMO सहाय्यक आहे. आज काय मदत करू?",
+    "gu": "નમસ્તે! હું RITMO સહાયક છું. આજે શું મદદ કરું?",
+    "kn": "ನಮಸ್ಕಾರ! ನಾನು RITMO ಸಹಾಯಕ. ಇವತ್ತು ಏನು ಸಹಾಯ ಬೇಕು?",
+    "ml": "നമസ്കാരം! ഞാൻ RITMO സഹായിയാണ്. ഇന്ന് എന്ത് സഹായം വേണം?",
+    "pa": "ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ RITMO ਸਹਾਇਕ ਹਾਂ। ਅੱਜ ਕੀ ਮਦਦ ਕਰਾਂ?",
+    "ur": "السلام علیکم! میں RITMO اسسٹنٹ ہوں۔ آج کیا مدد کر سکتا ہوں؟",
 }
 
 
@@ -579,7 +595,7 @@ def generate_voice_response(session_id: str | None, user_message: str) -> dict:
 
     # 2. Handle Off-Topic / Shit-Talk Guardrail (Only for actual abusive trolling)
     if is_nonsense and any(aw in user_message.lower() for aw in ["fuck", "chutiya", "madarchod", "bhosdike", "gandu"]):
-        reply = "Main MediVERSE hospital assistant hoon. Kripya apni bimari ya doctor ke bare mein bataein. Haan ya Naa kahein." if lang in ["hi", "hinglish"] else "I am the MediVERSE hospital assistant. Please describe your health symptom or doctor query."
+        reply = "Main RITMO hospital assistant hoon. Kripya apni bimari ya doctor ke bare mein bataein. Haan ya Naa kahein." if lang in ["hi", "hinglish"] else "I am the RITMO hospital assistant. Please describe your health symptom or doctor query."
         history.append({"role": "assistant", "content": reply})
     # 2.5 Handle Post-Booking Yes / No follow-up response
     if sess_data.get("post_booking"):
@@ -596,7 +612,7 @@ def generate_voice_response(session_id: str | None, user_message: str) -> dict:
             return {"session_id": sid, "reply": reply, "action": None, "action_data": None}
         elif any(w in user_lower.split() for w in yes_words) or intent == "CONFIRM":
             if lang in ["hi", "hinglish"]:
-                reply = "Zaroor! Main MediVERSE voice assistant aapki madad ke liye taiyar hoon. Aap kisi aur department, doctor ya sawaal ke bare mein puch sakte hain."
+                reply = "Zaroor! Main RITMO voice assistant aapki madad ke liye taiyar hoon. Aap kisi aur department, doctor ya sawaal ke bare mein puch sakte hain."
             else:
                 reply = "Certainly! I am here to help. You can ask about other departments, doctor schedules, wait times, or hospital guidance."
             history.append({"role": "assistant", "content": reply})
@@ -728,7 +744,7 @@ def generate_voice_response(session_id: str | None, user_message: str) -> dict:
     }
 
     # Format messages for OpenAI-compatible chat completions
-    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+    messages = [{"role": "system", "content": _get_dynamic_system_prompt()}]
     for msg in history[-8:-1]: # keep last 8 messages for context
         role = msg.get("role", "user")
         if role in ("user", "assistant", "system"):
@@ -817,6 +833,25 @@ def generate_voice_response(session_id: str | None, user_message: str) -> dict:
             clean_reply = _booking_reply(t_dict, lang)
         else:
             clean_reply += f" Token: {t_dict['token_number']} (Room {t_dict['room_number']}). Would you like further help? Say Yes or No."
+
+    elif "[GENERATE_RECEIPT]" in reply:
+        action = "GENERATE_RECEIPT"
+        parts_str = reply.split("[GENERATE_RECEIPT]")[1].strip().split("\n")[0]
+        parsed_args = {}
+        for part in parts_str.split():
+            if "=" in part:
+                k, v = part.split("=", 1)
+                parsed_args[k] = v
+        
+        ticket_id = parsed_args.get("ticket_id")
+        action_data = {"ticket_id": ticket_id}
+        clean_reply = reply.split("[GENERATE_RECEIPT]")[0].strip()
+        if not clean_reply or len(clean_reply) < 5:
+            clean_reply = "I am generating your receipt now."
+            
+        # We also need a URL to send back
+        # Real PDF URL generation will be on the frontend with the ticket ID
+        # So we just pass the action to the frontend
 
     elif "[CHECK_QUEUE]" in reply:
         action = "CHECK_QUEUE"
@@ -1081,7 +1116,7 @@ def _offline_flow(sid: str, history: List[dict], user_message: str) -> dict:
             state["step"] = "idle"
         elif any(w in lower.split() for w in yes_words):
             if lang in ["hi", "hinglish"]:
-                reply = "Zaroor! Main MediVERSE voice assistant aapki madad ke liye taiyar hoon. Aap kisi aur doctor ya department ke bare mein puch sakte hain."
+                reply = "Zaroor! Main RITMO voice assistant aapki madad ke liye taiyar hoon. Aap kisi aur doctor ya department ke bare mein puch sakte hain."
             else:
                 reply = "Certainly! You can ask about other departments, doctor availability, or hospital guidance."
             state["step"] = "ask_symptom"

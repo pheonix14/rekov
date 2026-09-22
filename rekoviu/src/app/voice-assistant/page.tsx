@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { MediVERSENav } from '@/components/common/MediVERSENav';
 import { useVoiceCall } from '@/contexts/VoiceCallContext';
 
@@ -28,6 +28,7 @@ function SpeakerIcon({ size = 20 }: { size?: number }) {
 
 export default function VoiceAssistantPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const {
     isCallActive,
     callStatus,
@@ -40,11 +41,43 @@ export default function VoiceAssistantPage() {
     toggleCall,
     toggleMute,
     sendTextMessage,
-    interruptAI
+    interruptAI,
+    addMessage
   } = useVoiceCall();
 
   const [inputVal, setInputVal] = useState('');
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const initializedRef = useRef(false);
+
+  useEffect(() => {
+    if (!initializedRef.current) {
+      initializedRef.current = true;
+      const pdf = searchParams?.get('pdf');
+      const ticketId = searchParams?.get('ticket');
+      let ticketContext = '';
+      
+      if (typeof window !== 'undefined') {
+        try {
+          const stored = localStorage.getItem('current_ticket');
+          if (stored) {
+            const t = JSON.parse(stored);
+            ticketContext = `Token: ${t.token_number} | Dr. ${t.doctor_name} | ${t.room_number}`;
+          }
+        } catch {}
+      }
+
+      if (pdf && ticketId) {
+        addMessage({
+          role: 'assistant',
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          content: `Here is your digital receipt${ticketContext ? ` (${ticketContext})` : ''}. Click [DOWNLOAD PDF](${pdf}) to save it.`
+        });
+        
+        // Clean URL after injection
+        router.replace('/voice-assistant');
+      }
+    }
+  }, [searchParams, addMessage, router]);
 
   // Auto-start call on mounting voice-assistant page if not active
   useEffect(() => {
@@ -117,7 +150,7 @@ export default function VoiceAssistantPage() {
               }}>
                 <div style={{ fontSize: 44, marginBottom: 12 }}>Mic</div>
                 <h3 style={{ fontSize: 22, color: 'var(--text-primary)', marginBottom: 6 }}>
-                  MediVERSE Voice Assistant
+                  RITMO
                 </h3>
                 <p style={{ fontSize: 14 }}>
                   Speak naturally into your microphone or type a message below.
@@ -143,7 +176,14 @@ export default function VoiceAssistantPage() {
                   lineHeight: 1.5,
                   boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
                 }}>
-                  {msg.content}
+                  {/* Basic markdown link parser for [text](url) */}
+                  {msg.content.split(/(\[.*?\]\(.*?\))/g).map((part, pIdx) => {
+                    const match = part.match(/\[(.*?)\]\((.*?)\)/);
+                    if (match) {
+                      return <a key={pIdx} href={match[2]} target="_blank" rel="noopener noreferrer" style={{ color: '#64d2ff', textDecoration: 'underline' }}>{match[1]}</a>;
+                    }
+                    return <span key={pIdx}>{part}</span>;
+                  })}
                 </div>
                 <span style={{ fontSize: 10, color: 'var(--text-secondary)', marginTop: 4, padding: '0 4px' }}>
                   {msg.timestamp}

@@ -129,7 +129,7 @@ export const TicketModal: React.FC<TicketModalProps> = ({ ticket, onClose }) => 
                 if (typeof window !== 'undefined') {
                   localStorage.setItem('current_ticket', JSON.stringify(ticket));
                 }
-                router.push('/voice-assistant');
+                router.push(`/voice-assistant?ticket=${ticket.ticket_id}&pdf=${encodeURIComponent(qrUrl)}`);
               }}
               style={{
                 flex: 1, padding: '10px 12px', background: '#D91636', color: '#fff', border: 'none',

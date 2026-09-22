@@ -426,3 +426,25 @@ ts,session_id,event_type,page,element,value,extra
 2026-09-22T21:09:17Z,7368bcf5-600d-481f-bf90-0de6112ad76e,navigate,/kiosk,step-4-next,,"{""from_step"": 4, ""to_step"": 5}"
 2026-09-22T21:09:17Z,7368bcf5-600d-481f-bf90-0de6112ad76e,submit,/kiosk,create-ticket,CARD-101,"{""ticket_id"": ""tck-978053a9"", ""department"": ""Cardiology"", ""patient"": ""DSSSHGGG ""}"
 2026-09-22T21:09:17Z,7368bcf5-600d-481f-bf90-0de6112ad76e,submit,/kiosk,create-ticket,CARD-102,"{""ticket_id"": ""tck-0b16a2e0"", ""department"": ""Cardiology"", ""patient"": ""DSSSHGGG ""}"
+2026-09-22T21:25:54Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-name,E,
+2026-09-22T21:25:54Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-name,EU,
+2026-09-22T21:25:55Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-name,EUG,
+2026-09-22T21:25:55Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-name,EUGS,
+2026-09-22T21:25:55Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-name,EUGSO,
+2026-09-22T21:25:55Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-name,EUGSOG,
+2026-09-22T21:26:00Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-name,EUGSOGA,
+2026-09-22T21:26:01Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-phone,***,
+2026-09-22T21:26:03Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-phone,***,
+2026-09-22T21:26:03Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-phone,***,
+2026-09-22T21:26:06Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-phone,***,
+2026-09-22T21:26:07Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-phone,***,
+2026-09-22T21:26:08Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-phone,***,
+2026-09-22T21:26:10Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-phone,***,
+2026-09-22T21:26:11Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-phone,***,
+2026-09-22T21:26:11Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-phone,***,
+2026-09-22T21:26:13Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-phone,***,
+2026-09-22T21:26:13Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-phone,***,
+2026-09-22T21:26:14Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,input,/kiosk,patient-phone,***,
+2026-09-22T21:26:15Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,navigate,/kiosk,step-1-next,,"{""from_step"": 1, ""to_step"": 2}"
+2026-09-22T21:26:17Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,navigate,/kiosk,step-2-next,,"{""from_step"": 2, ""to_step"": 3}"
+2026-09-22T21:26:20Z,eac8153a-4bcb-452a-b9d3-49f679f3034e,navigate,/kiosk,step-3-next,,"{""from_step"": 3, ""to_step"": 4}"

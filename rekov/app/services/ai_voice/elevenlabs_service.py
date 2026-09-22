@@ -85,7 +85,7 @@ def generate_tts_audio(text: str, voice_id: str | None = None) -> bytes | None:
         return None
 
     # Try ElevenLabs if configured
-    if ELEVENLABS_API_KEY:
+    if ELEVENLABS_API_KEY and len(ELEVENLABS_API_KEY) > 5:
         target_voice = voice_id or DEFAULT_ELEVEN_VOICE_ID
         url = f"https://api.elevenlabs.io/v1/text-to-speech/{target_voice}"
         headers = {
@@ -102,10 +102,10 @@ def generate_tts_audio(text: str, voice_id: str | None = None) -> bytes | None:
             }
         }
         try:
-            response = requests.post(url, json=data, headers=headers, timeout=8)
+            response = requests.post(url, json=data, headers=headers, timeout=12)
             if response.status_code == 200:
                 return response.content
-            print(f"[TTS] ElevenLabs Error: {response.status_code} - {response.text[:120]}")
+            print(f"[TTS] ElevenLabs Error: {response.status_code} - {response.text}")
         except Exception as e:
             print(f"[TTS] ElevenLabs Connection Error: {e}")
 

@@ -27,6 +27,7 @@ interface VoiceCallContextType {
   toggleMute: () => void;
   sendTextMessage: (text: string) => Promise<void>;
   interruptAI: () => void;
+  addMessage: (msg: ChatMessage) => void;
 }
 
 const VoiceCallContext = createContext<VoiceCallContextType | undefined>(undefined);
@@ -276,6 +277,42 @@ export const VoiceCallProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           localStorage.setItem('current_ticket', JSON.stringify(ticket));
         }
         speakAIResponse(reply);
+      } else if (data.action === 'GENERATE_RECEIPT' && data.action_data) {
+        speakAIResponse(reply);
+        let ticketIdToUse = data.action_data.ticket_id;
+        
+        // If AI didn't catch the exact ticket ID, try fetching it from latestTicket or localStorage
+        if (!ticketIdToUse || ticketIdToUse === 'UNKNOWN') {
+          if (latestTicket?.ticket_id) {
+            ticketIdToUse = latestTicket.ticket_id;
+          } else if (typeof window !== 'undefined') {
+            try {
+              const stored = localStorage.getItem('current_ticket');
+              if (stored) {
+                ticketIdToUse = JSON.parse(stored).ticket_id;
+              }
+            } catch {}
+          }
+        }
+        
+        if (ticketIdToUse && ticketIdToUse !== 'UNKNOWN') {
+          const pdfUrl = `${apiUrl.replace('/api/v1', '')}/kiosk/ticket/${ticketIdToUse}/pdf`;
+          setTimeout(() => {
+            setMessages(prev => [...prev, {
+              role: 'assistant',
+              content: `Here is your receipt link: [DOWNLOAD PDF](${pdfUrl})`,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            }]);
+          }, 500);
+        } else {
+          setTimeout(() => {
+            setMessages(prev => [...prev, {
+              role: 'assistant',
+              content: `I could not find a recent ticket to generate a receipt for. Please book an appointment first.`,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            }]);
+          }, 500);
+        }
       } else if (data.action === 'GO_TO_VOICE_ASSISTANT') {
         speakAIResponse(reply);
         setTimeout(() => {
@@ -300,7 +337,7 @@ export const VoiceCallProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setCallStatus('CONNECTING');
 
     // Greet user on call start
-    const greeting = "MediVERSE Voice Call active. How can I assist you?";
+    const greeting = "RITMO Voice Call active. How can I assist you?";
     setTimeout(() => {
       setMessages(prev => [...prev, { role: 'assistant', content: greeting, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
       speakAIResponse(greeting);
@@ -393,7 +430,8 @@ export const VoiceCallProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         toggleCall,
         toggleMute,
         sendTextMessage,
-        interruptAI
+        interruptAI,
+        addMessage: (msg: ChatMessage) => setMessages(prev => [...prev, msg])
       }}
     >
       {children}
